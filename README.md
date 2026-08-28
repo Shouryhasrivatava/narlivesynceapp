@@ -11,7 +11,7 @@ Built for the **MLSA SRM Technical Recruitment Task (Frontend Track)**.
 
 ---
 
-## 🛠️ Tech Stack & Decisions
+## Tech Stack & Decisions
 
 - **Frontend:** React (Vite), Tailwind CSS, Framer Motion, Lucide Icons.
 - **Backend:** Node.js (v18+), Express, Socket.IO.
@@ -25,7 +25,7 @@ Built for the **MLSA SRM Technical Recruitment Task (Frontend Track)**.
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
 1. **Multiplayer Live Cursors & Presence:**
    - Smooth 60fps cursor tracking with collaborator role tags and custom color pointers.
@@ -50,7 +50,7 @@ Built for the **MLSA SRM Technical Recruitment Task (Frontend Track)**.
 
 ---
 
-## 🧠 Concurrency & Conflict Resolution Strategy
+## Concurrency & Conflict Resolution Strategy
 
 When multiple people edit notes at the same time:
 
@@ -64,7 +64,7 @@ When multiple people edit notes at the same time:
 
 ---
 
-## 💻 How to Run Locally
+## How to Run Locally
 
 ### Prerequisites
 - Node.js 18 or newer installed (`node -v`).
@@ -87,7 +87,7 @@ When multiple people edit notes at the same time:
 
 ---
 
-## 🧪 Automated Concurrency Unit Tests
+## Automated Concurrency Unit Tests
 
 Run the test suite verifying 3-way text merging, field isolation, and additive voting:
 ```bash
@@ -96,16 +96,16 @@ node server/test-conflict.js
 
 Expected output:
 ```
-✅ Test 1 Passed: Alice moved note without conflict.
-✅ Test 2 Passed: Field-level merge preserved both position and text.
-✅ Test 3 Passed: 3-way text merge blended simultaneous edits non-destructively!
-✅ Test 4 Passed: Concurrent upvotes resolved additively without overwriting.
-🎉 ALL CONCURRENCY & CONFLICT TESTS PASSED PERFECTLY!
+ Test 1 Passed: Alice moved note without conflict.
+ Test 2 Passed: Field-level merge preserved both position and text.
+ Test 3 Passed: 3-way text merge blended simultaneous edits non-destructively!
+ Test 4 Passed: Concurrent upvotes resolved additively without overwriting.
+ ALL CONCURRENCY & CONFLICT TESTS PASSED PERFECTLY!
 ```
 
 ---
 
-## 📝 Personal Reflections & Engineering Tradeoffs
+## Personal Reflections & Engineering Tradeoffs
 
 Building this project helped me understand the real challenges behind collaborative tools like Miro and Google Docs. At first, I considered using a basic Last-Write-Wins (LWW) model with timestamps. However, during early multi-tab testing, I noticed that network jitter meant typing in one tab would randomly erase whole paragraphs typed in another. Writing the 3-way text merger in `server/conflictResolver.js` solved this by respecting base versions and merging new lines without silent data loss.
 
@@ -117,7 +117,7 @@ Overall, the current setup of Socket.IO event broadcasting, optimistic client up
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 dbugs/
