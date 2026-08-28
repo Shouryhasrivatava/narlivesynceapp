@@ -1,0 +1,19 @@
+{
+  "name": "syncspace-server",
+  "version": "1.0.0",
+  "description": "Express & Socket.IO real-time backend with atomic persistence, live cursor broadcasting, and 3-way non-destructive conflict resolution",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "morgan": "^1.10.0",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

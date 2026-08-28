@@ -1,0 +1,42 @@
+[
+  {
+    "id": "user-1",
+    "username": "peter",
+    "password": "webhead",
+    "name": "Peter Parker",
+    "role": "Daily Bugle Photographer & Webhead",
+    "avatar": "🕷️",
+    "badge": "STAFF PHOTOGRAPHER",
+    "isGuest": false
+  },
+  {
+    "id": "user-2",
+    "username": "jameson",
+    "password": "spiderman",
+    "name": "J. Jonah Jameson",
+    "role": "Publisher & Editor-in-Chief",
+    "avatar": "📰",
+    "badge": "EDITOR-IN-CHIEF",
+    "isGuest": false
+  },
+  {
+    "id": "user-3",
+    "username": "gwen",
+    "password": "ghostspider",
+    "name": "Gwen Stacy",
+    "role": "Earth-65 Ghost-Spider & Drummer",
+    "avatar": "🥁",
+    "badge": "MULTIVERSE HERO",
+    "isGuest": false
+  },
+  {
+    "id": "user-4",
+    "username": "miles",
+    "password": "brooklyn",
+    "name": "Miles Morales",
+    "role": "Brooklyn Spider-Man & Artist",
+    "avatar": "⚡",
+    "badge": "AVENGER RECRUIT",
+    "isGuest": false
+  }
+]

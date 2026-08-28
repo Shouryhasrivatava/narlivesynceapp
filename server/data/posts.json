@@ -1,0 +1,175 @@
+[
+  {
+    "id": "post-1",
+    "title": "DAILY BUGLE EXCLUSIVE: Spider-Man — Menace or Hero of Queens?",
+    "slug": "daily-bugle-exclusive-spider-man-menace-or-hero",
+    "excerpt": "Wall-crawler spotted swinging through Midtown at dawn. Chief Editor Jameson demands answers!",
+    "content": "### FRONT PAGE BULLETIN — NEW YORK CITY\n\nOnce again, the masked vigilante known as **Spider-Man** was spotted swinging across 5th Avenue before rush hour! While eyewitnesses claim he stopped an armored truck heist led by the notorious Rhino, our Chief Editor **J. Jonah Jameson** insists that public safety is at an all-time risk!\n\n> *\"He's a menace! A costumed vigilante causing traffic jams and leaving sticky webs on public statues! Who's going to clean that up?!\"* — J. Jonah Jameson\n\nMeanwhile, citizens of Queens are praising the friendly neighborhood hero for retrieving a stolen bakery van and rescuing a runaway cat from a billboard scaffolding.\n\n#### Key Witness Reports:\n* **Ned Leeds (Staff Reporter):** *\"I saw him do a quadruple backflip and catch three bank robbers with a single web-net. It was sensational!\"*\n* **NYPD Precinct 12:** *\"Suspects were securely webbed to a streetlight awaiting patrol arrival.\"*\n\nStay tuned as we investigate the secret formula behind his web shooters and whether Oscorp is secretly funding vigilante experiments!",
+    "author": "J. Jonah Jameson",
+    "authorRole": "Publisher & Editor-in-Chief",
+    "authorAvatar": "📰",
+    "category": "Scoop",
+    "tags": [
+      "Spider-Man",
+      "Daily Bugle",
+      "NYC",
+      "Rhino",
+      "Front Page"
+    ],
+    "coverImage": "https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&w=1000&q=80",
+    "soundEffect": "THWIP!",
+    "likes": 42,
+    "comments": [
+      {
+        "id": "c-1",
+        "author": "Peter Parker",
+        "avatar": "🕸️",
+        "text": "Great photos Mr. Jameson! Maybe we should pay the freelance photographer a bonus?",
+        "createdAt": "2026-08-25T14:30:00.000Z"
+      },
+      {
+        "id": "c-2",
+        "author": "Betty Brant",
+        "avatar": "✍️",
+        "text": "The readers love the Spidey front covers. Circulation is up 35%!",
+        "createdAt": "2026-08-25T15:10:00.000Z"
+      }
+    ],
+    "createdAt": "2026-08-25T10:00:00.000Z",
+    "updatedAt": "2026-08-25T10:00:00.000Z"
+  },
+  {
+    "id": "post-2",
+    "title": "Lab Notes: Mark IV Web-Fluid Tensile Strength Upgrade",
+    "slug": "lab-notes-mark-iv-web-fluid-tensile-strength",
+    "excerpt": "Synthesizing high-polymer web fluid to withstand extreme kinetic impacts and heat stress.",
+    "content": "### Midtown High / Empire State Science Lab Log #42\n\nDuring yesterday's rooftop encounter with Electro's stray electrical surges, the standard nylon-polymer web fluid degraded 18% faster than expected under high thermal friction.\n\n```text\n[Web Formula Refinement v4.2]\nBase: Ethyl-cellulose copolymer + polyoxyethylene\nCatalyst: Micro-crosslinked synthetic silk protein\nPSI Rating: 120,000 PSI tensile strength\nDegradation Half-Life: ~60 minutes under ambient UV\n```\n\n#### Testing Protocols Completed:\n1. **Kinetic Load Test:** Suspended a 2.5-ton yellow taxi cab from Manhattan Bridge structure for 45 minutes with zero strand elongation.\n2. **Insulation Layer:** Added non-conductive ceramic micro-beads into the auxiliary cartridge chamber to deflect lightning arcs.\n3. **Quick-Release Nozzle:** Recalibrated solenoid pressure valves for rapid-fire impact webbing (*THWIP-THWIP-THWIP* mode!).\n\n> **Note to Self:** Remember to restock solvent cartridges before patrol tonight. If May asks, this is all just chemistry homework!",
+    "author": "Peter Parker",
+    "authorRole": "Science Prodigy & Webhead",
+    "authorAvatar": "🕷️",
+    "category": "Tech & Gear",
+    "tags": [
+      "Web Shooters",
+      "Science",
+      "Peter Parker",
+      "Inventions"
+    ],
+    "coverImage": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1000&q=80",
+    "soundEffect": "POW!",
+    "likes": 89,
+    "comments": [
+      {
+        "id": "c-3",
+        "author": "Miles Morales",
+        "avatar": "⚡",
+        "text": "Bro, add some venom-blast grounding to that formula! Works like magic in Brooklyn.",
+        "createdAt": "2026-08-25T16:00:00.000Z"
+      },
+      {
+        "id": "comm-1787692027790",
+        "author": "nar",
+        "avatar": "📰",
+        "text": "crazy",
+        "createdAt": "2026-08-25T21:07:07.790Z"
+      }
+    ],
+    "createdAt": "2026-08-24T18:20:00.000Z",
+    "updatedAt": "2026-08-24T18:20:00.000Z"
+  },
+  {
+    "id": "post-3",
+    "title": "CODE RED: Doctor Octopus Raids Horizon Labs Energy Vault",
+    "slug": "code-red-doctor-octopus-raids-horizon-labs",
+    "excerpt": "Four mechanical titanium tentacles breach sector 7. Emergency protocols activated across Manhattan!",
+    "content": "### POLICE DISPATCH & HERO ALERT\n\nAt 22:15 hours, seismic vibration alarms triggered at the Horizon Labs sub-basement. **Dr. Otto Octavius (Doc Ock)** penetrated the perimeter vault using reinforced adamantium-tipped titanium tentacles.\n\n![Doc Ock Alert](https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1000&q=80)\n\n#### Incident Timeline:\n- **22:15:** Vault bulkhead crushed like an empty soda can.\n- **22:18:** Spider-Man arrives on the scene via express rooftop swing.\n- **22:24:** High-stakes confrontation in the central reactor rotunda (*BAM! KRASH!*).\n- **22:30:** Auxiliary power restored; Doc Ock retreated towards East River docks.\n\n> *\"The power of the sun in the palm of my hand! You cannot stop the inevitable, insect!\"* — Dr. Otto Octavius\n\n#### Citizen Safety Checklist:\n- Stay clear of high-voltage substations near the waterfront.\n- Report any sightings of metallic tentacles immediately to the Avengers Emergency Hotline or Spider-Tracer network.",
+    "author": "Captain George Stacy",
+    "authorRole": "NYPD Special Taskforce",
+    "authorAvatar": "🚨",
+    "category": "Villain Alert",
+    "tags": [
+      "Doc Ock",
+      "Horizon Labs",
+      "Villain Alert",
+      "Avengers",
+      "Emergency"
+    ],
+    "coverImage": "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1000&q=80",
+    "soundEffect": "KRASH!",
+    "likes": 56,
+    "comments": [
+      {
+        "id": "c-4",
+        "author": "Gwen Stacy",
+        "avatar": "🥁",
+        "text": "Stay safe out there Dad! Spidey's got your six.",
+        "createdAt": "2026-08-25T01:15:00.000Z"
+      }
+    ],
+    "createdAt": "2026-08-23T22:45:00.000Z",
+    "updatedAt": "2026-08-23T22:45:00.000Z"
+  },
+  {
+    "id": "post-4",
+    "title": "Earth-65 Transmission: Ghost-Spider Beats & Rooftop Patrols",
+    "slug": "earth-65-transmission-ghost-spider-beats-and-patrols",
+    "excerpt": "Drumming with The Mary Janes by day, swinging through neon-soaked skyscrapers by night.",
+    "content": "### Multiverse Frequency Sync: Earth-65\n\nHey web-slingers across the Spider-Verse! Gwen Stacy here with an update from Earth-65. \n\nOur band *The Mary Janes* just dropped a brand new demo tape, but before we could finish rehearsal at the garage, my custom drumkit was rattling from another dimensional distortion wave over Chelsea!\n\n#### Patrol Highlights:\n* **Dimension Hopping:** Stabilized a glitching collider portal with interdimensional web-mesh.\n* **Band Practice:** Mastered the bridge solo in our new track *\"Face It, Tiger\"*.\n* **Style Points:** Turquoise hood + magenta web-lining is still the uncontested best costume combo in any universe!\n\n> *\"In my universe, I couldn't save everyone... but I will never stop trying. Keep your chin up, wherever you're swinging from!\"* — Ghost-Spider",
+    "author": "Gwen Stacy",
+    "authorRole": "Ghost-Spider / Drummer",
+    "authorAvatar": "🕷️",
+    "category": "Multiverse",
+    "tags": [
+      "Spider-Gwen",
+      "Ghost-Spider",
+      "Earth-65",
+      "Multiverse",
+      "Music"
+    ],
+    "coverImage": "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1000&q=80",
+    "soundEffect": "ZAP!",
+    "likes": 124,
+    "comments": [
+      {
+        "id": "c-5",
+        "author": "Miles Morales",
+        "avatar": "🎨",
+        "text": "10/10 costume! When are you visiting Earth-1610 again? We have the best pizza.",
+        "createdAt": "2026-08-24T03:30:00.000Z"
+      }
+    ],
+    "createdAt": "2026-08-22T19:00:00.000Z",
+    "updatedAt": "2026-08-22T19:00:00.000Z"
+  },
+  {
+    "id": "post-5",
+    "title": "Patrol Log #304: The Golden Rule of Great Responsibility",
+    "slug": "patrol-log-304-golden-rule-of-great-responsibility",
+    "excerpt": "A late-night reflection on keeping New York safe, one alleyway and one kindness at a time.",
+    "content": "### Midnight Rooftop Log — Chrysler Building Gargoyle\n\nIt was a quiet Tuesday midnight until 11:30 PM. Stopped two bicycle thieves near Washington Square, helped a lost tourist find the 6-train subway entrance, and shared a half-eaten slice of pepperoni pizza with a pigeon on a water tower.\n\nPeople often ask why I keep doing this even when Jameson prints wild headlines or when I have 3 term papers due tomorrow morning.\n\n> **\"With great power comes great responsibility.\"**\n> Uncle Ben said those words, and every time I put on this mask, I remember why we fight for the people who can't fight for themselves.\n\nNo matter how bad your day is, New York always bounces back. And so do we.\n\n*Excelsior!*",
+    "author": "Spider-Man",
+    "authorRole": "Your Friendly Neighborhood Hero",
+    "authorAvatar": "🕸️",
+    "category": "Hero Log",
+    "tags": [
+      "Spider-Man",
+      "Patrol",
+      "Inspiration",
+      "Great Responsibility",
+      "NYC"
+    ],
+    "coverImage": "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1000&q=80",
+    "soundEffect": "BOOM!",
+    "likes": 210,
+    "comments": [
+      {
+        "id": "c-6",
+        "author": "Aunt May",
+        "avatar": "🥞",
+        "text": "Whoever you are under that mask, thank you for looking after our city. Don't forget to eat your vegetables!",
+        "createdAt": "2026-08-23T08:12:00.000Z"
+      }
+    ],
+    "createdAt": "2026-08-21T23:59:00.000Z",
+    "updatedAt": "2026-08-21T23:59:00.000Z"
+  }
+]
