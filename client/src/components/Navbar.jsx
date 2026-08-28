@@ -35,7 +35,7 @@ export default function Navbar({
   const [showPriorityMenu, setShowPriorityMenu] = useState(false);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 h-14 px-4 sm:px-6 flex items-center justify-between matte-panel border-b border-zinc-200 bg-white text-zinc-900">
+    <header className="fixed top-0 left-0 right-0 z-40 h-14 px-4 sm:px-6 flex items-center justify-between bg-white border-b border-zinc-200 text-zinc-900 shadow-xs">
       {/* Brand & Logo */}
       <div className="flex items-center gap-3 sm:gap-4">
         <div className="flex items-center gap-2.5">
@@ -44,30 +44,24 @@ export default function Navbar({
             NAR
           </div>
           <div>
-            <div className="flex items-center gap-1.5">
-              <h1 className="font-bold text-sm tracking-tight text-zinc-900 leading-none">
-                NAR Live Canvas
-              </h1>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" title="Connected" />
-            </div>
-            <p className="text-[10px] text-zinc-500 font-medium hidden md:block mt-0.5">
-              Next-Gen Collaborative Docs & Idea Canvas
-            </p>
+            <h1 className="font-bold text-sm tracking-tight text-black leading-none">
+              Live Sync Mini App
+            </h1>
           </div>
         </div>
 
         {/* Telemetry Indicator */}
         <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded bg-zinc-50 border border-zinc-200 text-[11px] font-mono">
           <span className="flex items-center gap-1.5 text-zinc-700 font-semibold">
-            <span className={`w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-emerald-500' : 'bg-rose-500'}`} />
-            {isConnected ? 'SYNCED' : 'OFFLINE'}
+            <span className={`w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-black' : 'bg-zinc-400'}`} />
+            {isConnected ? 'ONLINE' : 'OFFLINE'}
           </span>
           <span className="text-zinc-300">|</span>
           <span className="text-zinc-600 font-medium" title="Network Latency">
             {pingLatency}ms
           </span>
           <span className="text-zinc-300">|</span>
-          <span className="text-zinc-600 font-medium" title="Rendering Frame Rate">
+          <span className="text-zinc-600 font-medium" title="FPS">
             {fps} FPS
           </span>
         </div>
@@ -80,7 +74,7 @@ export default function Navbar({
             <div
               key={user.id || user.socketId}
               className="w-7 h-7 rounded-full border-2 border-white flex items-center justify-center text-xs shadow-xs transition-transform hover:scale-110 cursor-pointer"
-              style={{ backgroundColor: user.color || '#1c2bff' }}
+              style={{ backgroundColor: user.color || '#000000' }}
               title={`${user.name} ${user.id === currentUser.id ? '(You)' : ''}`}
             >
               <span className="text-white text-[11px]">{user.avatar || '👤'}</span>
@@ -109,19 +103,19 @@ export default function Navbar({
             }}
             className={`flex items-center gap-1 px-2.5 py-1.5 rounded border text-xs font-semibold transition-colors ${
               filterPriority !== 'All'
-                ? 'bg-zinc-100 text-zinc-900 border-zinc-400'
+                ? 'bg-black text-white border-black'
                 : 'bg-white border-zinc-200 text-zinc-700 hover:bg-zinc-50'
             }`}
             title="Filter by Priority"
           >
-            <Flag className="w-3 h-3 text-zinc-500" />
+            <Flag className="w-3 h-3" />
             <span>{filterPriority === 'All' ? 'Priority' : filterPriority.toUpperCase()}</span>
-            <ChevronDown className="w-3 h-3 text-zinc-400" />
+            <ChevronDown className="w-3 h-3" />
           </button>
 
           {showPriorityMenu && (
             <div
-              className="absolute right-0 top-10 w-36 rounded-lg p-1 matte-dropdown z-50 flex flex-col gap-0.5"
+              className="absolute right-0 top-10 w-36 rounded-lg p-1 bg-white border border-zinc-200 shadow-lg z-50 flex flex-col gap-0.5"
               onClick={() => setShowPriorityMenu(false)}
             >
               <button
@@ -158,19 +152,19 @@ export default function Navbar({
             }}
             className={`flex items-center gap-1 px-2.5 py-1.5 rounded border text-xs font-semibold transition-colors ${
               filterCategory !== 'All'
-                ? 'bg-zinc-100 text-zinc-900 border-zinc-400'
+                ? 'bg-black text-white border-black'
                 : 'bg-white border-zinc-200 text-zinc-700 hover:bg-zinc-50'
             }`}
             title="Filter by Category"
           >
-            <Filter className="w-3 h-3 text-zinc-500" />
+            <Filter className="w-3 h-3" />
             <span className="hidden sm:inline">{filterCategory}</span>
-            <ChevronDown className="w-3 h-3 text-zinc-400" />
+            <ChevronDown className="w-3 h-3" />
           </button>
 
           {showFilterMenu && (
             <div
-              className="absolute right-0 top-10 w-44 rounded-lg p-1 matte-dropdown z-50 flex flex-col gap-0.5"
+              className="absolute right-0 top-10 w-44 rounded-lg p-1 bg-white border border-zinc-200 shadow-lg z-50 flex flex-col gap-0.5"
               onClick={() => setShowFilterMenu(false)}
             >
               <button
@@ -204,12 +198,12 @@ export default function Navbar({
               ? 'bg-black text-white border-black'
               : 'bg-white border-zinc-200 text-zinc-600 hover:bg-zinc-50'
           }`}
-          title={snapToGrid ? 'Snap to Grid: Active (24px)' : 'Snap to Grid: Off'}
+          title={snapToGrid ? 'Snap to Grid: On' : 'Snap to Grid: Off'}
         >
           <Grid className="w-3.5 h-3.5" />
         </button>
 
-        {/* New Document Note CTA */}
+        {/* Create Note CTA */}
         <button
           onClick={() => onCreateNote()}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-black hover:bg-zinc-800 active:scale-95 text-xs font-semibold text-white shadow-xs transition-all"
@@ -227,7 +221,7 @@ export default function Navbar({
               setShowPriorityMenu(false);
             }}
             className="flex items-center gap-1 px-2.5 py-1.5 rounded bg-white hover:bg-zinc-50 border border-zinc-200 text-xs font-semibold text-zinc-700 transition-colors"
-            title="Load Template / Reset Canvas"
+            title="Templates"
           >
             <LayoutGrid className="w-3.5 h-3.5 text-zinc-500" />
             <span className="hidden sm:inline">Templates</span>
@@ -236,17 +230,17 @@ export default function Navbar({
 
           {showTemplateMenu && (
             <div
-              className="absolute right-0 top-10 w-48 rounded-lg p-1 matte-dropdown z-50 flex flex-col gap-0.5"
+              className="absolute right-0 top-10 w-48 rounded-lg p-1 bg-white border border-zinc-200 shadow-lg z-50 flex flex-col gap-0.5"
               onClick={() => setShowTemplateMenu(false)}
             >
               <button
                 onClick={() => onResetTemplate('brainstorm')}
                 className="w-full text-left px-2.5 py-2 rounded text-xs font-semibold text-zinc-800 hover:bg-zinc-100 flex items-center gap-2 transition-colors"
               >
-                <span>📋</span>
+                <span>📝</span>
                 <div>
-                  <div>Brainstorm Board</div>
-                  <div className="text-[10px] text-zinc-500 font-normal">Docs & Idea Canvas layout</div>
+                  <div>Classic Notes Setup</div>
+                  <div className="text-[10px] text-zinc-500 font-normal">Default 5 notes layout</div>
                 </div>
               </button>
               <button
@@ -255,8 +249,8 @@ export default function Navbar({
               >
                 <span>🔄</span>
                 <div>
-                  <div>Sprint Retrospective</div>
-                  <div className="text-[10px] text-zinc-500 font-normal">What Went Well / Action Items</div>
+                  <div>Sprint Tasks Board</div>
+                  <div className="text-[10px] text-zinc-500 font-normal">Tasks & Action Items</div>
                 </div>
               </button>
             </div>
@@ -267,7 +261,7 @@ export default function Navbar({
         <button
           onClick={onExportJSON}
           className="p-2 rounded bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-600 transition-colors hidden sm:block"
-          title="Export Canvas State"
+          title="Export Notes as JSON"
         >
           <Download className="w-3.5 h-3.5" />
         </button>
@@ -276,7 +270,7 @@ export default function Navbar({
         <button
           onClick={onOpenActivity}
           className="relative p-2 rounded bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-600 transition-colors"
-          title="Activity Stream"
+          title="Activity Log"
         >
           <History className="w-3.5 h-3.5" />
           {activityCount > 0 && (
@@ -294,7 +288,7 @@ export default function Navbar({
         >
           <div
             className="w-5 h-5 rounded-full flex items-center justify-center text-xs"
-            style={{ backgroundColor: currentUser.color || '#1c2bff' }}
+            style={{ backgroundColor: currentUser.color || '#000000' }}
           >
             <span className="text-white text-[10px]">{currentUser.avatar || '👤'}</span>
           </div>

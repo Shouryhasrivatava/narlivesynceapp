@@ -1,81 +1,74 @@
-// MSA SRM Inspired Clean Matte Color System
+// Classic Black & White Notes App Color System
 export const NOTE_COLORS = {
-  azure: {
-    name: 'MSA Azure',
-    bg: 'bg-[#f0f6ff] border-[#bfdbfe] text-[#0f172a]',
-    header: 'bg-[#e0efff] border-[#bfdbfe]',
-    accent: '#1c2bff',
-    tag: 'bg-[#dbeafe] text-[#1e40af]'
-  },
-  paper: {
-    name: 'Doc White',
-    bg: 'bg-[#ffffff] border-[#e2e8f0] text-[#0f172a]',
-    header: 'bg-[#f8fafc] border-[#e2e8f0]',
+  white: {
+    name: 'Classic White',
+    bg: 'bg-[#ffffff] border-[#e4e4e7] text-[#09090b]',
+    header: 'bg-[#fafafa] border-[#e4e4e7]',
     accent: '#18181b',
-    tag: 'bg-[#f1f5f9] text-[#334155]'
+    tag: 'bg-[#f4f4f5] text-[#27272a]'
   },
-  sage: {
-    name: 'Mint Sage',
-    bg: 'bg-[#f0fdf4] border-[#bbf7d0] text-[#064e3b]',
-    header: 'bg-[#dcfce7] border-[#bbf7d0]',
-    accent: '#107c41',
-    tag: 'bg-[#dcfce7] text-[#166534]'
-  },
-  honey: {
-    name: 'Honey Amber',
-    bg: 'bg-[#fffbeb] border-[#fde68a] text-[#78350f]',
-    header: 'bg-[#fef3c7] border-[#fde68a]',
-    accent: '#d97706',
-    tag: 'bg-[#fef3c7] text-[#92400e]'
-  },
-  rose: {
-    name: 'Coral Blush',
-    bg: 'bg-[#fff1f2] border-[#fecdd3] text-[#881337]',
-    header: 'bg-[#ffe4e6] border-[#fecdd3]',
-    accent: '#e11d48',
-    tag: 'bg-[#ffe4e6] text-[#9f1239]'
+  ivory: {
+    name: 'Warm Ivory',
+    bg: 'bg-[#fafaf9] border-[#e7e5e4] text-[#1c1917]',
+    header: 'bg-[#f5f5f4] border-[#e7e5e4]',
+    accent: '#292524',
+    tag: 'bg-[#e7e5e4] text-[#44403c]'
   },
   slate: {
-    name: 'Cool Slate',
-    bg: 'bg-[#f8fafc] border-[#cbd5e1] text-[#1e293b]',
+    name: 'Soft Slate',
+    bg: 'bg-[#f8fafc] border-[#cbd5e1] text-[#0f172a]',
     header: 'bg-[#f1f5f9] border-[#cbd5e1]',
-    accent: '#475569',
+    accent: '#334155',
     tag: 'bg-[#e2e8f0] text-[#334155]'
+  },
+  zinc: {
+    name: 'Pale Zinc',
+    bg: 'bg-[#f4f4f5] border-[#d4d4d8] text-[#18181b]',
+    header: 'bg-[#e4e4e7] border-[#d4d4d8]',
+    accent: '#27272a',
+    tag: 'bg-[#d4d4d8] text-[#18181b]'
+  },
+  amber: {
+    name: 'Muted Kraft',
+    bg: 'bg-[#fefce8] border-[#fef08a] text-[#422006]',
+    header: 'bg-[#fef9c3] border-[#fef08a]',
+    accent: '#854d0e',
+    tag: 'bg-[#fef08a] text-[#713f12]'
   }
 };
 
 export const PRIORITIES = [
-  { id: 'high', label: 'P1 High', color: 'bg-rose-50 text-rose-700 border-rose-200', dot: 'bg-rose-500' },
-  { id: 'medium', label: 'P2 Medium', color: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
-  { id: 'low', label: 'P3 Low', color: 'bg-blue-50 text-blue-700 border-blue-200', dot: 'bg-blue-500' },
-  { id: 'none', label: 'No Priority', color: 'bg-zinc-100 text-zinc-600 border-zinc-200', dot: 'bg-zinc-400' }
+  { id: 'high', label: 'P1 High', color: 'bg-black text-white border-black', dot: 'bg-rose-500' },
+  { id: 'medium', label: 'P2 Medium', color: 'bg-zinc-100 text-zinc-800 border-zinc-300', dot: 'bg-amber-500' },
+  { id: 'low', label: 'P3 Low', color: 'bg-zinc-50 text-zinc-600 border-zinc-200', dot: 'bg-blue-500' },
+  { id: 'none', label: 'No Priority', color: 'bg-white text-zinc-500 border-zinc-200', dot: 'bg-zinc-300' }
 ];
 
 export const HIGHLIGHT_COLORS = [
-  { id: 'yellow', name: 'Yellow', bg: 'bg-yellow-200/90 text-yellow-950', hex: '#fef08a' },
-  { id: 'blue', name: 'Blue', bg: 'bg-sky-200/90 text-sky-950', hex: '#bae6fd' },
-  { id: 'green', name: 'Green', bg: 'bg-emerald-200/90 text-emerald-950', hex: '#a7f3d0' },
-  { id: 'pink', name: 'Pink', bg: 'bg-pink-200/90 text-pink-950', hex: '#fbcfe8' }
+  { id: 'yellow', name: 'Yellow', bg: 'bg-[#fef08a] text-[#422006]', marker: '#fde047' },
+  { id: 'green', name: 'Green', bg: 'bg-[#bbf7d0] text-[#064e3b]', marker: '#86efac' },
+  { id: 'cyan', name: 'Cyan', bg: 'bg-[#bae6fd] text-[#0c4a6e]', marker: '#7dd3fc' },
+  { id: 'pink', name: 'Pink', bg: 'bg-[#fbcfe8] text-[#831843]', marker: '#f472b6' },
+  { id: 'purple', name: 'Purple', bg: 'bg-[#e9d5ff] text-[#581c87]', marker: '#c084fc' }
 ];
 
 export const CATEGORIES = [
-  { id: 'Docs', label: '📄 Docs', color: 'bg-blue-50 text-blue-700 border-blue-200' },
-  { id: 'Feature', label: '✨ Feature', color: 'bg-indigo-50 text-indigo-700 border-indigo-200' },
-  { id: 'Task', label: '✅ Task', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-  { id: 'Idea', label: '💡 Idea', color: 'bg-amber-50 text-amber-700 border-amber-200' },
-  { id: 'Bug', label: '🐛 Bug', color: 'bg-rose-50 text-rose-700 border-rose-200' },
-  { id: 'Architecture', label: '🏛️ Architecture', color: 'bg-purple-50 text-purple-700 border-purple-200' }
+  { id: 'Notes', label: '📝 Notes', color: 'bg-zinc-100 text-zinc-800 border-zinc-300' },
+  { id: 'Tasks', label: '✅ Tasks', color: 'bg-zinc-100 text-zinc-800 border-zinc-300' },
+  { id: 'Ideas', label: '💡 Ideas', color: 'bg-zinc-100 text-zinc-800 border-zinc-300' },
+  { id: 'Projects', label: '📁 Projects', color: 'bg-zinc-100 text-zinc-800 border-zinc-300' },
+  { id: 'Important', label: '⭐ Important', color: 'bg-zinc-100 text-zinc-800 border-zinc-300' }
 ];
 
 export const USER_AVATARS = ['👤', '⚡', '💡', '🎯', '✨', '☕', '🚀', '🛠️', '📌', '🧭'];
 
 export const USER_COLORS = [
-  '#1c2bff', // MSA Electric Royal Blue
-  '#107c41', // Microsoft Green
-  '#d97706', // Amber Gold
-  '#e11d48', // Coral
+  '#000000', // Solid Black
+  '#3f3f46', // Zinc Gray
+  '#2563eb', // Blue
+  '#059669', // Emerald
+  '#d97706', // Amber
   '#7c3aed', // Purple
-  '#0284c7', // Sky Blue
-  '#18181b', // Obsidian Black
+  '#e11d48', // Crimson
   '#475569'  // Slate
 ];

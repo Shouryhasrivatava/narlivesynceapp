@@ -16,8 +16,8 @@ import {
   ListTodo,
   CheckSquare,
   Square,
-  AlertCircle,
-  ChevronDown
+  ChevronDown,
+  Eraser
 } from 'lucide-react';
 import { NOTE_COLORS, CATEGORIES, PRIORITIES, HIGHLIGHT_COLORS } from '../types';
 import { useSocket } from '../context/SocketContext';
@@ -57,7 +57,7 @@ export default function StickyNote({
     setContent(note.content);
   }, [note.content]);
 
-  const colorConfig = NOTE_COLORS[note.color] || NOTE_COLORS.azure;
+  const colorConfig = NOTE_COLORS[note.color] || NOTE_COLORS.white;
   const currentPriority = PRIORITIES.find((p) => p.id === note.priority) || PRIORITIES[1];
   const isLockedByOther = activeLock && activeLock.userId !== currentUser.id;
   const hasVoted = !!(note.votedUsers && note.votedUsers[currentUser.id]);
@@ -119,8 +119,8 @@ export default function StickyNote({
     const handleMouseMove = (moveEvent) => {
       const deltaX = moveEvent.clientX - resizeStartPos.current.mouseX;
       const deltaY = moveEvent.clientY - resizeStartPos.current.mouseY;
-      const newWidth = Math.max(260, Math.min(650, resizeStartPos.current.width + deltaX));
-      const newHeight = Math.max(190, Math.min(650, resizeStartPos.current.height + deltaY));
+      const newWidth = Math.max(260, Math.min(700, resizeStartPos.current.width + deltaX));
+      const newHeight = Math.max(180, Math.min(700, resizeStartPos.current.height + deltaY));
 
       onUpdate({ id: note.id, width: newWidth, height: newHeight });
     };
@@ -135,7 +135,38 @@ export default function StickyNote({
     window.addEventListener('mouseup', handleMouseUp);
   };
 
-  // Content formatting helpers (Google Docs Vibe)
+  // Improved Highlighting & Text Formatting
+  const applyHighlight = (colorKey) => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selected = content.substring(start, end);
+
+    let replacement = '';
+    if (colorKey === 'clear') {
+      // Strip highlight tags from selection
+      replacement = selected.replace(/\[hl:[a-z]+\](.*?)\[\/hl\]/g, '$1').replace(/==(.*?)==/g, '$1');
+    } else {
+      const textToWrap = selected || 'highlighted text';
+      replacement = `[hl:${colorKey}]${textToWrap}[/hl]`;
+    }
+
+    const newContent = content.substring(0, start) + replacement + content.substring(end);
+    setContent(newContent);
+    onUpdate({ id: note.id, content: newContent });
+    setShowHighlightMenu(false);
+
+    // Re-focus and set selection
+    setTimeout(() => {
+      if (textareaRef.current) {
+        textareaRef.current.focus();
+        textareaRef.current.setSelectionRange(start, start + replacement.length);
+      }
+    }, 50);
+  };
+
   const applyTextFormat = (prefix, suffix = prefix) => {
     const textarea = textareaRef.current;
     if (!textarea) return;
@@ -145,21 +176,28 @@ export default function StickyNote({
     const selected = content.substring(start, end);
     const replacement = selected
       ? `${prefix}${selected}${suffix}`
-      : `${prefix}highlighted text${suffix}`;
+      : `${prefix}text${suffix}`;
 
     const newContent = content.substring(0, start) + replacement + content.substring(end);
     setContent(newContent);
     onUpdate({ id: note.id, content: newContent });
-    setShowHighlightMenu(false);
   };
 
   const insertChecklistItem = () => {
-    const newContent = content ? `${content.trim()}\n- [ ] New item` : '- [ ] New item';
+    const newContent = content ? `${content.trim()}\n- [ ] ` : '- [ ] ';
     setContent(newContent);
     onUpdate({ id: note.id, content: newContent });
+    setIsEditing(true);
+
+    setTimeout(() => {
+      if (textareaRef.current) {
+        textareaRef.current.focus();
+        textareaRef.current.setSelectionRange(newContent.length, newContent.length);
+      }
+    }, 50);
   };
 
-  // Toggle checklist checkbox directly inside rendered content
+  // Toggle checklist checkbox in formatted view
   const handleToggleChecklist = (lineIndex) => {
     const lines = content.split('\n');
     const line = lines[lineIndex];
@@ -196,18 +234,22 @@ export default function StickyNote({
     onVote(note.id);
   };
 
-  // Custom Rich Content Renderer (Markdown + Highlights + Checklists)
+  // Rich formatted content rendering with realistic fluorescent highlighters
   const renderFormattedContent = () => {
     if (!content.trim()) {
-      return <p className="text-xs text-zinc-400 italic">Click to write notes, add tasks, or highlight key points...</p>;
+      return (
+        <p className="text-xs text-zinc-400 italic">
+          Click to type note, highlight text, or create checklists (- [ ])...
+        </p>
+      );
     }
 
     const lines = content.split('\n');
 
     return (
-      <div className="flex flex-col gap-1 text-xs text-zinc-800 leading-relaxed font-sans select-text">
+      <div className="flex flex-col gap-1 text-xs text-zinc-900 leading-relaxed font-sans select-text">
         {lines.map((line, idx) => {
-          // 1. Checklist item
+          // Checklist item
           if (line.startsWith('- [ ]') || line.startsWith('- [x]')) {
             const isChecked = line.startsWith('- [x]');
             const itemText = line.replace(/^-\s*\[[ x]\]\s*/, '');
@@ -220,21 +262,21 @@ export default function StickyNote({
                   handleToggleChecklist(idx);
                 }}
               >
-                <button type="button" className="mt-0.5 text-zinc-700">
+                <button type="button" className="mt-0.5 text-zinc-800">
                   {isChecked ? (
-                    <CheckSquare className="w-3.5 h-3.5 text-emerald-600 fill-emerald-100" />
+                    <CheckSquare className="w-3.5 h-3.5 text-black" />
                   ) : (
                     <Square className="w-3.5 h-3.5 text-zinc-400" />
                   )}
                 </button>
-                <span className={`${isChecked ? 'line-through text-zinc-400' : 'text-zinc-800'}`}>
+                <span className={`${isChecked ? 'line-through text-zinc-400' : 'text-zinc-900'}`}>
                   {renderInlineHighlights(itemText)}
                 </span>
               </div>
             );
           }
 
-          // 2. Normal paragraph with inline highlights and bold
+          // Regular paragraph
           return (
             <p key={idx} className="min-h-[1.2em]">
               {renderInlineHighlights(line)}
@@ -245,39 +287,50 @@ export default function StickyNote({
     );
   };
 
-  // Helper for inline `==yellow==` or `[hl:color]...[/hl]` or `**bold**`
+  // Parse inline `==text==` and `[hl:color]text[/hl]` with vibrant fluorescent styling
   const renderInlineHighlights = (text) => {
-    // Replace ==text== with yellow highlight
-    const parts = text.split(/(==[^=]+==|\[hl:[^\]]+\][^[]+\[\/hl\]|\*\*[^*]+\*\*)/g);
+    const parts = text.split(/(\[hl:[a-z]+\](?:(?!\[\/hl\]).)+\[\/hl\]|==(?:(?!==).)+==|\*\*(?:(?!\*\*).)+\*\*)/g);
 
     return parts.map((part, i) => {
+      // Standard markdown highlight ==text==
       if (part.startsWith('==') && part.endsWith('==')) {
         return (
-          <mark key={i} className="bg-yellow-200/90 text-yellow-950 px-1 py-0.2 rounded font-medium">
+          <mark
+            key={i}
+            className="bg-[#fef08a] text-[#422006] px-1 py-0.5 rounded-[3px] font-medium shadow-xs"
+          >
             {part.slice(2, -2)}
           </mark>
         );
       }
+
+      // Tagged color highlight [hl:color]text[/hl]
       if (part.startsWith('[hl:') && part.includes(']')) {
-        const colorMatch = part.match(/\[hl:([a-z]+)\](.*?)\[\/hl\]/);
-        if (colorMatch) {
-          const colorKey = colorMatch[1];
-          const textInside = colorMatch[2];
+        const match = part.match(/^\[hl:([a-z]+)\](.*)\[\/hl\]$/s);
+        if (match) {
+          const colorKey = match[1];
+          const textInside = match[2];
           const highlightObj = HIGHLIGHT_COLORS.find((h) => h.id === colorKey) || HIGHLIGHT_COLORS[0];
           return (
-            <mark key={i} className={`${highlightObj.bg} px-1 py-0.2 rounded font-medium`}>
+            <mark
+              key={i}
+              className={`${highlightObj.bg} px-1 py-0.5 rounded-[3px] font-medium shadow-xs`}
+            >
               {textInside}
             </mark>
           );
         }
       }
+
+      // Bold text **text**
       if (part.startsWith('**') && part.endsWith('**')) {
         return (
-          <strong key={i} className="font-bold text-zinc-950">
+          <strong key={i} className="font-bold text-black">
             {part.slice(2, -2)}
           </strong>
         );
       }
+
       return part;
     });
   };
@@ -289,7 +342,7 @@ export default function StickyNote({
         isDragging
           ? 'matte-note-dragging cursor-grabbing z-50'
           : 'matte-note-card cursor-default'
-      } ${isLockedByOther ? 'ring-2 ring-indigo-600' : ''}`}
+      } ${isLockedByOther ? 'ring-2 ring-black' : ''}`}
       style={{
         left: note.x,
         top: note.y,
@@ -302,14 +355,14 @@ export default function StickyNote({
       {/* Remote Editing Lock Banner */}
       {isLockedByOther && (
         <div
-          className="absolute -top-7 left-0 right-0 mx-auto w-max px-2.5 py-0.5 rounded text-xs font-semibold text-white shadow-xs flex items-center gap-1.5 bg-black"
+          className="absolute -top-7 left-0 right-0 mx-auto w-max px-2 py-0.5 rounded text-xs font-semibold text-white shadow-xs flex items-center gap-1.5 bg-black"
         >
           <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
           <span>{activeLock.userName} is editing...</span>
         </div>
       )}
 
-      {/* Note Header / Document Toolbar */}
+      {/* Note Header / Top Bar */}
       <div
         onMouseDown={handleMouseDownHeader}
         className={`px-3 py-2 rounded-t-lg flex items-center justify-between gap-1.5 cursor-grab active:cursor-grabbing border-b ${colorConfig.header}`}
@@ -317,7 +370,7 @@ export default function StickyNote({
         <div className="flex items-center gap-1 flex-1 min-w-0">
           <GripHorizontal className="w-3.5 h-3.5 text-zinc-400 flex-shrink-0" />
 
-          {/* Priority Marker Badge */}
+          {/* Priority Marker */}
           <div className="relative">
             <button
               onClick={(e) => {
@@ -328,7 +381,7 @@ export default function StickyNote({
                 setShowHighlightMenu(false);
               }}
               className={`text-[10px] font-bold px-1.5 py-0.5 rounded border transition-colors flex items-center gap-1 ${currentPriority.color}`}
-              title="Set Priority Level"
+              title="Priority"
             >
               <span className={`w-1.5 h-1.5 rounded-full ${currentPriority.dot}`} />
               <span>{currentPriority.label}</span>
@@ -337,7 +390,7 @@ export default function StickyNote({
 
             {showPriorityPicker && (
               <div
-                className="absolute left-0 top-6 w-32 rounded-lg p-1 matte-dropdown z-50 flex flex-col gap-0.5"
+                className="absolute left-0 top-6 w-32 rounded-lg p-1 bg-white border border-zinc-200 shadow-lg z-50 flex flex-col gap-0.5"
                 onClick={(e) => e.stopPropagation()}
               >
                 {PRIORITIES.map((p) => (
@@ -348,10 +401,10 @@ export default function StickyNote({
                       setShowPriorityPicker(false);
                     }}
                     className={`text-left text-xs px-2 py-1 rounded font-medium transition-colors hover:bg-zinc-100 flex items-center gap-1.5 ${
-                      note.priority === p.id ? 'font-bold bg-zinc-100' : 'text-zinc-700'
+                      note.priority === p.id ? 'font-bold bg-zinc-100 text-black' : 'text-zinc-700'
                     }`}
                   >
-                    <span className={`w-2 h-2 rounded-full ${p.dot}`} />
+                    <span className={`w-1.5 h-1.5 rounded-full ${p.dot}`} />
                     <span>{p.label}</span>
                   </button>
                 ))}
@@ -372,12 +425,12 @@ export default function StickyNote({
               className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-black/5 hover:bg-black/10 transition-colors flex items-center gap-1 text-zinc-800"
             >
               <Tag className="w-2.5 h-2.5" />
-              <span>{note.category || 'Docs'}</span>
+              <span>{note.category || 'Notes'}</span>
             </button>
 
             {showCategoryPicker && (
               <div
-                className="absolute left-0 top-6 w-36 rounded-lg p-1 matte-dropdown z-50 flex flex-col gap-0.5"
+                className="absolute left-0 top-6 w-36 rounded-lg p-1 bg-white border border-zinc-200 shadow-lg z-50 flex flex-col gap-0.5"
                 onClick={(e) => e.stopPropagation()}
               >
                 {CATEGORIES.map((cat) => (
@@ -388,7 +441,7 @@ export default function StickyNote({
                       setShowCategoryPicker(false);
                     }}
                     className={`text-left text-xs px-2 py-1 rounded font-medium transition-colors hover:bg-zinc-100 ${
-                      note.category === cat.id ? 'font-bold text-zinc-900 bg-zinc-100' : 'text-zinc-700'
+                      note.category === cat.id ? 'font-bold text-black bg-zinc-100' : 'text-zinc-700'
                     }`}
                   >
                     {cat.label}
@@ -398,7 +451,7 @@ export default function StickyNote({
             )}
           </div>
 
-          {/* Conflict Merged Indicator */}
+          {/* Merged Conflict Indicator */}
           {note.lastConflict && (
             <span
               title={note.lastConflict.summary}
@@ -410,7 +463,7 @@ export default function StickyNote({
           )}
         </div>
 
-        {/* Top Right Controls */}
+        {/* Top Controls */}
         <div className="flex items-center gap-0.5">
           {/* Pin */}
           <button
@@ -419,7 +472,7 @@ export default function StickyNote({
               onUpdate({ id: note.id, pinned: !note.pinned });
             }}
             className={`p-1 rounded transition-colors ${
-              note.pinned ? 'bg-black text-white' : 'text-zinc-400 hover:text-zinc-800 hover:bg-black/5'
+              note.pinned ? 'bg-black text-white' : 'text-zinc-400 hover:text-black hover:bg-black/5'
             }`}
             title={note.pinned ? 'Unpin' : 'Pin in place'}
           >
@@ -436,15 +489,15 @@ export default function StickyNote({
                 setShowPriorityPicker(false);
                 setShowHighlightMenu(false);
               }}
-              className="p-1 text-zinc-400 hover:text-zinc-800 hover:bg-black/5 rounded transition-colors"
-              title="Theme Color"
+              className="p-1 text-zinc-400 hover:text-black hover:bg-black/5 rounded transition-colors"
+              title="Shade"
             >
               <Palette className="w-3 h-3" />
             </button>
 
             {showColorPicker && (
               <div
-                className="absolute right-0 top-6 p-1.5 rounded-lg matte-dropdown z-50 flex gap-1"
+                className="absolute right-0 top-6 p-1.5 rounded-lg bg-white border border-zinc-200 shadow-lg z-50 flex gap-1"
                 onClick={(e) => e.stopPropagation()}
               >
                 {Object.entries(NOTE_COLORS).map(([key, conf]) => (
@@ -479,9 +532,9 @@ export default function StickyNote({
         </div>
       </div>
 
-      {/* Note Body (Title + Text Editor / Rich Viewer) */}
+      {/* Note Body */}
       <div className="p-3 flex-1 flex flex-col gap-1.5 overflow-hidden">
-        {/* Title */}
+        {/* Note Title */}
         <input
           type="text"
           value={title}
@@ -495,13 +548,13 @@ export default function StickyNote({
           onKeyDown={(e) => {
             if (e.key === 'Enter') e.target.blur();
           }}
-          placeholder="Untitled Document..."
-          className="w-full font-bold text-xs bg-transparent border-b border-transparent hover:border-zinc-300 focus:border-zinc-900 focus:outline-none transition-colors px-1 py-0.5 rounded text-zinc-900"
+          placeholder="Note title..."
+          className="w-full font-bold text-xs bg-transparent border-b border-transparent hover:border-zinc-300 focus:border-black focus:outline-none transition-colors px-1 py-0.5 rounded text-black"
         />
 
-        {/* Google Docs Text Formatting Bar */}
-        <div className="flex items-center gap-1 py-1 border-y border-black/5 text-zinc-600">
-          {/* Highlight Picker Button */}
+        {/* Formatting & Highlighting Toolbar */}
+        <div className="flex items-center gap-1 py-1 border-y border-zinc-200 text-zinc-700 select-none">
+          {/* Highlighter Tool Menu */}
           <div className="relative">
             <button
               type="button"
@@ -510,27 +563,38 @@ export default function StickyNote({
                 setShowHighlightMenu(!showHighlightMenu);
                 setIsEditing(true);
               }}
-              className="p-1 rounded hover:bg-black/5 text-zinc-600 hover:text-zinc-900 transition-colors flex items-center gap-0.5"
-              title="Highlight Text"
+              className="px-1.5 py-0.5 rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-800 transition-colors flex items-center gap-1 text-[11px] font-semibold border border-zinc-300"
+              title="Highlight Tool"
             >
               <Highlighter className="w-3 h-3 text-amber-600" />
+              <span>Highlight</span>
+              <ChevronDown className="w-2.5 h-2.5 opacity-60" />
             </button>
 
             {showHighlightMenu && (
               <div
-                className="absolute left-0 top-6 rounded-lg p-1 matte-dropdown z-50 flex gap-1 shadow-md"
+                className="absolute left-0 top-6 rounded-lg p-1.5 bg-white border border-zinc-200 shadow-xl z-50 flex items-center gap-1.5"
                 onClick={(e) => e.stopPropagation()}
               >
                 {HIGHLIGHT_COLORS.map((h) => (
                   <button
                     key={h.id}
-                    onClick={() => applyTextFormat(`[hl:${h.id}]`, `[/hl]`)}
-                    className={`w-5 h-5 rounded text-[10px] font-bold border border-black/10 flex items-center justify-center hover:scale-110 transition-transform ${h.bg}`}
+                    onClick={() => applyHighlight(h.id)}
+                    className="w-6 h-6 rounded flex items-center justify-center font-bold text-[10px] border border-black/20 hover:scale-110 transition-transform shadow-xs"
+                    style={{ backgroundColor: h.marker }}
                     title={`Highlight ${h.name}`}
                   >
                     A
                   </button>
                 ))}
+                <div className="w-[1px] h-4 bg-zinc-200 mx-0.5" />
+                <button
+                  onClick={() => applyHighlight('clear')}
+                  className="p-1 rounded text-zinc-600 hover:text-black hover:bg-zinc-100 transition-colors flex items-center gap-1 text-[10px]"
+                  title="Clear Highlight"
+                >
+                  <Eraser className="w-3.5 h-3.5" />
+                </button>
               </div>
             )}
           </div>
@@ -541,7 +605,7 @@ export default function StickyNote({
               e.stopPropagation();
               applyTextFormat('**', '**');
             }}
-            className="p-1 rounded hover:bg-black/5 text-zinc-600 hover:text-zinc-900 transition-colors"
+            className="p-1 rounded hover:bg-black/5 text-zinc-700 hover:text-black transition-colors"
             title="Bold (**text**)"
           >
             <Bold className="w-3 h-3" />
@@ -553,7 +617,7 @@ export default function StickyNote({
               e.stopPropagation();
               applyTextFormat('*', '*');
             }}
-            className="p-1 rounded hover:bg-black/5 text-zinc-600 hover:text-zinc-900 transition-colors"
+            className="p-1 rounded hover:bg-black/5 text-zinc-700 hover:text-black transition-colors"
             title="Italic (*text*)"
           >
             <Italic className="w-3 h-3" />
@@ -565,10 +629,10 @@ export default function StickyNote({
               e.stopPropagation();
               insertChecklistItem();
             }}
-            className="p-1 rounded hover:bg-black/5 text-zinc-600 hover:text-zinc-900 transition-colors"
-            title="Add Task Checklist (- [ ] item)"
+            className="p-1 rounded hover:bg-black/5 text-zinc-700 hover:text-black transition-colors"
+            title="Add Checklist (- [ ] item)"
           >
-            <ListTodo className="w-3 h-3 text-indigo-600" />
+            <ListTodo className="w-3 h-3 text-black" />
           </button>
 
           <button
@@ -577,7 +641,7 @@ export default function StickyNote({
               e.stopPropagation();
               applyTextFormat('`', '`');
             }}
-            className="p-1 rounded hover:bg-black/5 text-zinc-600 hover:text-zinc-900 transition-colors"
+            className="p-1 rounded hover:bg-black/5 text-zinc-700 hover:text-black transition-colors"
             title="Code (`code`)"
           >
             <Code className="w-3 h-3" />
@@ -585,14 +649,14 @@ export default function StickyNote({
 
           <div className="ml-auto text-[10px] text-zinc-400 font-mono">
             {isEditing ? (
-              <span className="text-indigo-600 font-semibold">Editing</span>
+              <span className="text-black font-bold">Editing</span>
             ) : (
-              <span className="hover:text-zinc-700 cursor-pointer" onClick={() => setIsEditing(true)}>Edit</span>
+              <span className="hover:text-black cursor-pointer font-medium" onClick={() => setIsEditing(true)}>Edit</span>
             )}
           </div>
         </div>
 
-        {/* Content Area: View or Edit Mode */}
+        {/* Content Body: Editable vs Rendered Mode */}
         <div className="flex-1 overflow-y-auto min-h-0 pt-1">
           {isEditing ? (
             <textarea
@@ -606,8 +670,8 @@ export default function StickyNote({
               }}
               onFocus={() => onStartTyping(note.id)}
               onBlur={handleContentBlur}
-              placeholder="Type note or checklist (- [ ] task, ==highlight==, **bold**)..."
-              className="w-full h-full text-xs font-normal bg-transparent border border-transparent hover:border-zinc-200 focus:border-zinc-900 focus:bg-white focus:outline-none transition-colors p-1 rounded resize-none leading-relaxed font-sans"
+              placeholder="Type note, highlight text (==yellow== or [hl:green]text[/hl]), or add tasks (- [ ])..."
+              className="w-full h-full text-xs font-normal bg-transparent border border-transparent hover:border-zinc-200 focus:border-black focus:bg-white focus:outline-none transition-colors p-1 rounded resize-none leading-relaxed font-sans text-zinc-900"
               autoFocus
             />
           ) : (
@@ -626,7 +690,7 @@ export default function StickyNote({
         <div className="flex items-center gap-1.5">
           <span
             className="w-1.5 h-1.5 rounded-full"
-            style={{ backgroundColor: note.lastEditedByColor || '#1c2bff' }}
+            style={{ backgroundColor: note.lastEditedByColor || '#000000' }}
           />
           <span className="truncate max-w-[80px] font-medium">
             {note.lastEditedBy || 'Anonymous'}
@@ -639,7 +703,7 @@ export default function StickyNote({
               e.stopPropagation();
               onDuplicate(note);
             }}
-            className="p-1 hover:bg-black/5 rounded transition-colors text-zinc-500 hover:text-zinc-800"
+            className="p-1 hover:bg-black/5 rounded transition-colors text-zinc-500 hover:text-black"
             title="Duplicate"
           >
             <Copy className="w-2.5 h-2.5" />
@@ -663,7 +727,7 @@ export default function StickyNote({
         <div
           onMouseDown={handleMouseDownResize}
           className="absolute bottom-0 right-0 w-4 h-4 cursor-se-resize flex items-center justify-center text-zinc-400 hover:text-black select-none"
-          title="Drag to resize note dimensions"
+          title="Drag to resize dimensions"
         >
           <svg width="6" height="6" viewBox="0 0 6 6" fill="currentColor">
             <circle cx="5" cy="5" r="0.8" />

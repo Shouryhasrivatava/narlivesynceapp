@@ -56,7 +56,7 @@ function LiveSyncBoardApp() {
         </div>
         <div className="text-center flex flex-col items-center">
           <Loader2 className="w-4 h-4 text-zinc-600 animate-spin mb-1" />
-          <h2 className="text-xs font-semibold text-zinc-700">Connecting to NAR Live Canvas...</h2>
+          <h2 className="text-xs font-semibold text-zinc-700">Connecting to Live Sync Mini App...</h2>
           <p className="text-[11px] text-zinc-400 font-mono mt-0.5">Restoring persistent state</p>
         </div>
       </div>
