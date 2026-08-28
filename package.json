@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "SyncSpace: Real-Time Collaborative Canvas with Live Cursors, Optimistic UI, 3-Way Merge Simultaneous Edit Conflict Resolution, and Persistent Storage",
   "scripts": {
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev": "concurrently \"npm.cmd run dev:server\" \"npm.cmd run dev:client\" || concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "node server/server.js",
-    "dev:client": "npm --prefix client run dev",
-    "start": "concurrently \"npm run dev:server\" \"npm --prefix client run preview\"",
-    "install:all": "npm install && npm --prefix server install && npm --prefix client install",
-    "build:client": "npm --prefix client run build"
+    "dev:client": "npm.cmd --prefix client run dev || npm --prefix client run dev",
+    "start": "concurrently \"node server/server.js\" \"npm.cmd --prefix client run preview || npm --prefix client run preview\"",
+    "install:all": "npm.cmd install; npm.cmd --prefix server install; npm.cmd --prefix client install",
+    "build:client": "npm.cmd --prefix client run build || npm --prefix client run build"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

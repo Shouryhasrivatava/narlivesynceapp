@@ -1,44 +1,49 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GitMerge, X, Sparkles } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 export default function ConflictToast({ toasts, onDismiss }) {
+  const { isDark } = useTheme();
+
   return (
-    <div className="fixed bottom-6 left-6 z-50 flex flex-col gap-3 max-w-md w-full pointer-events-none">
+    <div className="fixed bottom-6 left-6 z-50 flex flex-col gap-2.5 max-w-md w-full pointer-events-none">
       <AnimatePresence>
         {toasts.map((toast) => (
           <motion.div
             key={toast.id}
-            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            initial={{ opacity: 0, y: 20, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="pointer-events-auto bg-slate-900/95 border-2 border-indigo-500/80 backdrop-blur-xl text-white rounded-xl p-4 shadow-2xl flex items-start gap-3.5"
+            exit={{ opacity: 0, y: 15, scale: 0.96 }}
+            className={`pointer-events-auto rounded-xl p-3.5 shadow-xl border flex items-start gap-3 transition-colors ${
+              isDark ? 'bg-slate-900 border-indigo-500/50 text-slate-100' : 'bg-white border-indigo-300 text-slate-900'
+            }`}
           >
-            <div className="p-2 bg-indigo-500/20 text-indigo-400 rounded-lg flex-shrink-0 border border-indigo-500/30 mt-0.5">
-              <GitMerge className="w-5 h-5 animate-pulse" />
+            <div className="p-1.5 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-lg flex-shrink-0 mt-0.5">
+              <GitMerge className="w-4 h-4 animate-pulse" />
             </div>
 
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-sm text-indigo-300 flex items-center gap-1">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              <div className="flex items-center gap-1.5">
+                <span className="font-bold text-xs text-indigo-600 dark:text-indigo-400 flex items-center gap-1">
+                  <Sparkles className="w-3 h-3 text-amber-500" />
                   Concurrent Edit Merged
                 </span>
-                <span className="text-[10px] uppercase font-mono px-2 py-0.5 bg-indigo-500/20 text-indigo-300 rounded-full border border-indigo-400/30">
-                  Non-Destructive 3-Way
+                <span className="text-[9px] uppercase font-mono px-1.5 py-0.2 rounded bg-indigo-500/10 text-indigo-600 dark:text-indigo-300">
+                  3-Way Diff
                 </span>
               </div>
-              <p className="text-xs text-slate-300 mt-1 leading-relaxed">
-                {toast.summary || 'Two collaborators edited this note at the same moment. Both sets of edits have been preserved without overwriting.'}
+              <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-snug">
+                {toast.summary || 'Simultaneous edit merged non-destructively without overwriting.'}
               </p>
             </div>
 
             <button
               onClick={() => onDismiss(toast.id)}
-              className="text-slate-400 hover:text-white p-1 rounded-md hover:bg-slate-800 transition-colors flex-shrink-0"
+              className="opacity-40 hover:opacity-100 p-1 rounded transition-opacity"
               title="Dismiss"
             >
-              <X className="w-4 h-4" />
+              <X className="w-3.5 h-3.5" />
             </button>
           </motion.div>
         ))}

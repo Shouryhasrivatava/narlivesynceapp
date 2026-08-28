@@ -610,7 +610,12 @@ io.on('connection', (socket) => {
     io.emit('presence:update', Array.from(onlineUsers.values()));
   });
 
-  // 12. Disconnect Clean Up
+  // 12. Latency Measurement Heartbeat
+  socket.on('ping:check', (callback) => {
+    if (typeof callback === 'function') callback();
+  });
+
+  // 13. Disconnect Clean Up
   socket.on('disconnect', () => {
     console.log(`[Socket] Client disconnected: ${socket.id}`);
     const user = onlineUsers.get(socket.id);

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { SocketProvider } from './context/SocketContext';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { useLiveBoard } from './hooks/useLiveBoard';
 import Navbar from './components/Navbar';
 import Canvas from './components/Canvas';
@@ -10,9 +11,12 @@ import ConflictToast from './components/ConflictToast';
 import { Loader2 } from 'lucide-react';
 
 function LiveSyncBoardApp() {
+  const { isDark } = useTheme();
+
   const {
     board,
     notes,
+    rawNotesCount,
     poll,
     activities,
     activeLocks,
@@ -20,6 +24,12 @@ function LiveSyncBoardApp() {
     pings,
     conflictToasts,
     isLoading,
+    fps,
+    pingLatency,
+    snapToGrid,
+    setSnapToGrid,
+    filterCategory,
+    setFilterCategory,
     createNote,
     updateNote,
     moveNote,
@@ -30,6 +40,7 @@ function LiveSyncBoardApp() {
     votePoll,
     pingCanvas,
     resetBoard,
+    exportBoardJSON,
     emitCursorMove,
     emitCursorLeave,
     dismissConflictToast
@@ -40,31 +51,42 @@ function LiveSyncBoardApp() {
 
   if (isLoading) {
     return (
-      <div className="w-screen h-screen flex flex-col items-center justify-center bg-slate-950 text-white gap-4">
-        <div className="w-12 h-12 rounded-2xl bg-indigo-600/30 border border-indigo-500/40 flex items-center justify-center animate-pulse">
-          <Loader2 className="w-6 h-6 text-indigo-400 animate-spin" />
+      <div className={`w-screen h-screen flex flex-col items-center justify-center gap-3 transition-colors ${
+        isDark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'
+      }`}>
+        <div className="w-10 h-10 rounded-xl bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center">
+          <Loader2 className="w-5 h-5 text-indigo-600 dark:text-indigo-400 animate-spin" />
         </div>
         <div className="text-center">
-          <h2 className="text-base font-bold text-slate-100">Connecting to SyncSpace Live Server...</h2>
-          <p className="text-xs text-slate-400 mt-1 font-mono">Restoring board state and initializing WebSocket stream</p>
+          <h2 className="text-sm font-bold">Connecting to SyncSpace...</h2>
+          <p className="text-xs text-slate-500 font-mono mt-0.5">Restoring persistent canvas state</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden bg-slate-950 text-slate-100">
-      {/* Top Navbar */}
+    <div className={`relative w-screen h-screen overflow-hidden transition-colors ${
+      isDark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'
+    }`}>
+      {/* Navigation Header */}
       <Navbar
-        notesCount={notes.length}
+        notesCount={rawNotesCount}
         activityCount={activities.length}
+        fps={fps}
+        pingLatency={pingLatency}
+        snapToGrid={snapToGrid}
+        onToggleSnap={() => setSnapToGrid(!snapToGrid)}
+        filterCategory={filterCategory}
+        onSelectCategory={setFilterCategory}
         onCreateNote={createNote}
         onResetTemplate={resetBoard}
+        onExportJSON={exportBoardJSON}
         onOpenActivity={() => setIsActivityOpen(true)}
         onOpenProfile={() => setIsProfileOpen(true)}
       />
 
-      {/* Main Interactive Canvas */}
+      {/* Interactive Canvas */}
       <Canvas
         notes={notes}
         activeLocks={activeLocks}
@@ -82,23 +104,23 @@ function LiveSyncBoardApp() {
         onPingCanvas={pingCanvas}
       />
 
-      {/* Synchronized Collaborative Poll Widget */}
+      {/* Live Poll Widget */}
       {poll && <LivePollWidget poll={poll} onVote={votePoll} />}
 
-      {/* Live Activity Audit Log Drawer */}
+      {/* Activity Log Drawer */}
       <ActivityDrawer
         isOpen={isActivityOpen}
         onClose={() => setIsActivityOpen(false)}
         activities={activities}
       />
 
-      {/* User Avatar & Name Profile Modal */}
+      {/* User Profile Modal */}
       <UserProfileModal
         isOpen={isProfileOpen}
         onClose={() => setIsProfileOpen(false)}
       />
 
-      {/* Concurrent Edit Conflict Resolution Toast */}
+      {/* Concurrent Conflict Toast */}
       <ConflictToast
         toasts={conflictToasts}
         onDismiss={dismissConflictToast}
@@ -109,8 +131,10 @@ function LiveSyncBoardApp() {
 
 export default function App() {
   return (
-    <SocketProvider>
-      <LiveSyncBoardApp />
-    </SocketProvider>
+    <ThemeProvider>
+      <SocketProvider>
+        <LiveSyncBoardApp />
+      </SocketProvider>
+    </ThemeProvider>
   );
 }

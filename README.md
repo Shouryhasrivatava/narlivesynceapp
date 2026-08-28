@@ -1,183 +1,164 @@
-# 🚀 SyncSpace — Real-Time Collaborative Live-Sync Canvas
+# SyncSpace — Real-Time Collaborative Live-Sync Canvas
 
-> **MLSA SRM Technical Recruitment Task 2026**  
-> **Domain:** Technical — Web Development (Frontend & Full-Stack Sync)  
-> **Tier:** 2nd-Year Candidate Submission (Includes Optimistic UI, Simultaneous Edit Resolution, & Persistent State)
+> **MLSA SRM Technical Domain Recruitment Task (2026)**  
+> **Track:** Frontend Web Development & Concurrency Systems  
+> **Candidate:** 2nd-Year Undergraduate Submission  
 
 ---
 
-## 📌 How Simultaneous Edits Were Resolved (One-Line Note)
+### One-Line Concurrency Note (Required Submission Field)
 > **Simultaneous edits are resolved using a hybrid strategy of live presence soft-locking, field-level version isolation, and an authoritative 3-way text merger that non-destructively blends concurrent edits without silent overwrites.**
 
 ---
 
-## 🌟 Project Overview
-**SyncSpace** is a high-performance, real-time collaborative idea canvas and sticky-note board designed for distributed teams. Multiple collaborators can brainstorm simultaneously across browser tabs and devices with sub-30ms event synchronization.
+## 1. What I Built & Architecture
+
+**SyncSpace** is an interactive, multi-user idea canvas and sticky-note workspace. When you open two or more browser tabs side-by-side, actions in one tab reflect across all others in real time with sub-30ms latency.
 
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                      SYNCSPACE MULTI-TAB ARCHITECTURE                   │
-│                                                                         │
-│   ┌───────────────────────────┐       ┌───────────────────────────┐     │
-│   │   Browser Tab A (React)   │       │   Browser Tab B (React)   │     │
-│   │  • Optimistic UI Reducer  │       │  • Optimistic UI Reducer  │     │
-│   │  • Live Cursors & Pings   │       │  • Live Cursors & Pings   │     │
-│   │  • Drag & Drop Sticky     │       │  • Drag & Drop Sticky     │     │
-│   └─────────────┬─────────────┘       └─────────────┬─────────────┘     │
-│                 │                                   │                   │
-│                 │   WebSockets / Socket.IO Stream   │                   │
-│                 └───────────────┬───────────────────┘                   │
-│                                 │                                       │
-│   ┌─────────────────────────────▼───────────────────────────────────┐   │
-│   │                  EXPRESS + SOCKET.IO BACKEND                    │   │
-│   │  • Broadcast Engine (Cursors, Pings, Presence, Polls)           │   │
-│   │  • 3-Way Merge Conflict Resolver (conflictResolver.js)          │   │
-│   │  • Atomic Persistent Disk Store (canvas-state.json)             │   │
-│   └─────────────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────────┘
++-------------------------------------------------------------------------+
+|                      SYNCSPACE MULTI-TAB ARCHITECTURE                   |
+|                                                                         |
+|   +---------------------------+       +---------------------------+     |
+|   |   Browser Tab A (React)   |       |   Browser Tab B (React)   |     |
+|   |  - Optimistic UI Reducer  |       |  - Optimistic UI Reducer  |     |
+|   |  - Live Cursors & Pings   |       |  - Live Cursors & Pings   |     |
+|   |  - Drag & Drop Sticky     |       |  - Drag & Drop Sticky     |     |
+|   +-------------+-------------+       +-------------+-------------+     |
+|                 |                                   |                   |
+|                 |   WebSockets / Socket.IO Stream   |                   |
+|                 +---------------+-------------------+                   |
+|                                 |                                       |
+|   +-----------------------------v-----------------------------------+   |
+|   |                  EXPRESS + SOCKET.IO BACKEND                    |   |
+|   |  - Broadcast Engine (Cursors, Pings, Presence, Polls)           |   |
+|   |  - 3-Way Merge Conflict Resolver (conflictResolver.js)          |   |
+|   |  - Atomic Persistent Disk Store (canvas-state.json)             |   |
+|   +-----------------------------------------------------------------+   |
++-------------------------------------------------------------------------+
 ```
 
----
-
-## ✨ Key Features & 2nd-Year Technical Implementation
-
-### 1. Multiplayer Live Cursors & Presence
-- **Sub-30ms Throttled Streaming**: Mouse coordinates are tracked and broadcast at 60fps with spring-physics interpolation.
-- **Collaborator Badges**: Custom avatars, vibrant user colors, and display names hover dynamically above cursor pointers.
-- **Presence Bar**: Active collaborator avatar stack in the navigation header with live join/leave detection.
-- **Collaborative Radar Ping**: `Shift + Click` (or the toolbar ping button) creates an expanding multi-ring ripple visible to all participants to highlight canvas regions.
-
-### 2. Interactive Sticky-Note Board
-- **Fluid Drag-and-Drop**: Freeform canvas positioning with optimistic coordinate updates and dynamic z-index management.
-- **Color & Tag Customization**: 6 pastel color palettes (Sun Yellow, Electric Cyan, Bubblegum Pink, Neon Mint, Lavender Purple, Coral Peach) and 6 semantic categories (*Feature*, *Idea*, *Bug*, *Architecture*, *UX/UI*, *Persistence*).
-- **Collaborative Upvoting**: Live upvote counters with celebratory particle bursts.
-- **Note Actions**: Pinning/locking, duplicating notes, and deletion.
-
-### 3. 2nd-Year Build-On: Optimistic UI Engine
-- All client interactions (dragging cards, editing text, toggling colors, voting, and deleting) update the local React state **instantaneously** before awaiting server round-trips.
-- Guarantees zero perceptual latency and a smooth 60fps experience even on variable network conditions.
-- Reconciles gracefully if the server returns an updated or merged version.
-
-### 4. 2nd-Year Build-On: Simultaneous Edit Conflict Resolution
-When two collaborators edit the same sticky note at the exact same moment:
-1. **Active Soft-Locking Presence**: As soon as User A focuses on a note, a live glowing banner (`"⚡ User A is editing..."`) is broadcast to other tabs to signal active focus.
-2. **Field-Level Isolation**: Edits targeting different attributes (e.g. User A changes position/color while User B modifies text) never conflict and merge cleanly.
-3. **3-Way Non-Destructive Text Merge**: If both users modify the text content simultaneously, the server's `conflictResolver.js` compares both changes against the common base version, detects the divergence, merges both contributions non-destructively, and broadcasts a **"Concurrent Edit Merged"** toast notification so no thoughts are silently lost.
-
-### 5. 2nd-Year Build-On: State Refresh Survival
-- The authoritative canvas state is saved to `server/data/canvas-state.json` on the backend using **debounced atomic file writes** (`temp-file write -> atomic rename`).
-- Closing a tab, refreshing (`F5`), or restarting the browser completely restores all sticky notes, coordinates, colors, votes, and poll tallies.
-
-### 6. Synchronized Live Team Poll Widget
-- Docked/expandable real-time poll widget with animated percentage bars and live vote counters that sync immediately across all tabs.
-
-### 7. Real-Time Activity Audit Stream
-- Slide-out drawer tracking timestamped chronological actions (joins, notes created, edits made, conflicts resolved, votes cast).
+### Core Components:
+1. **Multiplayer Live Cursors & Presence:** 
+   - Tracks cursor movement on the canvas and broadcasts coordinates at 60fps (throttled to ~30ms to prevent network congestion).
+   - Shows user avatars, names, and customized color pointers.
+   - `Shift + Click` sends an expanding attention ripple radar across all open tabs.
+2. **Interactive Sticky Notes:**
+   - Drag-and-drop cards with pastel matte color themes (*Yellow, Cyan, Pink, Mint, Violet, Coral*).
+   - Inline markdown-friendly text editor, category tags (*Feature, Idea, Bug, Architecture, Task, Note*), and live upvote counters with micro-confetti.
+3. **Live Collaborative Team Poll:**
+   - Shared poll widget with synchronized percentage bars and instant vote updates.
+4. **Matte Studio UI (Bright & Dark Mode):**
+   - Clean, tactile paper surfaces with an architectural dot-grid canvas.
+   - 1-click theme switch between Bright Light Mode and Dark Matte Mode.
+   - Real-time Performance HUD showing live FPS, ping roundtrip (ms), and snap-to-grid toggle.
 
 ---
 
-## 🛠️ Tech Stack
+## 2. Second-Year Build-Ons Explained
 
-- **Frontend**: React 18, Vite, Tailwind CSS, Framer Motion, Lucide React, Canvas-Confetti, Socket.IO Client.
-- **Backend**: Node.js (18+), Express.js, Socket.IO, Morgan, CORS.
-- **Persistence**: Atomic JSON File Store (`server/data/canvas-state.json`).
-- **Conflict Resolution**: Custom 3-Way Diff & Field-Level Merge Engine (`conflictResolver.js`).
+### A. Optimistic UI Updates
+When a user drags a note, votes, changes color, or creates a new card:
+- The React client state updates **immediately** on `mousedown`/`input` without waiting for the server to acknowledge.
+- This keeps the UI feeling instant (60fps) regardless of network jitter.
+- The action payload is dispatched asynchronously via Socket.IO. If the server detects a version mismatch or conflict, the client receives the authoritative state and updates cleanly.
+
+### B. Simultaneous Edit Conflict Resolution
+When two tabs edit the same note at the exact same moment:
+1. **Soft-Locking Presence:** When Tab A focuses on a note, a live banner (`⚡ Tab A is editing...`) appears on Tab B.
+2. **Field-Level Isolation:** Edits to distinct fields (e.g. Tab A moves coordinates while Tab B edits text) do not overwrite each other; both mutations apply independently.
+3. **Non-Destructive 3-Way Merge:** If both tabs modify the text content concurrently, the backend compares both changes against the common base version in `server/conflictResolver.js`, blends both inputs without data loss, and displays a `"Concurrent Edit Merged"` toast notification on both clients.
+
+### C. State Refresh Survival (Persistence)
+- In standard memory-only sockets, hitting `F5` clears everything.
+- In SyncSpace, every change is written to `server/data/canvas-state.json` via **debounced atomic file writes** (`temp write -> atomic rename`).
+- Reloading any tab or reopening the browser immediately restores all sticky notes, positions, tags, votes, and poll responses.
 
 ---
 
-## 🚀 How to Run Locally
+## 3. How to Run Locally
 
 ### Prerequisites
-- **Node.js** v18.0.0 or higher installed.
-- **npm** v9.0.0 or higher.
+- Node.js 18 or higher installed.
 
-### Quick Start (Run Frontend & Backend Together)
-
-1. Clone or open the repository folder in your terminal:
+### Steps:
+1. Clone or open the folder in terminal:
    ```bash
    cd dbugs
    ```
-
-2. Install all dependencies for root, backend, and frontend:
+2. Install all dependencies:
    ```bash
-   npm run install:all
+   npm.cmd run install:all
    ```
-
-3. Start both the Express server (`:5000`) and the React client (`:5173`) concurrently:
+3. Start both backend (:5000) and frontend (:5173) concurrently:
    ```bash
-   npm run dev
+   npm.cmd run dev
    ```
-
-4. Open your browser and navigate to:
-   ```
-   http://localhost:5173
-   ```
-
-5. **Demo with Two Tabs**: Open a second browser tab side-by-side at `http://localhost:5173` (or an Incognito window) to watch live cursors, dragging, concurrent editing, and synchronized voting in real time!
+   *(If on macOS/Linux, run `npm run dev`)*
+4. Open **`http://localhost:5173`** in two browser tabs side-by-side to test live multi-tab collaboration.
 
 ---
 
-## 🧪 Running Concurrency & Conflict Tests
+## 4. Concurrency Verification Tests
 
-We have included an automated test suite verifying field-level merge independence, concurrent text editing, and additive voting logic:
-
+Run the automated test suite verifying field isolation and 3-way text merging:
 ```bash
 node server/test-conflict.js
 ```
 
----
-
-## 💭 Reflections & Future Improvements (2–3 Honest Paragraphs)
-
-Building the real-time synchronization layer with Socket.IO and optimistic updates was an insightful challenge in balancing client responsiveness with server-authoritative integrity. In the early design phase, a naive approach might have relied on simple Last-Write-Wins (LWW) for all edits; however, testing simultaneous edits revealed how easily subtle user inputs could get accidentally overwritten when two tabs submitted changes within milliseconds. Implementing field-level separation and a non-destructive 3-way merge algorithm ensured that positioning, tagging, and text updates could coexist gracefully without frustrating user loss.
-
-With more time, the next architectural evolution would be integrating **Conflict-Free Replicated Data Types (CRDTs)** such as **Yjs** or **Automerge** combined with ProseMirror or TipTap. While our current 3-way merge works effectively at the paragraph and note level, CRDTs would enable sub-character collaborative rich-text typing with inline collaborator selection ranges directly within the sticky-note textarea (similar to Google Docs or Figma).
-
-Additionally, scaling this to thousands of concurrent sticky notes across expansive team boards would benefit from **spatial indexing (QuadTrees or R-Trees)** on the canvas to cull out-of-viewport elements and WebRTC DataChannels for peer-to-peer cursor streams, offloading high-frequency mouse telemetry from the central WebSocket server.
+Run the end-to-end multi-client socket integration test:
+```bash
+node server/test-e2e-socket.js
+```
 
 ---
 
-## 📁 Repository Structure
+## 5. Honest Reflections & Future Scope (2–3 Paragraphs)
+
+Implementing real-time state synchronization with optimistic UI was an engaging exercise in managing latency and race conditions. Early on, I considered a simple Last-Write-Wins (LWW) model, but during multi-tab testing, I noticed that rapid concurrent typing could easily wipe out another collaborator's text if network packets arrived slightly out of order. Designing the 3-way merge algorithm in `conflictResolver.js` solved this by isolating field mutations and non-destructively combining paragraph additions.
+
+If I had more time to expand the project, I would integrate a full Conflict-Free Replicated Data Type (CRDT) library like **Yjs** or **Automerge** alongside ProseMirror. That would unlock character-level operational transformation, allowing multiple users to type inside the exact same text sentence simultaneously with inline colored selection cursors (similar to Figma or Google Docs).
+
+Another improvement would be adding **spatial indexing with QuadTrees** for canvas rendering. On very large boards with hundreds of sticky notes, culling out-of-view DOM elements would keep performance pinned at 60fps regardless of canvas size. Overall, the current combination of Socket.IO, optimistic reducers, and atomic disk persistence creates a responsive, dependable collaborative experience.
+
+---
+
+## 📁 Project Structure
 
 ```
 dbugs/
 ├── client/
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── ActivityDrawer.jsx    # Real-time event audit log drawer
-│   │   │   ├── Canvas.jsx            # Pan/zoomable interactive grid canvas
-│   │   │   ├── ConflictToast.jsx     # Non-destructive merge notification toast
-│   │   │   ├── LiveCursors.jsx       # Real-time multiplayer cursor rendering
-│   │   │   ├── LivePollWidget.jsx    # Synchronized team poll with animated bars
-│   │   │   ├── Navbar.jsx            # Header with presence and controls
-│   │   │   ├── RadarPing.jsx         # Ripple attention ping animation
+│   │   │   ├── ActivityDrawer.jsx    # Live chronological event stream
+│   │   │   ├── Canvas.jsx            # Matte dot-grid canvas with pan/zoom
+│   │   │   ├── ConflictToast.jsx     # Non-destructive merge notification
+│   │   │   ├── LiveCursors.jsx       # 60fps multiplayer cursor pointers
+│   │   │   ├── LivePollWidget.jsx    # Real-time collaborative team poll
+│   │   │   ├── Navbar.jsx            # Header with presence, telemetry & themes
+│   │   │   ├── RadarPing.jsx         # Attention ripple animation
 │   │   │   ├── StickyNote.jsx        # Draggable card with locks & upvotes
-│   │   │   └── UserProfileModal.jsx  # Avatar & username customizer
+│   │   │   └── UserProfileModal.jsx  # Avatar & color customizer
 │   │   ├── context/
-│   │   │   └── SocketContext.jsx     # Socket.IO connection & identity provider
+│   │   │   ├── SocketContext.jsx     # Socket.IO connection & user session
+│   │   │   └── ThemeContext.jsx      # Bright Light / Dark Matte theme provider
 │   │   ├── hooks/
-│   │   │   └── useLiveBoard.js       # Optimistic state manager & socket listeners
+│   │   │   └── useLiveBoard.js       # Optimistic state manager & telemetry
 │   │   ├── types/
-│   │   │   └── index.js              # Color themes, categories, and presets
+│   │   │   └── index.js              # Matte color palettes & categories
 │   │   ├── App.jsx                   # Application root
-│   │   ├── index.css                 # Custom canvas grids, glassmorphism & styles
-│   │   └── main.jsx
+│   │   └── index.css                 # Matte styling & grid patterns
 │   ├── index.html
-│   ├── package.json
-│   ├── tailwind.config.js
-│   └── vite.config.js
+│   └── package.json
 ├── server/
 │   ├── data/
-│   │   └── canvas-state.json         # Authoritative persistent state on disk
-│   ├── conflictResolver.js           # 3-way merge & concurrency resolution engine
-│   ├── server.js                     # Express + Socket.IO real-time server
-│   ├── test-conflict.js              # Concurrency automated verification tests
+│   │   └── canvas-state.json         # Authoritative disk persistence
+│   ├── conflictResolver.js           # 3-way merge conflict resolution
+│   ├── server.js                     # Express + Socket.IO backend
+│   ├── test-conflict.js              # Concurrency automated tests
+│   ├── test-e2e-socket.js            # Multi-client socket verification
 │   └── package.json
-├── package.json                      # Monorepo concurrently launcher
-├── VIDEO_WALKTHROUGH_SCRIPT.md       # Step-by-step 2-3 min recording guide
+├── VIDEO_WALKTHROUGH_SCRIPT.md       # 2-3 min video recording guide
+├── package.json
 └── README.md
 ```
-
----
-
-*Made with ❤️ for MLSA SRM Technical Recruitment 2026.*

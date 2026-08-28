@@ -14,15 +14,56 @@ export function useLiveBoard() {
   const [conflictToasts, setConflictToasts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Highest z-index tracking for bringing notes to front
-  const maxZIndexRef = useRef(20);
+  // Performance & Network Telemetry
+  const [fps, setFps] = useState(60);
+  const [pingLatency, setPingLatency] = useState(12);
+  const [eventCount, setEventCount] = useState(0);
+  const [snapToGrid, setSnapToGrid] = useState(false);
+  const [filterCategory, setFilterCategory] = useState('All');
 
-  // Throttle cursor broadcasting to ~30ms for optimal 60fps performance
+  // Highest z-index tracking
+  const maxZIndexRef = useRef(20);
   const lastCursorEmitRef = useRef(0);
+
+  // Measure FPS live
+  useEffect(() => {
+    let frameCount = 0;
+    let lastTime = performance.now();
+    let animId;
+
+    const calculateFps = (now) => {
+      frameCount++;
+      if (now - lastTime >= 1000) {
+        setFps(Math.round((frameCount * 1000) / (now - lastTime)));
+        frameCount = 0;
+        lastTime = now;
+      }
+      animId = requestAnimationFrame(calculateFps);
+    };
+
+    animId = requestAnimationFrame(calculateFps);
+    return () => cancelAnimationFrame(animId);
+  }, []);
+
+  // Measure Socket Round-Trip Latency (Heartbeat)
+  useEffect(() => {
+    if (!socket || !isConnected) return;
+
+    const interval = setInterval(() => {
+      const start = Date.now();
+      socket.emit('ping:check', () => {
+        setPingLatency(Date.now() - start);
+      });
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [socket, isConnected]);
 
   // Subscribe to all socket events
   useEffect(() => {
     if (!socket) return;
+
+    const incrementEvent = () => setEventCount((c) => c + 1);
 
     // 1. Initial State Sync
     socket.on('board:init', (data) => {
@@ -35,18 +76,21 @@ export function useLiveBoard() {
       const maxZ = (data.notes || []).reduce((max, n) => Math.max(max, n.zIndex || 0), 20);
       maxZIndexRef.current = maxZ + 1;
       setIsLoading(false);
+      incrementEvent();
     });
 
-    // 2. Note Real-Time Events
+    // 2. Note Events
     socket.on('note:created', (newNote) => {
       setNotes((prev) => {
         if (prev.some((n) => n.id === newNote.id)) return prev;
         return [...prev, newNote];
       });
+      incrementEvent();
     });
 
     socket.on('note:updated', ({ note, conflictOccurred }) => {
       setNotes((prev) => prev.map((n) => (n.id === note.id ? note : n)));
+      incrementEvent();
     });
 
     socket.on('note:moved', ({ id, x, y, zIndex }) => {
@@ -63,12 +107,14 @@ export function useLiveBoard() {
           return n;
         })
       );
+      incrementEvent();
     });
 
     socket.on('note:voted', ({ noteId, votes, votedUsers }) => {
       setNotes((prev) =>
         prev.map((n) => (n.id === noteId ? { ...n, votes, votedUsers } : n))
       );
+      incrementEvent();
     });
 
     socket.on('note:deleted', ({ id }) => {
@@ -78,9 +124,10 @@ export function useLiveBoard() {
         delete copy[id];
         return copy;
       });
+      incrementEvent();
     });
 
-    // 3. Active Locks (Live Typing Indicators)
+    // 3. Active Locks
     socket.on('lock:update', ({ noteId, lockInfo }) => {
       setActiveLocks((prev) => {
         const copy = { ...prev };
@@ -91,9 +138,10 @@ export function useLiveBoard() {
         }
         return copy;
       });
+      incrementEvent();
     });
 
-    // 4. Live Collaborative Cursors
+    // 4. Live Cursors
     socket.on('cursor:update', (data) => {
       setCursors((prev) => ({
         ...prev,
@@ -113,29 +161,33 @@ export function useLiveBoard() {
     socket.on('canvas:ping_received', (pingData) => {
       const pingId = `ping-${Date.now()}-${Math.random()}`;
       setPings((prev) => [...prev, { ...pingData, id: pingId }]);
+      incrementEvent();
 
       setTimeout(() => {
         setPings((prev) => prev.filter((p) => p.id !== pingId));
       }, 2500);
     });
 
-    // 6. Simultaneous Edit Conflict Alert
+    // 6. Conflict Resolution Notification
     socket.on('conflict:resolved', (conflictData) => {
       const toastId = `conflict-${Date.now()}`;
       setConflictToasts((prev) => [...prev, { ...conflictData, id: toastId }]);
+      incrementEvent();
 
       setTimeout(() => {
         setConflictToasts((prev) => prev.filter((t) => t.id !== toastId));
       }, 7000);
     });
 
-    // 7. Poll & Board State
+    // 7. Poll & Activities
     socket.on('poll:updated', (updatedPoll) => {
       setPoll(updatedPoll);
+      incrementEvent();
     });
 
     socket.on('activity:new', (activity) => {
       setActivities((prev) => [...prev.slice(-59), activity]);
+      incrementEvent();
     });
 
     socket.on('board:reset', (resetData) => {
@@ -143,6 +195,7 @@ export function useLiveBoard() {
       if (resetData.notes) setNotes(resetData.notes);
       if (resetData.poll) setPoll(resetData.poll);
       setActiveLocks({});
+      incrementEvent();
     });
 
     return () => {
@@ -163,7 +216,7 @@ export function useLiveBoard() {
     };
   }, [socket]);
 
-  // Broadcast mouse coordinates (throttled to ~30ms)
+  // Cursor broadcasting throttled to ~30ms
   const emitCursorMove = useCallback(
     (coords) => {
       if (!socket || !isConnected) return;
@@ -195,12 +248,21 @@ export function useLiveBoard() {
     (initialData = {}) => {
       maxZIndexRef.current += 1;
       const tempId = `note-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
+
+      let rawX = initialData.x ?? 150 + Math.random() * 200;
+      let rawY = initialData.y ?? 150 + Math.random() * 150;
+
+      if (snapToGrid) {
+        rawX = Math.round(rawX / 24) * 24;
+        rawY = Math.round(rawY / 24) * 24;
+      }
+
       const newNote = {
         id: tempId,
-        title: initialData.title || 'New Idea',
+        title: initialData.title || 'New Note',
         content: initialData.content || '',
-        x: initialData.x ?? 150 + Math.random() * 200,
-        y: initialData.y ?? 150 + Math.random() * 150,
+        x: rawX,
+        y: rawY,
         color: initialData.color || 'yellow',
         category: initialData.category || 'Idea',
         pinned: !!initialData.pinned,
@@ -214,10 +276,8 @@ export function useLiveBoard() {
         zIndex: maxZIndexRef.current
       };
 
-      // Optimistically insert locally
       setNotes((prev) => [...prev, newNote]);
 
-      // Emit to server
       if (socket && isConnected) {
         socket.emit('note:create', newNote, (res) => {
           if (res?.note && res.note.id !== tempId) {
@@ -228,10 +288,10 @@ export function useLiveBoard() {
 
       return newNote;
     },
-    [socket, isConnected, currentUser]
+    [socket, isConnected, currentUser, snapToGrid]
   );
 
-  // Optimistic Note Update with Concurrency Metadata
+  // Optimistic Note Update
   const updateNote = useCallback(
     (patch) => {
       const existingNote = notes.find((n) => n.id === patch.id);
@@ -244,7 +304,6 @@ export function useLiveBoard() {
         baseTitle: existingNote.title || ''
       };
 
-      // Optimistic local update
       setNotes((prev) =>
         prev.map((n) =>
           n.id === patch.id
@@ -259,7 +318,6 @@ export function useLiveBoard() {
         )
       );
 
-      // Emit to server
       if (socket && isConnected) {
         socket.emit('note:update', payload);
       }
@@ -267,23 +325,30 @@ export function useLiveBoard() {
     [socket, isConnected, notes, currentUser]
   );
 
-  // Optimistic Move (Smooth 60fps drag)
+  // Optimistic Move with optional grid snapping
   const moveNote = useCallback(
     (id, x, y, bringToFront = false) => {
+      let finalX = x;
+      let finalY = y;
+
+      if (snapToGrid) {
+        finalX = Math.round(x / 24) * 24;
+        finalY = Math.round(y / 24) * 24;
+      }
+
       let zIndex;
       if (bringToFront) {
         maxZIndexRef.current += 1;
         zIndex = maxZIndexRef.current;
       }
 
-      // Optimistically update position
       setNotes((prev) =>
         prev.map((n) => {
           if (n.id === id) {
             return {
               ...n,
-              x,
-              y,
+              x: finalX,
+              y: finalY,
               zIndex: zIndex !== undefined ? zIndex : n.zIndex
             };
           }
@@ -291,12 +356,11 @@ export function useLiveBoard() {
         })
       );
 
-      // Emit to server
       if (socket && isConnected) {
-        socket.emit('note:move', { id, x, y, zIndex });
+        socket.emit('note:move', { id, x: finalX, y: finalY, zIndex });
       }
     },
-    [socket, isConnected]
+    [socket, isConnected, snapToGrid]
   );
 
   // Optimistic Upvote
@@ -310,14 +374,12 @@ export function useLiveBoard() {
       const newVotes = Math.max(0, (note.votes || 0) + voteDelta);
       const newVotedUsers = { ...(note.votedUsers || {}), [currentUser.id]: !hasVoted };
 
-      // Optimistic update
       setNotes((prev) =>
         prev.map((n) =>
           n.id === noteId ? { ...n, votes: newVotes, votedUsers: newVotedUsers } : n
         )
       );
 
-      // Emit to server
       if (socket && isConnected) {
         socket.emit('note:vote', { noteId, voteDelta, hasVoted: !hasVoted });
       }
@@ -328,9 +390,7 @@ export function useLiveBoard() {
   // Optimistic Delete
   const deleteNote = useCallback(
     (id) => {
-      // Optimistic removal
       setNotes((prev) => prev.filter((n) => n.id !== id));
-
       if (socket && isConnected) {
         socket.emit('note:delete', { id });
       }
@@ -338,7 +398,7 @@ export function useLiveBoard() {
     [socket, isConnected]
   );
 
-  // Typing Soft-Lock
+  // Typing locks
   const startTyping = useCallback(
     (noteId) => {
       if (socket && isConnected) {
@@ -367,7 +427,7 @@ export function useLiveBoard() {
     [socket, isConnected]
   );
 
-  // Reset Canvas Template
+  // Reset Template
   const resetBoard = useCallback(
     (template = 'brainstorm') => {
       if (socket && isConnected) {
@@ -375,19 +435,35 @@ export function useLiveBoard() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ template })
-        }).catch((err) => console.error('Failed to reset board via REST:', err));
+        }).catch((err) => console.error('Failed to reset board:', err));
       }
     },
     [socket, isConnected]
   );
 
+  // Export board as JSON
+  const exportBoardJSON = useCallback(() => {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ board, notes, poll }, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", `syncspace-board-${Date.now()}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+  }, [board, notes, poll]);
+
   const dismissConflictToast = useCallback((toastId) => {
     setConflictToasts((prev) => prev.filter((t) => t.id !== toastId));
   }, []);
 
+  const filteredNotes = filterCategory === 'All'
+    ? notes
+    : notes.filter((n) => n.category === filterCategory);
+
   return {
     board,
-    notes,
+    notes: filteredNotes,
+    rawNotesCount: notes.length,
     poll,
     activities,
     activeLocks,
@@ -395,6 +471,13 @@ export function useLiveBoard() {
     pings,
     conflictToasts,
     isLoading,
+    fps,
+    pingLatency,
+    eventCount,
+    snapToGrid,
+    setSnapToGrid,
+    filterCategory,
+    setFilterCategory,
     createNote,
     updateNote,
     moveNote,
@@ -405,6 +488,7 @@ export function useLiveBoard() {
     votePoll,
     pingCanvas,
     resetBoard,
+    exportBoardJSON,
     emitCursorMove,
     emitCursorLeave,
     dismissConflictToast

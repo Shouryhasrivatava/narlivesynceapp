@@ -216,6 +216,50 @@
         "name": "Bob (Tab 2)",
         "color": "#ec4899"
       }
+    },
+    {
+      "id": "act-1787949241684-z8m9c",
+      "type": "join",
+      "text": "Explorer #629 joined the canvas.",
+      "timestamp": 1787949241684,
+      "user": {
+        "id": "user-1787949241283-dxdl",
+        "name": "Explorer #629",
+        "color": "#06b6d4"
+      }
+    },
+    {
+      "id": "act-1787949245000-0fiq4",
+      "type": "join",
+      "text": "Explorer #843 joined the canvas.",
+      "timestamp": 1787949245002,
+      "user": {
+        "id": "user-1787949242612-2d2w",
+        "name": "Explorer #843",
+        "color": "#3b82f6"
+      }
+    },
+    {
+      "id": "act-1787949483372-2ifnk",
+      "type": "leave",
+      "text": "Explorer #843 disconnected.",
+      "timestamp": 1787949483372,
+      "user": {
+        "id": "user-1787949242612-2d2w",
+        "name": "Explorer #843",
+        "color": "#3b82f6"
+      }
+    },
+    {
+      "id": "act-1787949483389-ps1cv",
+      "type": "leave",
+      "text": "Explorer #629 disconnected.",
+      "timestamp": 1787949483389,
+      "user": {
+        "id": "user-1787949241283-dxdl",
+        "name": "Explorer #629",
+        "color": "#06b6d4"
+      }
     }
   ]
 }
