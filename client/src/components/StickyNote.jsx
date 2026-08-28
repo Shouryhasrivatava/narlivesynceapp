@@ -17,7 +17,9 @@ import {
   CheckSquare,
   Square,
   ChevronDown,
-  Eraser
+  Eraser,
+  Eye,
+  Edit3
 } from 'lucide-react';
 import { NOTE_COLORS, CATEGORIES, PRIORITIES, HIGHLIGHT_COLORS } from '../types';
 import { useSocket } from '../context/SocketContext';
@@ -34,8 +36,8 @@ export default function StickyNote({
   onStopTyping
 }) {
   const { currentUser } = useSocket();
-  const [title, setTitle] = useState(note.title);
-  const [content, setContent] = useState(note.content);
+  const [title, setTitle] = useState(note.title || '');
+  const [content, setContent] = useState(note.content || '');
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [showCategoryPicker, setShowCategoryPicker] = useState(false);
   const [showPriorityPicker, setShowPriorityPicker] = useState(false);
@@ -44,17 +46,21 @@ export default function StickyNote({
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
 
+  // Floating Selection Popover State
+  const [floatingPopover, setFloatingPopover] = useState(null);
+
   const noteRef = useRef(null);
   const textareaRef = useRef(null);
   const dragStartPos = useRef({ mouseX: 0, mouseY: 0, noteX: 0, noteY: 0 });
   const resizeStartPos = useRef({ mouseX: 0, mouseY: 0, width: 320, height: 230 });
+  const lastSelectionRef = useRef({ start: 0, end: 0, text: '' });
 
   useEffect(() => {
-    setTitle(note.title);
+    setTitle(note.title || '');
   }, [note.title]);
 
   useEffect(() => {
-    setContent(note.content);
+    setContent(note.content || '');
   }, [note.content]);
 
   const colorConfig = NOTE_COLORS[note.color] || NOTE_COLORS.white;
@@ -64,6 +70,159 @@ export default function StickyNote({
 
   const noteWidth = note.width || 320;
   const noteHeight = note.height || 230;
+
+  // Track text selection in textarea
+  const handleTextareaSelect = (e) => {
+    const start = e.target.selectionStart;
+    const end = e.target.selectionEnd;
+    const text = content.substring(start, end);
+    lastSelectionRef.current = { start, end, text };
+  };
+
+  // Track text selection in rendered view to show floating highlight bubble
+  const handleRenderedMouseUp = (e) => {
+    const sel = window.getSelection();
+    if (!sel || sel.isCollapsed) {
+      setFloatingPopover(null);
+      return;
+    }
+
+    const selectedText = sel.toString().trim();
+    if (!selectedText) {
+      setFloatingPopover(null);
+      return;
+    }
+
+    const rect = sel.getRangeAt(0).getBoundingClientRect();
+    const noteRect = noteRef.current?.getBoundingClientRect();
+
+    if (noteRect) {
+      setFloatingPopover({
+        x: Math.max(10, rect.left - noteRect.left + rect.width / 2 - 80),
+        y: Math.max(10, rect.top - noteRect.top - 42),
+        text: selectedText
+      });
+    }
+  };
+
+  // Apply Highlight (Works in BOTH edit mode and view mode!)
+  const applyHighlight = (colorKey, overrideText = null) => {
+    const targetText = overrideText || lastSelectionRef.current.text || '';
+
+    if (isEditing && textareaRef.current) {
+      const textarea = textareaRef.current;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const selected = content.substring(start, end) || lastSelectionRef.current.text;
+
+      let replacement = '';
+      if (colorKey === 'clear') {
+        replacement = selected.replace(/\[hl:[a-z]+\](.*?)\[\/hl\]/gs, '$1').replace(/==(.*?)==/gs, '$1');
+      } else if (colorKey === 'yellow') {
+        replacement = `==${selected || 'highlighted text'}==`;
+      } else {
+        replacement = `[hl:${colorKey}]${selected || 'highlighted text'}[/hl]`;
+      }
+
+      const newContent = content.substring(0, start) + replacement + content.substring(end);
+      setContent(newContent);
+      onUpdate({ id: note.id, content: newContent });
+      setShowHighlightMenu(false);
+      setFloatingPopover(null);
+
+      setTimeout(() => {
+        if (textareaRef.current) {
+          textareaRef.current.focus();
+          textareaRef.current.setSelectionRange(start, start + replacement.length);
+        }
+      }, 50);
+      return;
+    }
+
+    // View Mode Highlight Application
+    if (targetText && content.includes(targetText)) {
+      let replacement = '';
+      if (colorKey === 'clear') {
+        replacement = targetText.replace(/\[hl:[a-z]+\](.*?)\[\/hl\]/gs, '$1').replace(/==(.*?)==/gs, '$1');
+      } else if (colorKey === 'yellow') {
+        replacement = `==${targetText}==`;
+      } else {
+        replacement = `[hl:${colorKey}]${targetText}[/hl]`;
+      }
+
+      const newContent = content.replace(targetText, replacement);
+      setContent(newContent);
+      onUpdate({ id: note.id, content: newContent });
+      setFloatingPopover(null);
+      setShowHighlightMenu(false);
+      return;
+    }
+
+    // Fallback: Enter edit mode and append highlight placeholder
+    setIsEditing(true);
+    const tag = colorKey === 'yellow' ? '==highlighted text==' : `[hl:${colorKey}]highlighted text[/hl]`;
+    const newContent = content ? `${content}\n${tag}` : tag;
+    setContent(newContent);
+    onUpdate({ id: note.id, content: newContent });
+    setShowHighlightMenu(false);
+    setFloatingPopover(null);
+  };
+
+  const applyTextFormat = (prefix, suffix = prefix) => {
+    if (!isEditing) setIsEditing(true);
+
+    setTimeout(() => {
+      const textarea = textareaRef.current;
+      if (!textarea) return;
+
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const selected = content.substring(start, end);
+      const replacement = selected
+        ? `${prefix}${selected}${suffix}`
+        : `${prefix}text${suffix}`;
+
+      const newContent = content.substring(0, start) + replacement + content.substring(end);
+      setContent(newContent);
+      onUpdate({ id: note.id, content: newContent });
+
+      setTimeout(() => {
+        textarea.focus();
+        textarea.setSelectionRange(start + prefix.length, end + prefix.length);
+      }, 50);
+    }, 50);
+  };
+
+  const insertChecklistItem = () => {
+    setIsEditing(true);
+    const newContent = content ? `${content.trim()}\n- [ ] ` : '- [ ] ';
+    setContent(newContent);
+    onUpdate({ id: note.id, content: newContent });
+
+    setTimeout(() => {
+      if (textareaRef.current) {
+        textareaRef.current.focus();
+        textareaRef.current.setSelectionRange(newContent.length, newContent.length);
+      }
+    }, 50);
+  };
+
+  // Toggle checklist checkbox
+  const handleToggleChecklist = (lineIndex) => {
+    const lines = content.split('\n');
+    const line = lines[lineIndex];
+    if (!line) return;
+
+    if (line.includes('- [ ]')) {
+      lines[lineIndex] = line.replace('- [ ]', '- [x]');
+    } else if (line.includes('- [x]')) {
+      lines[lineIndex] = line.replace('- [x]', '- [ ]');
+    }
+
+    const updated = lines.join('\n');
+    setContent(updated);
+    onUpdate({ id: note.id, content: updated });
+  };
 
   // Dragging logic
   const handleMouseDownHeader = (e) => {
@@ -135,87 +294,7 @@ export default function StickyNote({
     window.addEventListener('mouseup', handleMouseUp);
   };
 
-  // Improved Highlighting & Text Formatting
-  const applyHighlight = (colorKey) => {
-    const textarea = textareaRef.current;
-    if (!textarea) return;
-
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selected = content.substring(start, end);
-
-    let replacement = '';
-    if (colorKey === 'clear') {
-      // Strip highlight tags from selection
-      replacement = selected.replace(/\[hl:[a-z]+\](.*?)\[\/hl\]/g, '$1').replace(/==(.*?)==/g, '$1');
-    } else {
-      const textToWrap = selected || 'highlighted text';
-      replacement = `[hl:${colorKey}]${textToWrap}[/hl]`;
-    }
-
-    const newContent = content.substring(0, start) + replacement + content.substring(end);
-    setContent(newContent);
-    onUpdate({ id: note.id, content: newContent });
-    setShowHighlightMenu(false);
-
-    // Re-focus and set selection
-    setTimeout(() => {
-      if (textareaRef.current) {
-        textareaRef.current.focus();
-        textareaRef.current.setSelectionRange(start, start + replacement.length);
-      }
-    }, 50);
-  };
-
-  const applyTextFormat = (prefix, suffix = prefix) => {
-    const textarea = textareaRef.current;
-    if (!textarea) return;
-
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selected = content.substring(start, end);
-    const replacement = selected
-      ? `${prefix}${selected}${suffix}`
-      : `${prefix}text${suffix}`;
-
-    const newContent = content.substring(0, start) + replacement + content.substring(end);
-    setContent(newContent);
-    onUpdate({ id: note.id, content: newContent });
-  };
-
-  const insertChecklistItem = () => {
-    const newContent = content ? `${content.trim()}\n- [ ] ` : '- [ ] ';
-    setContent(newContent);
-    onUpdate({ id: note.id, content: newContent });
-    setIsEditing(true);
-
-    setTimeout(() => {
-      if (textareaRef.current) {
-        textareaRef.current.focus();
-        textareaRef.current.setSelectionRange(newContent.length, newContent.length);
-      }
-    }, 50);
-  };
-
-  // Toggle checklist checkbox in formatted view
-  const handleToggleChecklist = (lineIndex) => {
-    const lines = content.split('\n');
-    const line = lines[lineIndex];
-    if (!line) return;
-
-    if (line.includes('- [ ]')) {
-      lines[lineIndex] = line.replace('- [ ]', '- [x]');
-    } else if (line.includes('- [x]')) {
-      lines[lineIndex] = line.replace('- [x]', '- [ ]');
-    }
-
-    const updated = lines.join('\n');
-    setContent(updated);
-    onUpdate({ id: note.id, content: updated });
-  };
-
   const handleContentBlur = () => {
-    setIsEditing(false);
     onStopTyping(note.id);
     if (content !== note.content) {
       onUpdate({ id: note.id, content });
@@ -234,12 +313,63 @@ export default function StickyNote({
     onVote(note.id);
   };
 
-  // Rich formatted content rendering with realistic fluorescent highlighters
+  // Render highlighted segments
+  const renderInlineHighlights = (text) => {
+    // Regex matches ==text== or [hl:color]text[/hl] or **bold**
+    const parts = text.split(/(\[hl:[a-z]+\](?:(?!\[\/hl\]).)+\[\/hl\]|==(?:(?!==).)+==|\*\*(?:(?!\*\*).)+\*\*)/gs);
+
+    return parts.map((part, i) => {
+      // 1. Standard markdown highlight ==text==
+      if (part.startsWith('==') && part.endsWith('==') && part.length > 4) {
+        return (
+          <mark
+            key={i}
+            className="bg-[#fef08a] text-[#422006] px-1 py-0.5 rounded-[3px] font-medium mx-0.5"
+            style={{ WebkitBoxDecorationBreak: 'clone', boxDecorationBreak: 'clone' }}
+          >
+            {part.slice(2, -2)}
+          </mark>
+        );
+      }
+
+      // 2. Tagged color highlight [hl:color]text[/hl]
+      if (part.startsWith('[hl:') && part.includes(']')) {
+        const match = part.match(/^\[hl:([a-z]+)\](.*)\[\/hl\]$/s);
+        if (match) {
+          const colorKey = match[1];
+          const textInside = match[2];
+          const highlightObj = HIGHLIGHT_COLORS.find((h) => h.id === colorKey) || HIGHLIGHT_COLORS[0];
+          return (
+            <mark
+              key={i}
+              className={`${highlightObj.bg} px-1 py-0.5 rounded-[3px] font-medium mx-0.5`}
+              style={{ WebkitBoxDecorationBreak: 'clone', boxDecorationBreak: 'clone' }}
+            >
+              {textInside}
+            </mark>
+          );
+        }
+      }
+
+      // 3. Bold text **text**
+      if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
+        return (
+          <strong key={i} className="font-bold text-black">
+            {part.slice(2, -2)}
+          </strong>
+        );
+      }
+
+      return part;
+    });
+  };
+
+  // Formatted View Body
   const renderFormattedContent = () => {
     if (!content.trim()) {
       return (
-        <p className="text-xs text-zinc-400 italic">
-          Click to type note, highlight text, or create checklists (- [ ])...
+        <p className="text-xs text-zinc-400 italic py-2">
+          Click here to write notes, highlight text, or add checklists...
         </p>
       );
     }
@@ -247,24 +377,26 @@ export default function StickyNote({
     const lines = content.split('\n');
 
     return (
-      <div className="flex flex-col gap-1 text-xs text-zinc-900 leading-relaxed font-sans select-text">
+      <div
+        onMouseUp={handleRenderedMouseUp}
+        className="flex flex-col gap-1 text-xs text-zinc-900 leading-relaxed font-sans select-text py-1"
+      >
         {lines.map((line, idx) => {
-          // Checklist item
           if (line.startsWith('- [ ]') || line.startsWith('- [x]')) {
             const isChecked = line.startsWith('- [x]');
             const itemText = line.replace(/^-\s*\[[ x]\]\s*/, '');
             return (
               <div
                 key={idx}
-                className="flex items-start gap-1.5 cursor-pointer hover:bg-black/5 rounded p-0.5"
+                className="flex items-start gap-1.5 cursor-pointer hover:bg-black/5 rounded p-0.5 transition-colors"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleToggleChecklist(idx);
                 }}
               >
-                <button type="button" className="mt-0.5 text-zinc-800">
+                <button type="button" className="mt-0.5 text-zinc-800 flex-shrink-0">
                   {isChecked ? (
-                    <CheckSquare className="w-3.5 h-3.5 text-black" />
+                    <CheckSquare className="w-3.5 h-3.5 text-black fill-zinc-200" />
                   ) : (
                     <Square className="w-3.5 h-3.5 text-zinc-400" />
                   )}
@@ -276,7 +408,6 @@ export default function StickyNote({
             );
           }
 
-          // Regular paragraph
           return (
             <p key={idx} className="min-h-[1.2em]">
               {renderInlineHighlights(line)}
@@ -285,54 +416,6 @@ export default function StickyNote({
         })}
       </div>
     );
-  };
-
-  // Parse inline `==text==` and `[hl:color]text[/hl]` with vibrant fluorescent styling
-  const renderInlineHighlights = (text) => {
-    const parts = text.split(/(\[hl:[a-z]+\](?:(?!\[\/hl\]).)+\[\/hl\]|==(?:(?!==).)+==|\*\*(?:(?!\*\*).)+\*\*)/g);
-
-    return parts.map((part, i) => {
-      // Standard markdown highlight ==text==
-      if (part.startsWith('==') && part.endsWith('==')) {
-        return (
-          <mark
-            key={i}
-            className="bg-[#fef08a] text-[#422006] px-1 py-0.5 rounded-[3px] font-medium shadow-xs"
-          >
-            {part.slice(2, -2)}
-          </mark>
-        );
-      }
-
-      // Tagged color highlight [hl:color]text[/hl]
-      if (part.startsWith('[hl:') && part.includes(']')) {
-        const match = part.match(/^\[hl:([a-z]+)\](.*)\[\/hl\]$/s);
-        if (match) {
-          const colorKey = match[1];
-          const textInside = match[2];
-          const highlightObj = HIGHLIGHT_COLORS.find((h) => h.id === colorKey) || HIGHLIGHT_COLORS[0];
-          return (
-            <mark
-              key={i}
-              className={`${highlightObj.bg} px-1 py-0.5 rounded-[3px] font-medium shadow-xs`}
-            >
-              {textInside}
-            </mark>
-          );
-        }
-      }
-
-      // Bold text **text**
-      if (part.startsWith('**') && part.endsWith('**')) {
-        return (
-          <strong key={i} className="font-bold text-black">
-            {part.slice(2, -2)}
-          </strong>
-        );
-      }
-
-      return part;
-    });
   };
 
   return (
@@ -359,6 +442,33 @@ export default function StickyNote({
         >
           <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
           <span>{activeLock.userName} is editing...</span>
+        </div>
+      )}
+
+      {/* Floating Selection Highlighter Popover (Appears right above selected text) */}
+      {floatingPopover && (
+        <div
+          className="absolute z-50 p-1 rounded-lg bg-black text-white shadow-xl flex items-center gap-1"
+          style={{ left: floatingPopover.x, top: floatingPopover.y }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <span className="text-[10px] font-bold px-1 text-zinc-300">Highlight:</span>
+          {HIGHLIGHT_COLORS.map((h) => (
+            <button
+              key={h.id}
+              onClick={() => applyHighlight(h.id, floatingPopover.text)}
+              className="w-5 h-5 rounded-full border border-white/30 hover:scale-125 transition-transform"
+              style={{ backgroundColor: h.marker }}
+              title={h.name}
+            />
+          ))}
+          <button
+            onClick={() => applyHighlight('clear', floatingPopover.text)}
+            className="p-1 text-zinc-400 hover:text-white"
+            title="Clear Highlight"
+          >
+            <Eraser className="w-3 h-3" />
+          </button>
         </div>
       )}
 
@@ -561,26 +671,25 @@ export default function StickyNote({
               onClick={(e) => {
                 e.stopPropagation();
                 setShowHighlightMenu(!showHighlightMenu);
-                setIsEditing(true);
               }}
-              className="px-1.5 py-0.5 rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-800 transition-colors flex items-center gap-1 text-[11px] font-semibold border border-zinc-300"
+              className="px-1.5 py-0.5 rounded bg-yellow-100 hover:bg-yellow-200 text-yellow-900 transition-colors flex items-center gap-1 text-[11px] font-bold border border-yellow-300 shadow-2xs"
               title="Highlight Tool"
             >
-              <Highlighter className="w-3 h-3 text-amber-600" />
+              <Highlighter className="w-3 h-3 text-amber-700" />
               <span>Highlight</span>
-              <ChevronDown className="w-2.5 h-2.5 opacity-60" />
+              <ChevronDown className="w-2.5 h-2.5 opacity-70" />
             </button>
 
             {showHighlightMenu && (
               <div
-                className="absolute left-0 top-6 rounded-lg p-1.5 bg-white border border-zinc-200 shadow-xl z-50 flex items-center gap-1.5"
+                className="absolute left-0 top-6 rounded-lg p-1.5 bg-white border border-zinc-300 shadow-2xl z-50 flex items-center gap-1.5"
                 onClick={(e) => e.stopPropagation()}
               >
                 {HIGHLIGHT_COLORS.map((h) => (
                   <button
                     key={h.id}
                     onClick={() => applyHighlight(h.id)}
-                    className="w-6 h-6 rounded flex items-center justify-center font-bold text-[10px] border border-black/20 hover:scale-110 transition-transform shadow-xs"
+                    className="w-6 h-6 rounded flex items-center justify-center font-bold text-[10px] border border-black/20 hover:scale-115 transition-transform shadow-xs"
                     style={{ backgroundColor: h.marker }}
                     title={`Highlight ${h.name}`}
                   >
@@ -647,16 +756,33 @@ export default function StickyNote({
             <Code className="w-3 h-3" />
           </button>
 
-          <div className="ml-auto text-[10px] text-zinc-400 font-mono">
-            {isEditing ? (
-              <span className="text-black font-bold">Editing</span>
-            ) : (
-              <span className="hover:text-black cursor-pointer font-medium" onClick={() => setIsEditing(true)}>Edit</span>
-            )}
+          {/* Mode Switcher Toggle: Edit vs Preview */}
+          <div className="ml-auto flex items-center">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsEditing(!isEditing);
+              }}
+              className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-800 text-[10px] font-semibold transition-colors"
+              title={isEditing ? 'Switch to Formatted Preview' : 'Switch to Raw Text Editor'}
+            >
+              {isEditing ? (
+                <>
+                  <Eye className="w-2.5 h-2.5" />
+                  <span>Preview</span>
+                </>
+              ) : (
+                <>
+                  <Edit3 className="w-2.5 h-2.5" />
+                  <span>Edit</span>
+                </>
+              )}
+            </button>
           </div>
         </div>
 
-        {/* Content Body: Editable vs Rendered Mode */}
+        {/* Content Body: Editable vs Formatted Render */}
         <div className="flex-1 overflow-y-auto min-h-0 pt-1">
           {isEditing ? (
             <textarea
@@ -664,20 +790,21 @@ export default function StickyNote({
               rows={5}
               value={content}
               disabled={isLockedByOther}
+              onSelect={handleTextareaSelect}
               onChange={(e) => {
                 setContent(e.target.value);
                 onStartTyping(note.id);
               }}
               onFocus={() => onStartTyping(note.id)}
               onBlur={handleContentBlur}
-              placeholder="Type note, highlight text (==yellow== or [hl:green]text[/hl]), or add tasks (- [ ])..."
+              placeholder="Type note, select text & click Highlight, or add tasks (- [ ])..."
               className="w-full h-full text-xs font-normal bg-transparent border border-transparent hover:border-zinc-200 focus:border-black focus:bg-white focus:outline-none transition-colors p-1 rounded resize-none leading-relaxed font-sans text-zinc-900"
               autoFocus
             />
           ) : (
             <div
               className="w-full h-full min-h-[60px] cursor-text p-1"
-              onClick={() => setIsEditing(true)}
+              onDoubleClick={() => setIsEditing(true)}
             >
               {renderFormattedContent()}
             </div>
