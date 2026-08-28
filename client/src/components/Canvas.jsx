@@ -163,8 +163,8 @@ export default function Canvas({
     let y = Math.max(20, coords.y - 50);
 
     if (snapToGrid) {
-      x = Math.round(x / 24) * 24;
-      y = Math.round(y / 24) * 24;
+      x = Math.round(x / 32) * 32;
+      y = Math.round(y / 32) * 32;
     }
 
     onCreateNote({
@@ -207,8 +207,8 @@ export default function Canvas({
     onCreateNote({
       title: `${note.title} (Copy)`,
       content: note.content,
-      x: note.x + (snapToGrid ? 24 : 30),
-      y: note.y + (snapToGrid ? 24 : 30),
+      x: note.x + (snapToGrid ? 32 : 30),
+      y: note.y + (snapToGrid ? 32 : 30),
       width: note.width,
       height: note.height,
       color: note.color,
@@ -268,30 +268,24 @@ export default function Canvas({
           onDeleteConnector={onDeleteConnector}
         />
 
-        {/* Interactive Sticky Notes */}
+        {/* Interactive Sticky Notes (Mapped directly without static wrapper) */}
         {notes.map((note) => (
-          <div
+          <StickyNote
             key={note.id}
-            onClick={() => handleNoteClickForConnect(note.id)}
-            className={`transition-shadow ${
-              connectSourceNoteId === note.id
-                ? 'ring-4 ring-black dark:ring-white rounded-lg'
-                : ''
-            }`}
-          >
-            <StickyNote
-              note={note}
-              activeLock={activeLocks[note.id]}
-              snapToGrid={snapToGrid}
-              onUpdate={onUpdateNote}
-              onMove={onMoveNote}
-              onVote={onVoteNote}
-              onDelete={onDeleteNote}
-              onDuplicate={handleDuplicateNote}
-              onStartTyping={onStartTyping}
-              onStopTyping={onStopTyping}
-            />
-          </div>
+            note={note}
+            activeLock={activeLocks[note.id]}
+            snapToGrid={snapToGrid}
+            zoom={zoom}
+            isSelectedForConnect={connectSourceNoteId === note.id}
+            onSelectForConnect={handleNoteClickForConnect}
+            onUpdate={onUpdateNote}
+            onMove={onMoveNote}
+            onVote={onVoteNote}
+            onDelete={onDeleteNote}
+            onDuplicate={handleDuplicateNote}
+            onStartTyping={onStartTyping}
+            onStopTyping={onStopTyping}
+          />
         ))}
 
         {/* Live Multiplayer Cursors */}
@@ -430,7 +424,7 @@ export default function Canvas({
         {snapToGrid && (
           <>
             <span>|</span>
-            <span className="text-black dark:text-white font-bold">SNAP 24px</span>
+            <span className="text-black dark:text-white font-bold">SNAP 32px</span>
           </>
         )}
       </div>

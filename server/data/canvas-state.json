@@ -89,61 +89,6 @@
   },
   "activities": [
     {
-      "id": "act-1787950129466-b8xzn",
-      "type": "leave",
-      "text": "Explorer #629 disconnected.",
-      "timestamp": 1787950129466,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787950129525-6rnfj",
-      "type": "join",
-      "text": "Explorer #629 joined the canvas.",
-      "timestamp": 1787950129525,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787950134999-nhsz3",
-      "type": "leave",
-      "text": "Explorer #629 disconnected.",
-      "timestamp": 1787950134999,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787950136167-c5uqk",
-      "type": "join",
-      "text": "Explorer #629 joined the canvas.",
-      "timestamp": 1787950136167,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787950283711-b1u3o",
-      "type": "join",
-      "text": "Explorer #843 joined the canvas.",
-      "timestamp": 1787950283711,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
       "id": "act-1787950624670-3a5y4",
       "type": "leave",
       "text": "Explorer #843 disconnected.",
@@ -742,6 +687,61 @@
       "type": "join",
       "text": "Explorer #843 joined the canvas.",
       "timestamp": 1787953736479,
+      "user": {
+        "id": "user-1787949242612-2d2w",
+        "name": "Explorer #843",
+        "color": "#3b82f6"
+      }
+    },
+    {
+      "id": "act-1787953853308-82kvx",
+      "type": "leave",
+      "text": "Explorer #629 disconnected.",
+      "timestamp": 1787953853308,
+      "user": {
+        "id": "user-1787949241283-dxdl",
+        "name": "Explorer #629",
+        "color": "#06b6d4"
+      }
+    },
+    {
+      "id": "act-1787953853625-zn88l",
+      "type": "join",
+      "text": "Explorer #629 joined the canvas.",
+      "timestamp": 1787953853625,
+      "user": {
+        "id": "user-1787949241283-dxdl",
+        "name": "Explorer #629",
+        "color": "#06b6d4"
+      }
+    },
+    {
+      "id": "act-1787953869780-lwncv",
+      "type": "leave",
+      "text": "Explorer #629 disconnected.",
+      "timestamp": 1787953869780,
+      "user": {
+        "id": "user-1787949241283-dxdl",
+        "name": "Explorer #629",
+        "color": "#06b6d4"
+      }
+    },
+    {
+      "id": "act-1787953870159-xhfap",
+      "type": "join",
+      "text": "Explorer #629 joined the canvas.",
+      "timestamp": 1787953870159,
+      "user": {
+        "id": "user-1787949241283-dxdl",
+        "name": "Explorer #629",
+        "color": "#06b6d4"
+      }
+    },
+    {
+      "id": "act-1787953876379-clkpm",
+      "type": "leave",
+      "text": "Explorer #843 disconnected.",
+      "timestamp": 1787953876379,
       "user": {
         "id": "user-1787949242612-2d2w",
         "name": "Explorer #843",

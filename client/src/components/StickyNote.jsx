@@ -19,15 +19,26 @@ import {
   ChevronDown,
   Eraser,
   Eye,
-  Edit3
+  Edit3,
+  Scaling
 } from 'lucide-react';
 import { NOTE_COLORS, CATEGORIES, PRIORITIES, HIGHLIGHT_COLORS } from '../types';
 import { useSocket } from '../context/SocketContext';
 
+const SIZE_PRESETS = [
+  { label: 'Compact', width: 260, height: 190 },
+  { label: 'Standard', width: 320, height: 240 },
+  { label: 'Wide', width: 440, height: 240 },
+  { label: 'Large', width: 520, height: 340 }
+];
+
 export default function StickyNote({
   note,
   activeLock,
-  snapToGrid,
+  snapToGrid = false,
+  zoom = 1,
+  isSelectedForConnect = false,
+  onSelectForConnect,
   onUpdate,
   onMove,
   onVote,
@@ -39,9 +50,13 @@ export default function StickyNote({
   const { currentUser } = useSocket();
   const [title, setTitle] = useState(note.title || '');
   const [content, setContent] = useState(note.content || '');
+  const [localWidth, setLocalWidth] = useState(note.width || 320);
+  const [localHeight, setLocalHeight] = useState(note.height || 240);
+
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [showCategoryPicker, setShowCategoryPicker] = useState(false);
   const [showPriorityPicker, setShowPriorityPicker] = useState(false);
+  const [showSizePicker, setShowSizePicker] = useState(false);
   const [showHighlightMenu, setShowHighlightMenu] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -53,7 +68,7 @@ export default function StickyNote({
   const noteRef = useRef(null);
   const textareaRef = useRef(null);
   const dragStartPos = useRef({ mouseX: 0, mouseY: 0, noteX: 0, noteY: 0 });
-  const resizeStartPos = useRef({ mouseX: 0, mouseY: 0, width: 320, height: 230 });
+  const resizeStartPos = useRef({ mouseX: 0, mouseY: 0, width: 320, height: 240 });
   const lastSelectionRef = useRef({ start: 0, end: 0, text: '' });
 
   useEffect(() => {
@@ -64,13 +79,17 @@ export default function StickyNote({
     setContent(note.content || '');
   }, [note.content]);
 
+  useEffect(() => {
+    if (!isResizing) {
+      setLocalWidth(note.width || 320);
+      setLocalHeight(note.height || 240);
+    }
+  }, [note.width, note.height, isResizing]);
+
   const colorConfig = NOTE_COLORS[note.color] || NOTE_COLORS.white;
   const currentPriority = PRIORITIES.find((p) => p.id === note.priority) || PRIORITIES[1];
   const isLockedByOther = activeLock && activeLock.userId !== currentUser.id;
   const hasVoted = !!(note.votedUsers && note.votedUsers[currentUser.id]);
-
-  const noteWidth = note.width || 320;
-  const noteHeight = note.height || 230;
 
   // Track text selection in textarea
   const handleTextareaSelect = (e) => {
@@ -159,7 +178,6 @@ export default function StickyNote({
       return;
     }
 
-    // Fallback: Enter edit mode and append highlight placeholder
     setIsEditing(true);
     const tag = colorKey === 'yellow' ? '==highlighted text==' : `[hl:${colorKey}]highlighted text[/hl]`;
     const newContent = content ? `${content}\n${tag}` : tag;
@@ -225,7 +243,7 @@ export default function StickyNote({
     onUpdate({ id: note.id, content: updated });
   };
 
-  // Dragging logic with live snap-to-grid
+  // Dragging logic with live snap-to-grid (32px grid step)
   const handleMouseDownHeader = (e) => {
     if (note.pinned || isLockedByOther) return;
     if (e.target.closest('button') || e.target.closest('input')) return;
@@ -244,14 +262,14 @@ export default function StickyNote({
     onMove(note.id, note.x, note.y, true);
 
     const handleMouseMove = (moveEvent) => {
-      const deltaX = moveEvent.clientX - dragStartPos.current.mouseX;
-      const deltaY = moveEvent.clientY - dragStartPos.current.mouseY;
-      let newX = Math.max(10, dragStartPos.current.noteX + deltaX);
-      let newY = Math.max(10, dragStartPos.current.noteY + deltaY);
+      const deltaX = (moveEvent.clientX - dragStartPos.current.mouseX) / zoom;
+      const deltaY = (moveEvent.clientY - dragStartPos.current.mouseY) / zoom;
+      let newX = Math.max(0, dragStartPos.current.noteX + deltaX);
+      let newY = Math.max(0, dragStartPos.current.noteY + deltaY);
 
       if (snapToGrid) {
-        newX = Math.round(newX / 24) * 24;
-        newY = Math.round(newY / 24) * 24;
+        newX = Math.round(newX / 32) * 32;
+        newY = Math.round(newY / 32) * 32;
       }
 
       onMove(note.id, newX, newY, false);
@@ -267,7 +285,7 @@ export default function StickyNote({
     window.addEventListener('mouseup', handleMouseUp);
   };
 
-  // Resizing logic with live snap-to-grid
+  // Resizing logic with live snap-to-grid & instant dimension feedback
   const handleMouseDownResize = (e) => {
     if (note.pinned || isLockedByOther) return;
     e.preventDefault();
@@ -277,21 +295,23 @@ export default function StickyNote({
     resizeStartPos.current = {
       mouseX: e.clientX,
       mouseY: e.clientY,
-      width: noteWidth,
-      height: noteHeight
+      width: localWidth,
+      height: localHeight
     };
 
     const handleMouseMove = (moveEvent) => {
-      const deltaX = moveEvent.clientX - resizeStartPos.current.mouseX;
-      const deltaY = moveEvent.clientY - resizeStartPos.current.mouseY;
-      let newWidth = Math.max(260, Math.min(700, resizeStartPos.current.width + deltaX));
-      let newHeight = Math.max(180, Math.min(700, resizeStartPos.current.height + deltaY));
+      const deltaX = (moveEvent.clientX - resizeStartPos.current.mouseX) / zoom;
+      const deltaY = (moveEvent.clientY - resizeStartPos.current.mouseY) / zoom;
+      let newWidth = Math.max(220, Math.min(800, resizeStartPos.current.width + deltaX));
+      let newHeight = Math.max(160, Math.min(800, resizeStartPos.current.height + deltaY));
 
       if (snapToGrid) {
-        newWidth = Math.round(newWidth / 24) * 24;
-        newHeight = Math.round(newHeight / 24) * 24;
+        newWidth = Math.round(newWidth / 32) * 32;
+        newHeight = Math.round(newHeight / 32) * 32;
       }
 
+      setLocalWidth(newWidth);
+      setLocalHeight(newHeight);
       onUpdate({ id: note.id, width: newWidth, height: newHeight });
     };
 
@@ -303,6 +323,13 @@ export default function StickyNote({
 
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
+  };
+
+  const handleApplyPresetSize = (width, height) => {
+    setLocalWidth(width);
+    setLocalHeight(height);
+    onUpdate({ id: note.id, width, height });
+    setShowSizePicker(false);
   };
 
   const handleContentBlur = () => {
@@ -324,7 +351,6 @@ export default function StickyNote({
     onVote(note.id);
   };
 
-  // Render highlighted segments
   const renderInlineHighlights = (text) => {
     const parts = text.split(/(\[hl:[a-z]+\](?:(?!\[\/hl\]).)+\[\/hl\]|==(?:(?!==).)+==|\*\*(?:(?!\*\*).)+\*\*)/gs);
 
@@ -430,16 +456,23 @@ export default function StickyNote({
       className={`absolute rounded-lg border transition-all select-text flex flex-col justify-between ${colorConfig.bg} dark:bg-zinc-900 dark:border-zinc-800 dark:text-white ${
         isDragging
           ? 'matte-note-dragging cursor-grabbing z-50'
+          : isResizing
+          ? 'ring-2 ring-black dark:ring-white z-50'
           : 'matte-note-card cursor-default'
-      } ${isLockedByOther ? 'ring-2 ring-black dark:ring-white' : ''}`}
+      } ${isLockedByOther ? 'ring-2 ring-black dark:ring-white' : ''} ${
+        isSelectedForConnect ? 'ring-4 ring-black dark:ring-white' : ''
+      }`}
       style={{
-        left: note.x,
-        top: note.y,
-        width: `${noteWidth}px`,
-        height: `${noteHeight}px`,
+        left: `${note.x}px`,
+        top: `${note.y}px`,
+        width: `${localWidth}px`,
+        height: `${localHeight}px`,
         zIndex: note.zIndex || 10
       }}
-      onClick={() => onMove(note.id, note.x, note.y, true)}
+      onClick={(e) => {
+        if (onSelectForConnect) onSelectForConnect(note.id);
+        onMove(note.id, note.x, note.y, true);
+      }}
     >
       {/* Remote Editing Lock Banner */}
       {isLockedByOther && (
@@ -494,6 +527,7 @@ export default function StickyNote({
                 setShowPriorityPicker(!showPriorityPicker);
                 setShowCategoryPicker(false);
                 setShowColorPicker(false);
+                setShowSizePicker(false);
                 setShowHighlightMenu(false);
               }}
               className={`text-[10px] font-bold px-1.5 py-0.5 rounded border transition-colors flex items-center gap-1 ${currentPriority.color}`}
@@ -536,6 +570,7 @@ export default function StickyNote({
                 setShowCategoryPicker(!showCategoryPicker);
                 setShowPriorityPicker(false);
                 setShowColorPicker(false);
+                setShowSizePicker(false);
                 setShowHighlightMenu(false);
               }}
               className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 transition-colors flex items-center gap-1 text-zinc-800 dark:text-zinc-200"
@@ -581,6 +616,42 @@ export default function StickyNote({
 
         {/* Top Controls */}
         <div className="flex items-center gap-0.5">
+          {/* Quick Dimensions Picker */}
+          <div className="relative">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowSizePicker(!showSizePicker);
+                setShowColorPicker(false);
+                setShowCategoryPicker(false);
+                setShowPriorityPicker(false);
+                setShowHighlightMenu(false);
+              }}
+              className="p-1 text-zinc-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 rounded transition-colors"
+              title="Resize Note Presets"
+            >
+              <Scaling className="w-3 h-3" />
+            </button>
+
+            {showSizePicker && (
+              <div
+                className="absolute right-0 top-6 w-36 rounded-lg p-1 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-xl z-50 flex flex-col gap-0.5"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {SIZE_PRESETS.map((preset) => (
+                  <button
+                    key={preset.label}
+                    onClick={() => handleApplyPresetSize(preset.width, preset.height)}
+                    className="text-left text-xs px-2 py-1.5 rounded font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 flex items-center justify-between"
+                  >
+                    <span>{preset.label}</span>
+                    <span className="text-[10px] text-zinc-400 font-mono">{preset.width}x{preset.height}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* Pin */}
           <button
             onClick={(e) => {
@@ -603,6 +674,7 @@ export default function StickyNote({
                 setShowColorPicker(!showColorPicker);
                 setShowCategoryPicker(false);
                 setShowPriorityPicker(false);
+                setShowSizePicker(false);
                 setShowHighlightMenu(false);
               }}
               className="p-1 text-zinc-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 rounded transition-colors"
@@ -829,7 +901,7 @@ export default function StickyNote({
           </span>
         </div>
 
-        <div className="flex items-center gap-1 pr-3">
+        <div className="flex items-center gap-1 pr-4">
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -855,16 +927,15 @@ export default function StickyNote({
           </button>
         </div>
 
-        {/* Resizable Corner Handle */}
+        {/* High-Visibility Corner Resize Handle */}
         <div
           onMouseDown={handleMouseDownResize}
-          className="absolute bottom-0 right-0 w-4 h-4 cursor-se-resize flex items-center justify-center text-zinc-400 hover:text-black dark:hover:text-white select-none"
-          title="Drag to resize dimensions"
+          className="absolute bottom-0 right-0 w-6 h-6 cursor-nwse-resize flex items-end justify-end p-1 text-zinc-400 hover:text-black dark:hover:text-white select-none group"
+          title="Drag to resize note dimensions"
         >
-          <svg width="6" height="6" viewBox="0 0 6 6" fill="currentColor">
-            <circle cx="5" cy="5" r="0.8" />
-            <circle cx="5" cy="2" r="0.8" />
-            <circle cx="2" cy="5" r="0.8" />
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+            <line x1="8" y1="2" x2="2" y2="8" />
+            <line x1="8" y1="5.5" x2="5.5" y2="8" />
           </svg>
         </div>
       </div>
