@@ -27,7 +27,7 @@
     {
       "id": "note-2",
       "title": "🛡️ 2nd-Year Concurrency & Merge",
-      "content": "Try editing this note simultaneously in 2 tabs! Notice the live lock badge and 3-way non-destructive merging engine in action.",
+      "content": "Try ==editing== this note simultaneously in 2 tabs! Notice the live lock badge and 3-way non-destructive merging engine in action.",
       "x": 420,
       "y": 100,
       "color": "cyan",
@@ -35,12 +35,12 @@
       "pinned": true,
       "votes": 14,
       "votedUsers": {},
-      "version": 1,
+      "version": 2,
       "createdAt": 1756400000000,
-      "updatedAt": 1787951634334,
-      "lastEditedBy": "System",
+      "updatedAt": 1787951800309,
+      "lastEditedBy": "Explorer #629",
       "lastEditedByColor": "#06b6d4",
-      "zIndex": 51
+      "zIndex": 55
     },
     {
       "id": "note-3",
@@ -133,6 +133,24 @@
       "lastEditedBy": "Explorer #629",
       "lastEditedByColor": "#06b6d4",
       "zIndex": 27
+    },
+    {
+      "id": "note-1787951975809-d6ms",
+      "title": "New Idea",
+      "content": "",
+      "x": 893,
+      "y": 398,
+      "color": "stone",
+      "category": "Docs",
+      "pinned": false,
+      "votes": 0,
+      "votedUsers": {},
+      "version": 1,
+      "createdAt": 1787951975888,
+      "updatedAt": 1787951975888,
+      "lastEditedBy": "Explorer #629",
+      "lastEditedByColor": "#06b6d4",
+      "zIndex": 17
     }
   ],
   "poll": {
@@ -142,7 +160,7 @@
       {
         "id": "opt-1",
         "text": "WebSockets (Socket.IO)",
-        "votes": 13
+        "votes": 14
       },
       {
         "id": "opt-2",
@@ -156,21 +174,12 @@
       }
     ],
     "votedUsers": {
-      "user-1787949242612-2d2w": "opt-1"
+      "user-1787949242612-2d2w": "opt-1",
+      "user-1787949241283-dxdl": "opt-1"
     },
-    "totalVotes": 20
+    "totalVotes": 21
   },
   "activities": [
-    {
-      "id": "act-1",
-      "type": "system",
-      "text": "SyncSpace collaborative canvas initialized.",
-      "timestamp": 1756400000000,
-      "user": {
-        "name": "System",
-        "color": "#6366f1"
-      }
-    },
     {
       "id": "act-1787948905785-t828m",
       "type": "join",
@@ -759,6 +768,72 @@
       "type": "join",
       "text": "Explorer #629 joined the canvas.",
       "timestamp": 1787951546955,
+      "user": {
+        "id": "user-1787949241283-dxdl",
+        "name": "Explorer #629",
+        "color": "#06b6d4"
+      }
+    },
+    {
+      "id": "act-1787951800309-5h7vs",
+      "type": "update",
+      "text": "Explorer #629 updated note \"🛡️ 2nd-Year Concurrency & Merge\".",
+      "timestamp": 1787951800309,
+      "user": {
+        "id": "user-1787949241283-dxdl",
+        "name": "Explorer #629",
+        "color": "#06b6d4"
+      }
+    },
+    {
+      "id": "act-1787951905158-edswu",
+      "type": "leave",
+      "text": "Explorer #843 disconnected.",
+      "timestamp": 1787951905158,
+      "user": {
+        "id": "user-1787949242612-2d2w",
+        "name": "Explorer #843",
+        "color": "#3b82f6"
+      }
+    },
+    {
+      "id": "act-1787951975895-n9ist",
+      "type": "create",
+      "text": "Explorer #629 created note \"New Idea\".",
+      "timestamp": 1787951975895,
+      "user": {
+        "id": "user-1787949241283-dxdl",
+        "name": "Explorer #629",
+        "color": "#06b6d4"
+      }
+    },
+    {
+      "id": "act-1787951986513-giyw8",
+      "type": "poll",
+      "text": "Explorer #629 voted in the collaborative poll.",
+      "timestamp": 1787951986513,
+      "user": {
+        "id": "user-1787949241283-dxdl",
+        "name": "Explorer #629",
+        "color": "#06b6d4"
+      }
+    },
+    {
+      "id": "act-1787952046183-138ci",
+      "type": "leave",
+      "text": "Explorer #629 disconnected.",
+      "timestamp": 1787952046183,
+      "user": {
+        "id": "user-1787949241283-dxdl",
+        "name": "Explorer #629",
+        "color": "#06b6d4"
+      }
+    },
+    {
+      "id": "act-1787952050273-am52t",
+      "type": "join",
+      "text": "Explorer #629 joined the canvas.",
+      "timestamp": 1787952050273,
       "user": {
         "id": "user-1787949241283-dxdl",
         "name": "Explorer #629",

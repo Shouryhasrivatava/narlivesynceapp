@@ -58,11 +58,11 @@ export default function Canvas({
     const y = Math.round((e.clientY - rect.top - pan.y) / zoom);
 
     onCreateNote({
-      title: 'New Idea',
+      title: 'New Note',
       content: '',
-      x: Math.max(20, x - 140),
+      x: Math.max(20, x - 160),
       y: Math.max(20, y - 50),
-      color: ['sand', 'stone', 'mist', 'clay', 'slate', 'cream'][Math.floor(Math.random() * 6)]
+      color: ['white', 'ivory', 'slate', 'zinc', 'amber'][Math.floor(Math.random() * 5)]
     });
   };
 
@@ -103,8 +103,11 @@ export default function Canvas({
       content: note.content,
       x: note.x + 30,
       y: note.y + 30,
+      width: note.width,
+      height: note.height,
       color: note.color,
       category: note.category,
+      priority: note.priority,
       pinned: false
     });
   };
@@ -152,32 +155,32 @@ export default function Canvas({
       </div>
 
       {/* Floating Canvas Controls */}
-      <div className="fixed bottom-6 left-6 z-30 flex items-center gap-1 rounded matte-panel p-1 bg-white border border-zinc-200 text-zinc-800">
+      <div className="fixed bottom-6 left-6 z-30 flex items-center gap-1 rounded matte-panel p-1 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 shadow-md">
         <button
           onClick={handleZoomIn}
-          className="p-1.5 rounded hover:bg-zinc-100 transition-colors"
+          className="p-1.5 rounded hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
           title="Zoom In"
         >
           <ZoomIn className="w-3.5 h-3.5" />
         </button>
 
-        <span className="text-[11px] font-mono font-semibold px-1.5 text-zinc-500">
+        <span className="text-[11px] font-mono font-semibold px-1.5 text-zinc-500 dark:text-zinc-400">
           {Math.round(zoom * 100)}%
         </span>
 
         <button
           onClick={handleZoomOut}
-          className="p-1.5 rounded hover:bg-zinc-100 transition-colors"
+          className="p-1.5 rounded hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
           title="Zoom Out"
         >
           <ZoomOut className="w-3.5 h-3.5" />
         </button>
 
-        <div className="w-[1px] h-3.5 bg-zinc-200 my-auto mx-0.5" />
+        <div className="w-[1px] h-3.5 bg-zinc-200 dark:bg-zinc-700 my-auto mx-0.5" />
 
         <button
           onClick={handleResetView}
-          className="p-1.5 rounded hover:bg-zinc-100 transition-colors"
+          className="p-1.5 rounded hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
           title="Reset View (100%)"
         >
           <Maximize2 className="w-3.5 h-3.5" />
@@ -185,7 +188,7 @@ export default function Canvas({
 
         <button
           onClick={() => onPingCanvas(window.innerWidth / 2 - pan.x, window.innerHeight / 2 - pan.y)}
-          className="p-1.5 rounded text-zinc-700 hover:bg-zinc-100 transition-colors"
+          className="p-1.5 rounded text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
           title="Attention Ping (or Shift+Click canvas)"
         >
           <Sparkles className="w-3.5 h-3.5" />
@@ -193,7 +196,7 @@ export default function Canvas({
       </div>
 
       {/* Tip Badge */}
-      <div className="fixed top-18 left-6 z-20 hidden lg:flex items-center gap-2 px-2.5 py-1 rounded bg-white border border-zinc-200 text-[11px] text-zinc-500 shadow-xs pointer-events-none">
+      <div className="fixed top-18 left-6 z-20 hidden lg:flex items-center gap-2 px-2.5 py-1 rounded bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-[11px] text-zinc-500 dark:text-zinc-400 shadow-xs pointer-events-none">
         <span><b>Double-click</b> canvas to create note • <b>Shift+Click</b> to ping collaborators</span>
       </div>
     </main>

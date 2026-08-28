@@ -622,6 +622,37 @@ io.on('connection', (socket) => {
     logActivity('poll', `${user.name} voted in the collaborative poll.`, user);
   });
 
+  // 11. Live Poll Creation
+  socket.on('poll:create', ({ question, options }, callback) => {
+    const user = onlineUsers.get(socket.id) || { id: socket.id, name: 'Collaborator' };
+    if (!question || !Array.isArray(options) || options.length < 2) {
+      if (typeof callback === 'function') callback({ error: 'Invalid poll data' });
+      return;
+    }
+
+    const newPoll = {
+      id: `poll-${Date.now()}`,
+      question: question.trim(),
+      options: options
+        .map((opt, i) => ({
+          id: `opt-${i + 1}`,
+          text: typeof opt === 'string' ? opt.trim() : (opt?.text || '').trim(),
+          votes: 0
+        }))
+        .filter((o) => o.text.length > 0),
+      votedUsers: {},
+      totalVotes: 0,
+      createdBy: user.name
+    };
+
+    canvasState.poll = newPoll;
+    saveStateToDisk();
+    io.emit('poll:updated', newPoll);
+    logActivity('poll', `${user.name} created a new poll: "${newPoll.question}".`, user);
+
+    if (typeof callback === 'function') callback({ success: true, poll: newPoll });
+  });
+
   // 11. User Profile Update
   socket.on('user:profile_update', (newProfile) => {
     const user = onlineUsers.get(socket.id);

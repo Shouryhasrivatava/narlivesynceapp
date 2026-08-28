@@ -445,6 +445,16 @@ export function useLiveBoard() {
     [socket, isConnected]
   );
 
+  // Create New Poll
+  const createPoll = useCallback(
+    (question, options) => {
+      if (socket && isConnected) {
+        socket.emit('poll:create', { question, options });
+      }
+    },
+    [socket, isConnected]
+  );
+
   // Reset Template
   const resetBoard = useCallback(
     (template = 'brainstorm') => {
@@ -509,6 +519,7 @@ export function useLiveBoard() {
     startTyping,
     stopTyping,
     votePoll,
+    createPoll,
     pingCanvas,
     resetBoard,
     exportBoardJSON,
