@@ -89,17 +89,6 @@
   },
   "activities": [
     {
-      "id": "act-1787949752605-giqav",
-      "type": "update",
-      "text": "Explorer #629 updated note \"New Note\".",
-      "timestamp": 1787949752605,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
       "id": "act-1787950018656-on2am",
       "type": "leave",
       "text": "Explorer #843 disconnected.",
@@ -742,6 +731,17 @@
       "type": "leave",
       "text": "Explorer #629 disconnected.",
       "timestamp": 1787952870933,
+      "user": {
+        "id": "user-1787949241283-dxdl",
+        "name": "Explorer #629",
+        "color": "#06b6d4"
+      }
+    },
+    {
+      "id": "act-1787953305773-p6ucf",
+      "type": "join",
+      "text": "Explorer #629 joined the canvas.",
+      "timestamp": 1787953305773,
       "user": {
         "id": "user-1787949241283-dxdl",
         "name": "Explorer #629",

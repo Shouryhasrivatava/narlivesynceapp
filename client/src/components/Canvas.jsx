@@ -50,6 +50,7 @@ export default function Canvas({
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isPanning, setIsPanning] = useState(false);
   const panStartRef = useRef({ mouseX: 0, mouseY: 0, panX: 0, panY: 0 });
+  const [mouseCoords, setMouseCoords] = useState({ x: 0, y: 0 });
 
   // Drawing state
   const [isDrawing, setIsDrawing] = useState(false);
@@ -74,6 +75,7 @@ export default function Canvas({
   const handleMouseMove = useCallback(
     (e) => {
       const coords = getCanvasCoords(e);
+      setMouseCoords(coords);
       onCursorMove(coords);
 
       if (isPanning) {
@@ -217,7 +219,7 @@ export default function Canvas({
       onMouseUp={handleMouseUp}
       onDoubleClick={handleDoubleClick}
       onClick={handleCanvasClick}
-      className={`relative w-screen h-screen pt-14 overflow-hidden select-none canvas-plain-bg ${
+      className={`relative w-screen h-screen pt-14 overflow-hidden select-none canvas-studio-bg ${
         canvasMode === 'draw'
           ? 'cursor-crosshair'
           : canvasMode === 'connect'
@@ -227,6 +229,9 @@ export default function Canvas({
           : 'cursor-default'
       }`}
     >
+      {/* Subtle Studio Ambient Lighting Overlay */}
+      <div className="absolute inset-0 studio-ambient-light pointer-events-none z-0" />
+
       {/* Visual Canvas Layer */}
       <div
         className="canvas-background absolute inset-0 origin-top-left transition-transform duration-75"
@@ -278,8 +283,8 @@ export default function Canvas({
         <LiveCursors cursors={cursors} />
       </div>
 
-      {/* Floating StrawPage Toolbar (Select, Draw, Connect Arrows) */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 flex items-center gap-1 rounded-full matte-panel p-1.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 shadow-xl">
+      {/* Floating StrawPage Toolbar */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 flex items-center gap-1 rounded-full matte-panel p-1.5 bg-white/95 dark:bg-zinc-900/95 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 shadow-xl backdrop-blur-md">
         {/* Select / Move */}
         <button
           onClick={() => {
@@ -308,7 +313,7 @@ export default function Canvas({
               ? 'bg-black text-white dark:bg-white dark:text-black shadow-xs'
               : 'hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300'
           }`}
-          title="Draw on background (StrawPage mode)"
+          title="Draw on canvas"
         >
           <Pencil className="w-3.5 h-3.5" />
           <span>Draw</span>
@@ -328,7 +333,7 @@ export default function Canvas({
           <span>Connect</span>
         </button>
 
-        {/* Color Palette (When in Draw or Connect mode) */}
+        {/* Color Palette */}
         {(canvasMode === 'draw' || canvasMode === 'connect') && (
           <div className="flex items-center gap-1 px-2 border-l border-zinc-200 dark:border-zinc-800">
             {DRAW_COLORS.map((c) => (
@@ -354,7 +359,6 @@ export default function Canvas({
           </div>
         )}
 
-        {/* Connector helper alert */}
         {canvasMode === 'connect' && (
           <span className="text-[10px] font-mono text-zinc-500 dark:text-zinc-400 px-2">
             {connectSourceNoteId ? '👉 Click target note' : '👉 Click 1st note'}
@@ -363,7 +367,7 @@ export default function Canvas({
       </div>
 
       {/* Floating Canvas Zoom Controls */}
-      <div className="fixed bottom-6 left-6 z-30 flex items-center gap-1 rounded-full matte-panel p-1 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 shadow-md">
+      <div className="fixed bottom-6 left-6 z-30 flex items-center gap-1 rounded-full matte-panel p-1 bg-white/95 dark:bg-zinc-900/95 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 shadow-md backdrop-blur-md">
         <button
           onClick={handleZoomIn}
           className="p-1.5 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
@@ -403,9 +407,16 @@ export default function Canvas({
         </button>
       </div>
 
+      {/* Minimal Coordinates HUD */}
+      <div className="fixed bottom-6 right-6 z-20 hidden xl:flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/90 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800 text-[10px] font-mono text-zinc-400 dark:text-zinc-500 shadow-xs pointer-events-none">
+        <span>X: {mouseCoords.x}</span>
+        <span>|</span>
+        <span>Y: {mouseCoords.y}</span>
+      </div>
+
       {/* Tip Badge */}
-      <div className="fixed top-18 left-6 z-20 hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-[11px] text-zinc-500 dark:text-zinc-400 shadow-xs pointer-events-none">
-        <span><b>StrawPage Mode</b> • Draw freely or click <b>Connect</b> to link notes with arrows</span>
+      <div className="fixed top-18 left-6 z-20 hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/85 dark:bg-zinc-900/85 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 text-[11px] text-zinc-600 dark:text-zinc-400 shadow-xs pointer-events-none">
+        <span><b>Studio Canvas</b> • Draw freely or click <b>Connect</b> to link notes</span>
       </div>
     </main>
   );

@@ -5,33 +5,47 @@
 @layer base {
   body {
     @apply m-0 p-0 overflow-hidden font-sans;
-    background-color: #fafafa;
+    background-color: #f8f9fa;
     color: #18181b;
     user-select: none;
     -webkit-user-select: none;
   }
 
   body.dark {
-    background-color: #09090b;
+    background-color: #0d0f14;
     color: #f4f4f5;
   }
 
-  /* Plain and Simple Clean StrawPage Canvas Background (No Dots) */
-  .canvas-plain-bg {
-    background-color: #fafafa;
+  /* Elegant Architectural Fine Grid Background (Subtle & Decent) */
+  .canvas-studio-bg {
+    background-color: #f8f9fa;
+    background-image: 
+      linear-gradient(to right, rgba(0, 0, 0, 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
+    background-size: 36px 36px;
   }
 
-  .dark .canvas-plain-bg {
-    background-color: #0c0d10;
+  .dark .canvas-studio-bg {
+    background-color: #0d0f14;
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 36px 36px;
   }
 }
 
-/* StrawPage Drawing Styles */
-.drawing-canvas {
-  touch-action: none;
+/* Subtle Ambient Gradient Accents (Clean Studio Lighting) */
+.studio-ambient-light {
+  background: radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.06), transparent 45%),
+              radial-gradient(circle at 85% 85%, rgba(147, 51, 234, 0.04), transparent 45%);
 }
 
-/* StrawPage Connectors / Arrows */
+.dark .studio-ambient-light {
+  background: radial-gradient(circle at 15% 15%, rgba(37, 99, 235, 0.12), transparent 50%),
+              radial-gradient(circle at 85% 85%, rgba(124, 58, 237, 0.08), transparent 50%);
+}
+
+/* StrawPage Connectors / Animated Line */
 .connector-line {
   stroke-dasharray: 4 4;
   animation: connector-dash 20s linear infinite;
@@ -45,37 +59,39 @@
 
 /* Clean Panels */
 .matte-panel {
-  background-color: #ffffff;
-  border: 1px solid #e4e4e7;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.06);
 }
 
 .dark .matte-panel {
-  background-color: #14161b;
+  background-color: rgba(20, 23, 31, 0.95);
+  backdrop-filter: blur(12px);
   border: 1px solid #27272a;
   box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
 }
 
 .matte-dropdown {
   background-color: #ffffff;
-  border: 1px solid #e4e4e7;
-  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.1);
 }
 
 .dark .matte-dropdown {
-  background-color: #14161b;
+  background-color: #141720;
   border: 1px solid #27272a;
-  box-shadow: 0 8px 24px -2px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.7);
 }
 
-/* Clean Cards */
+/* Note Cards */
 .matte-note-card {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.03);
 }
 
 .dark .matte-note-card {
-  background-color: #16181f;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  background-color: #161a24;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.07);
 }
 
 .matte-note-dragging {
@@ -121,7 +137,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d4d4d8;
+  background: #cbd5e1;
   border-radius: 9999px;
 }
 
@@ -130,7 +146,7 @@
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a1a1aa;
+  background: #94a3b8;
 }
 
 .dark ::-webkit-scrollbar-thumb:hover {
