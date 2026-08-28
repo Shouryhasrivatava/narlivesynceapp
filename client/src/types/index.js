@@ -1,79 +1,67 @@
-// Matte Color Themes - Refined satin/paper aesthetic for both Light and Dark modes
+// Clean Neutral Matte Color System
 export const NOTE_COLORS = {
-  yellow: {
-    name: 'Post-it Yellow',
-    bgLight: 'bg-[#fffbeb] border-[#fde68a] text-amber-950',
-    bgDark: 'bg-[#292218] border-[#785924] text-[#fef3c7]',
-    headerLight: 'bg-[#fef3c7] border-[#fde68a]',
-    headerDark: 'bg-[#3b2d18] border-[#785924]',
-    accent: '#d97706',
-    dot: 'bg-amber-500'
+  sand: {
+    name: 'Warm Sand',
+    bg: 'bg-[#faf7f2] border-[#e7dfd5] text-[#292524]',
+    header: 'bg-[#f4eee5] border-[#e7dfd5]',
+    accent: '#78716c',
+    tag: 'bg-[#e7dfd5] text-[#44403c]'
   },
-  cyan: {
-    name: 'Studio Cyan',
-    bgLight: 'bg-[#ecfeff] border-[#a5f3fc] text-cyan-950',
-    bgDark: 'bg-[#14262b] border-[#1e5866] text-[#cffafe]',
-    headerLight: 'bg-[#cffafe] border-[#a5f3fc]',
-    headerDark: 'bg-[#1b3d45] border-[#1e5866]',
-    accent: '#0891b2',
-    dot: 'bg-cyan-500'
+  stone: {
+    name: 'Classic Paper',
+    bg: 'bg-[#ffffff] border-[#e2e8f0] text-[#0f172a]',
+    header: 'bg-[#f8fafc] border-[#e2e8f0]',
+    accent: '#475569',
+    tag: 'bg-[#f1f5f9] text-[#334155]'
   },
-  pink: {
-    name: 'Soft Rose',
-    bgLight: 'bg-[#fff1f2] border-[#fecdd3] text-rose-950',
-    bgDark: 'bg-[#2b171c] border-[#712838] text-[#ffe4e6]',
-    headerLight: 'bg-[#ffe4e6] border-[#fecdd3]',
-    headerDark: 'bg-[#3f1f28] border-[#712838]',
-    accent: '#e11d48',
-    dot: 'bg-rose-500'
+  mist: {
+    name: 'Pale Sage',
+    bg: 'bg-[#f4f7f4] border-[#d8e2d8] text-[#1c2e1f]',
+    header: 'bg-[#eaf0ea] border-[#d8e2d8]',
+    accent: '#4b6e51',
+    tag: 'bg-[#d8e2d8] text-[#2d4a33]'
   },
-  emerald: {
-    name: 'Mint Green',
-    bgLight: 'bg-[#f0fdf4] border-[#bbf7d0] text-emerald-950',
-    bgDark: 'bg-[#15291b] border-[#225732] text-[#dcfce7]',
-    headerLight: 'bg-[#dcfce7] border-[#bbf7d0]',
-    headerDark: 'bg-[#1d3d27] border-[#225732]',
-    accent: '#059669',
-    dot: 'bg-emerald-500'
+  clay: {
+    name: 'Muted Clay',
+    bg: 'bg-[#fbf5f3] border-[#ecdcd8] text-[#3a221d]',
+    header: 'bg-[#f3e7e4] border-[#ecdcd8]',
+    accent: '#8c594d',
+    tag: 'bg-[#ecdcd8] text-[#5c352d]'
   },
-  purple: {
-    name: 'Muted Violet',
-    bgLight: 'bg-[#f5f3ff] border-[#ddd6fe] text-violet-950',
-    bgDark: 'bg-[#221a30] border-[#553c7b] text-[#ede9fe]',
-    headerLight: 'bg-[#ede9fe] border-[#ddd6fe]',
-    headerDark: 'bg-[#302345] border-[#553c7b]',
-    accent: '#7c3aed',
-    dot: 'bg-violet-500'
+  slate: {
+    name: 'Soft Slate',
+    bg: 'bg-[#f1f5f9] border-[#cbd5e1] text-[#1e293b]',
+    header: 'bg-[#e2e8f0] border-[#cbd5e1]',
+    accent: '#334155',
+    tag: 'bg-[#cbd5e1] text-[#1e293b]'
   },
-  coral: {
-    name: 'Warm Coral',
-    bgLight: 'bg-[#fff7ed] border-[#fed7aa] text-orange-950',
-    bgDark: 'bg-[#2d1c16] border-[#753c29] text-[#ffedd5]',
-    headerLight: 'bg-[#ffedd5] border-[#fed7aa]',
-    headerDark: 'bg-[#40261c] border-[#753c29]',
-    accent: '#ea580c',
-    dot: 'bg-orange-500'
+  cream: {
+    name: 'Ivory Cream',
+    bg: 'bg-[#fefce8] border-[#fef08a] text-[#422006]',
+    header: 'bg-[#fef9c3] border-[#fef08a]',
+    accent: '#854d0e',
+    tag: 'bg-[#fef08a] text-[#713f12]'
   }
 };
 
 export const CATEGORIES = [
-  { id: 'Feature', label: 'Feature', color: 'bg-blue-500/10 text-blue-600 border-blue-200 dark:text-blue-400' },
-  { id: 'Idea', label: 'Idea', color: 'bg-amber-500/10 text-amber-600 border-amber-200 dark:text-amber-400' },
-  { id: 'Bug', label: 'Bug', color: 'bg-rose-500/10 text-rose-600 border-rose-200 dark:text-rose-400' },
-  { id: 'Architecture', label: 'Architecture', color: 'bg-purple-500/10 text-purple-600 border-purple-200 dark:text-purple-400' },
-  { id: 'Task', label: 'Task', color: 'bg-emerald-500/10 text-emerald-600 border-emerald-200 dark:text-emerald-400' },
-  { id: 'Note', label: 'Note', color: 'bg-zinc-500/10 text-zinc-600 border-zinc-200 dark:text-zinc-400' }
+  { id: 'Feature', label: 'Feature', color: 'bg-zinc-100 text-zinc-700 border-zinc-300' },
+  { id: 'Idea', label: 'Idea', color: 'bg-zinc-100 text-zinc-700 border-zinc-300' },
+  { id: 'Bug', label: 'Bug', color: 'bg-zinc-100 text-zinc-700 border-zinc-300' },
+  { id: 'Architecture', label: 'Architecture', color: 'bg-zinc-100 text-zinc-700 border-zinc-300' },
+  { id: 'Task', label: 'Task', color: 'bg-zinc-100 text-zinc-700 border-zinc-300' },
+  { id: 'Note', label: 'Note', color: 'bg-zinc-100 text-zinc-700 border-zinc-300' }
 ];
 
-export const USER_AVATARS = ['🦊', '🐱', '🦄', '🐼', '🐯', '⚡', '🧙‍♂️', '🦁', '🦉', '🐙'];
+export const USER_AVATARS = ['👤', '⚡', '💡', '🎯', '✨', '☕', '🚀', '🛠️', '📌', '🧭'];
 
 export const USER_COLORS = [
-  '#2563eb', // Blue
-  '#db2777', // Pink
-  '#059669', // Emerald
-  '#7c3aed', // Purple
-  '#d97706', // Amber
-  '#0891b2', // Cyan
-  '#e11d48', // Rose
-  '#4f46e5'  // Indigo
+  '#18181b', // Zinc Black
+  '#475569', // Slate
+  '#2563eb', // Neutral Blue
+  '#0d9488', // Teal
+  '#b45309', // Amber
+  '#4338ca', // Indigo
+  '#be123c', // Crimson
+  '#4d7c0f'  // Olive
 ];

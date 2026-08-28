@@ -1,18 +1,18 @@
 {
   "board": {
     "id": "main-live-canvas",
-    "name": "SyncSpace Team Canvas",
+    "name": "NAR Live Workspace",
     "createdAt": 1756400000000,
     "lastModified": 1756400000000
   },
   "notes": [
     {
       "id": "note-1",
-      "title": "⚡ Live Sync & Presence",
-      "content": "Multiple tabs communicate via WebSockets / Socket.IO with sub-30ms latency! Watch cursors glide across the canvas.",
+      "title": "Live Sync & Presence",
+      "content": "Multiple tabs synchronize with sub-30ms latency via Socket.IO. Live cursor positions and user tags stream in real time.",
       "x": 80,
       "y": 100,
-      "color": "yellow",
+      "color": "sand",
       "category": "Feature",
       "pinned": false,
       "votes": 8,
@@ -21,16 +21,16 @@
       "createdAt": 1756400000000,
       "updatedAt": 1756400000000,
       "lastEditedBy": "System",
-      "lastEditedByColor": "#f59e0b",
+      "lastEditedByColor": "#18181b",
       "zIndex": 10
     },
     {
       "id": "note-2",
-      "title": "🛡️ 2nd-Year Concurrency & Merge",
-      "content": "Try editing this note simultaneously in 2 tabs! Notice the live lock badge and 3-way non-destructive merging engine in action.",
+      "title": "Simultaneous Edit Resolution",
+      "content": "Test concurrent edits across two tabs! Features active presence locking and non-destructive 3-way text merging.",
       "x": 420,
       "y": 100,
-      "color": "cyan",
+      "color": "stone",
       "category": "Architecture",
       "pinned": true,
       "votes": 14,
@@ -39,17 +39,17 @@
       "createdAt": 1756400000000,
       "updatedAt": 1756400000000,
       "lastEditedBy": "System",
-      "lastEditedByColor": "#06b6d4",
+      "lastEditedByColor": "#475569",
       "zIndex": 11
     },
     {
       "id": "note-3",
-      "title": "🚀 Optimistic UI Updates",
-      "content": "Dragging, voting, and color toggles update instantly on client state before server acknowledgement for zero-latency feel.",
+      "title": "Optimistic UI Updates",
+      "content": "Dragging, voting, and note edits update immediately on the client state before server response for responsive 60fps interaction.",
       "x": 760,
       "y": 100,
-      "color": "pink",
-      "category": "UX/UI",
+      "color": "mist",
+      "category": "Feature",
       "pinned": false,
       "votes": 11,
       "votedUsers": {},
@@ -57,17 +57,17 @@
       "createdAt": 1756400000000,
       "updatedAt": 1756400000000,
       "lastEditedBy": "System",
-      "lastEditedByColor": "#ec4899",
+      "lastEditedByColor": "#0d9488",
       "zIndex": 12
     },
     {
       "id": "note-4",
-      "title": "💾 Refresh Survival Guarantee",
-      "content": "All state changes are persistently written to server disk atomically. Close any tab or hit F5; your canvas state is safely restored.",
+      "title": "State Refresh Survival",
+      "content": "All state changes are persistently written to disk atomically. Reloading or closing tabs restores the exact canvas state.",
       "x": 250,
       "y": 380,
-      "color": "emerald",
-      "category": "Persistence",
+      "color": "clay",
+      "category": "Architecture",
       "pinned": false,
       "votes": 9,
       "votedUsers": {},
@@ -75,16 +75,16 @@
       "createdAt": 1756400000000,
       "updatedAt": 1756400000000,
       "lastEditedBy": "System",
-      "lastEditedByColor": "#10b981",
+      "lastEditedByColor": "#b45309",
       "zIndex": 13
     },
     {
       "id": "note-5",
-      "title": "🎯 Team Brainstorming Idea",
-      "content": "Double-click anywhere to quickly create a note, or click the toolbar button. You can change colors and tag categories on the fly!",
+      "title": "Team Ideas & Brainstorming",
+      "content": "Double-click anywhere to add notes. You can categorize by tag, change palette shades, or vote collaboratively.",
       "x": 590,
       "y": 380,
-      "color": "purple",
+      "color": "slate",
       "category": "Idea",
       "pinned": false,
       "votes": 5,
@@ -93,173 +93,28 @@
       "createdAt": 1756400000000,
       "updatedAt": 1756400000000,
       "lastEditedBy": "System",
-      "lastEditedByColor": "#8b5cf6",
+      "lastEditedByColor": "#4338ca",
       "zIndex": 14
-    },
-    {
-      "id": "note-1787948905788-hniq",
-      "title": "E2E Test Note",
-      "content": "Testing real-time live sync",
-      "x": 200,
-      "y": 200,
-      "color": "emerald",
-      "category": "Idea",
-      "pinned": false,
-      "votes": 1,
-      "votedUsers": {
-        "rbE_EioN50S2M35BAAAD": true
-      },
-      "version": 1,
-      "createdAt": 1787948905788,
-      "updatedAt": 1787948905791,
-      "lastEditedBy": "Alice (Tab 1)",
-      "lastEditedByColor": "#3b82f6",
-      "zIndex": 15
     }
   ],
   "poll": {
     "id": "poll-1",
-    "question": "What's the best real-time transport mechanism?",
+    "question": "What's your preferred real-time sync approach?",
     "options": [
-      {
-        "id": "opt-1",
-        "text": "WebSockets (Socket.IO)",
-        "votes": 12
-      },
-      {
-        "id": "opt-2",
-        "text": "Server-Sent Events (SSE)",
-        "votes": 4
-      },
-      {
-        "id": "opt-3",
-        "text": "WebRTC DataChannels",
-        "votes": 3
-      }
+      { "id": "opt-1", "text": "WebSockets (Socket.IO)", "votes": 14 },
+      { "id": "opt-2", "text": "Server-Sent Events (SSE)", "votes": 4 },
+      { "id": "opt-3", "text": "WebRTC Data Channels", "votes": 3 }
     ],
     "votedUsers": {},
-    "totalVotes": 19
+    "totalVotes": 21
   },
   "activities": [
     {
       "id": "act-1",
       "type": "system",
-      "text": "SyncSpace collaborative canvas initialized.",
+      "text": "NAR Live Workspace initialized.",
       "timestamp": 1756400000000,
-      "user": {
-        "name": "System",
-        "color": "#6366f1"
-      }
-    },
-    {
-      "id": "act-1787948905785-t828m",
-      "type": "join",
-      "text": "Alice (Tab 1) joined the canvas.",
-      "timestamp": 1787948905785,
-      "user": {
-        "id": "qaJQgz_BmwQ53GW2AAAC",
-        "name": "Alice (Tab 1)",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787948905788-h8s05",
-      "type": "create",
-      "text": "Alice (Tab 1) created note \"E2E Test Note\".",
-      "timestamp": 1787948905788,
-      "user": {
-        "id": "qaJQgz_BmwQ53GW2AAAC",
-        "name": "Alice (Tab 1)",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787948905790-tvtyq",
-      "type": "join",
-      "text": "Bob (Tab 2) joined the canvas.",
-      "timestamp": 1787948905790,
-      "user": {
-        "id": "rbE_EioN50S2M35BAAAD",
-        "name": "Bob (Tab 2)",
-        "color": "#ec4899"
-      }
-    },
-    {
-      "id": "act-1787948905792-ppztk",
-      "type": "vote",
-      "text": "Bob (Tab 2) voted on \"E2E Test Note\".",
-      "timestamp": 1787948905792,
-      "user": {
-        "id": "rbE_EioN50S2M35BAAAD",
-        "name": "Bob (Tab 2)",
-        "color": "#ec4899"
-      }
-    },
-    {
-      "id": "act-1787948905796-k8hc8",
-      "type": "leave",
-      "text": "Alice (Tab 1) disconnected.",
-      "timestamp": 1787948905796,
-      "user": {
-        "id": "qaJQgz_BmwQ53GW2AAAC",
-        "name": "Alice (Tab 1)",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787948905797-tfdoi",
-      "type": "leave",
-      "text": "Bob (Tab 2) disconnected.",
-      "timestamp": 1787948905797,
-      "user": {
-        "id": "rbE_EioN50S2M35BAAAD",
-        "name": "Bob (Tab 2)",
-        "color": "#ec4899"
-      }
-    },
-    {
-      "id": "act-1787949241684-z8m9c",
-      "type": "join",
-      "text": "Explorer #629 joined the canvas.",
-      "timestamp": 1787949241684,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787949245000-0fiq4",
-      "type": "join",
-      "text": "Explorer #843 joined the canvas.",
-      "timestamp": 1787949245002,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787949483372-2ifnk",
-      "type": "leave",
-      "text": "Explorer #843 disconnected.",
-      "timestamp": 1787949483372,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787949483389-ps1cv",
-      "type": "leave",
-      "text": "Explorer #629 disconnected.",
-      "timestamp": 1787949483389,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
+      "user": { "name": "System", "color": "#18181b" }
     }
   ]
 }

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { SocketProvider } from './context/SocketContext';
-import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { useLiveBoard } from './hooks/useLiveBoard';
 import Navbar from './components/Navbar';
 import Canvas from './components/Canvas';
@@ -11,8 +10,6 @@ import ConflictToast from './components/ConflictToast';
 import { Loader2 } from 'lucide-react';
 
 function LiveSyncBoardApp() {
-  const { isDark } = useTheme();
-
   const {
     board,
     notes,
@@ -51,25 +48,22 @@ function LiveSyncBoardApp() {
 
   if (isLoading) {
     return (
-      <div className={`w-screen h-screen flex flex-col items-center justify-center gap-3 transition-colors ${
-        isDark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'
-      }`}>
-        <div className="w-10 h-10 rounded-xl bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center">
-          <Loader2 className="w-5 h-5 text-indigo-600 dark:text-indigo-400 animate-spin" />
+      <div className="w-screen h-screen flex flex-col items-center justify-center gap-3 bg-[#fafafa] text-zinc-900">
+        <div className="w-8 h-8 rounded bg-black text-white font-mono font-bold flex items-center justify-center text-xs">
+          NAR
         </div>
-        <div className="text-center">
-          <h2 className="text-sm font-bold">Connecting to SyncSpace...</h2>
-          <p className="text-xs text-slate-500 font-mono mt-0.5">Restoring persistent canvas state</p>
+        <div className="text-center flex flex-col items-center">
+          <Loader2 className="w-4 h-4 text-zinc-600 animate-spin mb-1" />
+          <h2 className="text-xs font-semibold text-zinc-700">Connecting to NAR Live Canvas...</h2>
+          <p className="text-[11px] text-zinc-400 font-mono mt-0.5">Restoring persistent state</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={`relative w-screen h-screen overflow-hidden transition-colors ${
-      isDark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'
-    }`}>
-      {/* Navigation Header */}
+    <div className="relative w-screen h-screen overflow-hidden bg-[#fafafa] text-zinc-900 font-sans">
+      {/* Top Header with NAR Logo */}
       <Navbar
         notesCount={rawNotesCount}
         activityCount={activities.length}
@@ -86,7 +80,7 @@ function LiveSyncBoardApp() {
         onOpenProfile={() => setIsProfileOpen(true)}
       />
 
-      {/* Interactive Canvas */}
+      {/* Main Interactive Canvas */}
       <Canvas
         notes={notes}
         activeLocks={activeLocks}
@@ -104,7 +98,7 @@ function LiveSyncBoardApp() {
         onPingCanvas={pingCanvas}
       />
 
-      {/* Live Poll Widget */}
+      {/* Synchronized Collaborative Poll Widget */}
       {poll && <LivePollWidget poll={poll} onVote={votePoll} />}
 
       {/* Activity Log Drawer */}
@@ -120,7 +114,7 @@ function LiveSyncBoardApp() {
         onClose={() => setIsProfileOpen(false)}
       />
 
-      {/* Concurrent Conflict Toast */}
+      {/* Concurrent Conflict Resolution Toast */}
       <ConflictToast
         toasts={conflictToasts}
         onDismiss={dismissConflictToast}
@@ -131,10 +125,8 @@ function LiveSyncBoardApp() {
 
 export default function App() {
   return (
-    <ThemeProvider>
-      <SocketProvider>
-        <LiveSyncBoardApp />
-      </SocketProvider>
-    </ThemeProvider>
+    <SocketProvider>
+      <LiveSyncBoardApp />
+    </SocketProvider>
   );
 }

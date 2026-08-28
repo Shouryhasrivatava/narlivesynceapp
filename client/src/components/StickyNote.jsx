@@ -10,10 +10,8 @@ import {
   GitMerge,
   GripHorizontal
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
 import { NOTE_COLORS, CATEGORIES } from '../types';
 import { useSocket } from '../context/SocketContext';
-import { useTheme } from '../context/ThemeContext';
 
 export default function StickyNote({
   note,
@@ -27,7 +25,6 @@ export default function StickyNote({
   onStopTyping
 }) {
   const { currentUser } = useSocket();
-  const { isDark } = useTheme();
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content);
   const [showColorPicker, setShowColorPicker] = useState(false);
@@ -45,11 +42,10 @@ export default function StickyNote({
     setContent(note.content);
   }, [note.content]);
 
-  const colorConfig = NOTE_COLORS[note.color] || NOTE_COLORS.yellow;
+  const colorConfig = NOTE_COLORS[note.color] || NOTE_COLORS.sand;
   const isLockedByOther = activeLock && activeLock.userId !== currentUser.id;
   const hasVoted = !!(note.votedUsers && note.votedUsers[currentUser.id]);
 
-  // Dragging logic
   const handleMouseDownHeader = (e) => {
     if (note.pinned || isLockedByOther) return;
     if (e.target.closest('button') || e.target.closest('input')) return;
@@ -65,7 +61,7 @@ export default function StickyNote({
       noteY: note.y
     };
 
-    onMove(note.id, note.x, note.y, true); // Bring to front
+    onMove(note.id, note.x, note.y, true);
 
     const handleMouseMove = (moveEvent) => {
       const deltaX = moveEvent.clientX - dragStartPos.current.mouseX;
@@ -103,38 +99,16 @@ export default function StickyNote({
   const handleVote = (e) => {
     e.stopPropagation();
     onVote(note.id);
-
-    if (!hasVoted) {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const x = (rect.left + rect.width / 2) / window.innerWidth;
-      const y = (rect.top + rect.height / 2) / window.innerHeight;
-
-      confetti({
-        particleCount: 18,
-        spread: 40,
-        startVelocity: 20,
-        origin: { x, y },
-        colors: ['#4f46e5', '#db2777', '#d97706', '#059669'],
-        disableForReducedMotion: true
-      });
-    }
   };
-
-  const bgStyle = isDark ? colorConfig.bgDark : colorConfig.bgLight;
-  const headerStyle = isDark ? colorConfig.headerDark : colorConfig.headerLight;
 
   return (
     <div
       ref={noteRef}
-      className={`absolute w-72 rounded-xl transition-all duration-100 border select-text ${bgStyle} ${
+      className={`absolute w-72 rounded-lg border transition-all duration-75 select-text ${colorConfig.bg} ${
         isDragging
-          ? isDark
-            ? 'matte-card-shadow-dark-drag cursor-grabbing'
-            : 'matte-card-shadow-light-drag cursor-grabbing'
-          : isDark
-          ? 'matte-card-shadow-dark cursor-default'
-          : 'matte-card-shadow-light cursor-default'
-      } ${isLockedByOther ? 'ring-2 ring-indigo-500' : ''}`}
+          ? 'matte-note-dragging cursor-grabbing z-50'
+          : 'matte-note-card cursor-default'
+      } ${isLockedByOther ? 'ring-2 ring-zinc-800' : ''}`}
       style={{
         left: note.x,
         top: note.y,
@@ -145,21 +119,20 @@ export default function StickyNote({
       {/* Remote Editing Lock Banner */}
       {isLockedByOther && (
         <div
-          className="absolute -top-7 left-0 right-0 mx-auto w-max px-2.5 py-0.5 rounded-full text-xs font-semibold text-white shadow-md flex items-center gap-1.5 animate-pulse border border-white/20"
-          style={{ backgroundColor: activeLock.userColor || '#4f46e5' }}
+          className="absolute -top-7 left-0 right-0 mx-auto w-max px-2.5 py-0.5 rounded text-xs font-semibold text-white shadow-xs flex items-center gap-1.5 bg-black"
         >
           <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
-          <span>⚡ {activeLock.userName} is typing...</span>
+          <span>{activeLock.userName} is editing...</span>
         </div>
       )}
 
       {/* Note Header */}
       <div
         onMouseDown={handleMouseDownHeader}
-        className={`px-3 py-2 rounded-t-xl flex items-center justify-between gap-1.5 cursor-grab active:cursor-grabbing border-b ${headerStyle}`}
+        className={`px-3 py-2 rounded-t-lg flex items-center justify-between gap-1.5 cursor-grab active:cursor-grabbing border-b ${colorConfig.header}`}
       >
         <div className="flex items-center gap-1 flex-1 min-w-0">
-          <GripHorizontal className="w-3.5 h-3.5 opacity-40 flex-shrink-0" />
+          <GripHorizontal className="w-3.5 h-3.5 text-zinc-400 flex-shrink-0" />
           {/* Category Tag */}
           <div className="relative">
             <button
@@ -168,7 +141,7 @@ export default function StickyNote({
                 setShowCategoryPicker(!showCategoryPicker);
                 setShowColorPicker(false);
               }}
-              className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 transition-colors flex items-center gap-1"
+              className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-black/5 hover:bg-black/10 transition-colors flex items-center gap-1 text-zinc-800"
             >
               <Tag className="w-2.5 h-2.5" />
               <span>{note.category || 'Idea'}</span>
@@ -176,9 +149,7 @@ export default function StickyNote({
 
             {showCategoryPicker && (
               <div
-                className={`absolute left-0 top-6 w-36 rounded-xl p-1 shadow-xl z-50 flex flex-col gap-0.5 border ${
-                  isDark ? 'matte-dropdown-dark' : 'matte-dropdown-light'
-                }`}
+                className="absolute left-0 top-6 w-36 rounded-lg p-1 matte-dropdown z-50 flex flex-col gap-0.5"
                 onClick={(e) => e.stopPropagation()}
               >
                 {CATEGORIES.map((cat) => (
@@ -188,8 +159,8 @@ export default function StickyNote({
                       onUpdate({ id: note.id, category: cat.id });
                       setShowCategoryPicker(false);
                     }}
-                    className={`text-left text-xs px-2 py-1 rounded font-medium transition-colors hover:bg-black/5 dark:hover:bg-white/10 ${
-                      note.category === cat.id ? 'font-bold text-indigo-600 dark:text-indigo-400' : ''
+                    className={`text-left text-xs px-2 py-1 rounded font-medium transition-colors hover:bg-zinc-100 ${
+                      note.category === cat.id ? 'font-bold text-zinc-900 bg-zinc-100' : 'text-zinc-700'
                     }`}
                   >
                     {cat.label}
@@ -203,7 +174,7 @@ export default function StickyNote({
           {note.lastConflict && (
             <span
               title={note.lastConflict.summary}
-              className="flex items-center gap-0.5 text-[9px] font-bold px-1.5 py-0.5 bg-indigo-600 text-white rounded shadow-sm"
+              className="flex items-center gap-0.5 text-[9px] font-bold px-1.5 py-0.5 bg-black text-white rounded"
             >
               <GitMerge className="w-2.5 h-2.5" />
               <span>Merged</span>
@@ -211,23 +182,21 @@ export default function StickyNote({
           )}
         </div>
 
-        {/* Header Controls */}
+        {/* Controls */}
         <div className="flex items-center gap-0.5">
-          {/* Pin */}
           <button
             onClick={(e) => {
               e.stopPropagation();
               onUpdate({ id: note.id, pinned: !note.pinned });
             }}
             className={`p-1 rounded transition-colors ${
-              note.pinned ? 'bg-indigo-600 text-white' : 'opacity-40 hover:opacity-90 hover:bg-black/5 dark:hover:bg-white/10'
+              note.pinned ? 'bg-black text-white' : 'text-zinc-400 hover:text-zinc-800 hover:bg-black/5'
             }`}
-            title={note.pinned ? 'Unpin' : 'Pin'}
+            title={note.pinned ? 'Unpin' : 'Pin in place'}
           >
             {note.pinned ? <Pin className="w-3 h-3" /> : <PinOff className="w-3 h-3" />}
           </button>
 
-          {/* Palette */}
           <div className="relative">
             <button
               onClick={(e) => {
@@ -235,17 +204,15 @@ export default function StickyNote({
                 setShowColorPicker(!showColorPicker);
                 setShowCategoryPicker(false);
               }}
-              className="p-1 opacity-40 hover:opacity-90 hover:bg-black/5 dark:hover:bg-white/10 rounded transition-colors"
-              title="Change Color"
+              className="p-1 text-zinc-400 hover:text-zinc-800 hover:bg-black/5 rounded transition-colors"
+              title="Color"
             >
               <Palette className="w-3 h-3" />
             </button>
 
             {showColorPicker && (
               <div
-                className={`absolute right-0 top-6 p-1.5 rounded-xl shadow-xl z-50 flex gap-1 border ${
-                  isDark ? 'matte-dropdown-dark' : 'matte-dropdown-light'
-                }`}
+                className="absolute right-0 top-6 p-1.5 rounded-lg matte-dropdown z-50 flex gap-1"
                 onClick={(e) => e.stopPropagation()}
               >
                 {Object.entries(NOTE_COLORS).map(([key, conf]) => (
@@ -255,8 +222,8 @@ export default function StickyNote({
                       onUpdate({ id: note.id, color: key });
                       setShowColorPicker(false);
                     }}
-                    className={`w-5 h-5 rounded-full border transition-transform hover:scale-110 ${
-                      note.color === key ? 'border-indigo-600 scale-110 ring-2 ring-indigo-400' : 'border-black/10'
+                    className={`w-5 h-5 rounded border transition-transform hover:scale-110 ${
+                      note.color === key ? 'border-black scale-110 ring-1 ring-black' : 'border-zinc-300'
                     }`}
                     style={{ backgroundColor: conf.accent }}
                     title={conf.name}
@@ -266,13 +233,12 @@ export default function StickyNote({
             )}
           </div>
 
-          {/* Delete */}
           <button
             onClick={(e) => {
               e.stopPropagation();
               onDelete(note.id);
             }}
-            className="p-1 opacity-40 hover:opacity-100 hover:text-rose-600 hover:bg-rose-500/10 rounded transition-colors"
+            className="p-1 text-zinc-400 hover:text-rose-600 hover:bg-rose-50 rounded transition-colors"
             title="Delete"
           >
             <Trash2 className="w-3 h-3" />
@@ -296,7 +262,7 @@ export default function StickyNote({
             if (e.key === 'Enter') e.target.blur();
           }}
           placeholder="Note title..."
-          className="w-full font-bold text-xs bg-transparent border-b border-transparent hover:border-black/10 dark:hover:border-white/10 focus:border-indigo-500 focus:outline-none transition-colors px-1 py-0.5 rounded"
+          className="w-full font-bold text-xs bg-transparent border-b border-transparent hover:border-zinc-300 focus:border-zinc-900 focus:outline-none transition-colors px-1 py-0.5 rounded"
         />
 
         <textarea
@@ -309,16 +275,16 @@ export default function StickyNote({
           }}
           onFocus={() => onStartTyping(note.id)}
           onBlur={handleContentBlur}
-          placeholder="Write note or idea..."
-          className="w-full text-xs font-normal bg-transparent border border-transparent hover:border-black/5 dark:hover:border-white/5 focus:border-indigo-500 focus:bg-white/40 dark:focus:bg-black/30 focus:outline-none transition-colors p-1.5 rounded-lg resize-none leading-relaxed"
+          placeholder="Write idea or note..."
+          className="w-full text-xs font-normal bg-transparent border border-transparent hover:border-zinc-200 focus:border-zinc-900 focus:bg-white focus:outline-none transition-colors p-1.5 rounded resize-none leading-relaxed"
         />
 
         {/* Footer */}
-        <div className="pt-2 border-t border-black/5 dark:border-white/5 flex items-center justify-between text-[10px] opacity-70">
+        <div className="pt-2 border-t border-black/5 flex items-center justify-between text-[10px] text-zinc-500">
           <div className="flex items-center gap-1">
             <span
               className="w-1.5 h-1.5 rounded-full"
-              style={{ backgroundColor: note.lastEditedByColor || '#4f46e5' }}
+              style={{ backgroundColor: note.lastEditedByColor || '#18181b' }}
             />
             <span className="truncate max-w-[90px] font-medium">
               {note.lastEditedBy || 'Anonymous'}
@@ -331,18 +297,18 @@ export default function StickyNote({
                 e.stopPropagation();
                 onDuplicate(note);
               }}
-              className="p-1 hover:bg-black/5 dark:hover:bg-white/10 rounded transition-colors"
-              title="Duplicate Note"
+              className="p-1 hover:bg-black/5 rounded transition-colors text-zinc-500 hover:text-zinc-800"
+              title="Duplicate"
             >
               <Copy className="w-2.5 h-2.5" />
             </button>
 
             <button
               onClick={handleVote}
-              className={`flex items-center gap-1 px-2 py-0.5 rounded-full font-bold transition-all ${
+              className={`flex items-center gap-1 px-2 py-0.5 rounded font-semibold transition-all ${
                 hasVoted
-                  ? 'bg-indigo-600 text-white shadow-sm scale-105'
-                  : 'bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20'
+                  ? 'bg-black text-white'
+                  : 'bg-black/5 hover:bg-black/10 text-zinc-700'
               }`}
               title="Vote"
             >

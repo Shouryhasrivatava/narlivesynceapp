@@ -3,7 +3,6 @@ import StickyNote from './StickyNote';
 import LiveCursors from './LiveCursors';
 import RadarPing from './RadarPing';
 import { ZoomIn, ZoomOut, Maximize2, Sparkles } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
 
 export default function Canvas({
   notes,
@@ -21,7 +20,6 @@ export default function Canvas({
   onCursorLeave,
   onPingCanvas
 }) {
-  const { isDark } = useTheme();
   const canvasRef = useRef(null);
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -52,7 +50,6 @@ export default function Canvas({
     setIsPanning(false);
   }, [onCursorLeave]);
 
-  // Double click to create note
   const handleDoubleClick = (e) => {
     if (e.target !== canvasRef.current && !e.target.classList.contains('canvas-background')) return;
 
@@ -65,7 +62,7 @@ export default function Canvas({
       content: '',
       x: Math.max(20, x - 140),
       y: Math.max(20, y - 50),
-      color: ['yellow', 'cyan', 'pink', 'emerald', 'purple', 'coral'][Math.floor(Math.random() * 6)]
+      color: ['sand', 'stone', 'mist', 'clay', 'slate', 'cream'][Math.floor(Math.random() * 6)]
     });
   };
 
@@ -121,9 +118,9 @@ export default function Canvas({
       onMouseUp={handleMouseUp}
       onDoubleClick={handleDoubleClick}
       onClick={handleCanvasClick}
-      className={`relative w-screen h-screen pt-16 overflow-hidden cursor-crosshair transition-colors duration-200 ${
-        isDark ? 'canvas-matte-dark' : 'canvas-matte-light'
-      } ${isPanning ? 'cursor-grab active:cursor-grabbing' : ''}`}
+      className={`relative w-screen h-screen pt-14 overflow-hidden cursor-crosshair canvas-matte-grid select-none ${
+        isPanning ? 'cursor-grab active:cursor-grabbing' : ''
+      }`}
     >
       {/* Visual Canvas Layer */}
       <div
@@ -154,35 +151,33 @@ export default function Canvas({
         <LiveCursors cursors={cursors} />
       </div>
 
-      {/* Floating Canvas Controls (Bottom Left) */}
-      <div className={`fixed bottom-6 left-6 z-30 flex items-center gap-1 rounded-xl p-1 shadow-lg border transition-colors ${
-        isDark ? 'matte-bar-dark text-slate-200' : 'matte-bar-light text-slate-800'
-      }`}>
+      {/* Floating Canvas Controls */}
+      <div className="fixed bottom-6 left-6 z-30 flex items-center gap-1 rounded matte-panel p-1 bg-white border border-zinc-200 text-zinc-800">
         <button
           onClick={handleZoomIn}
-          className="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+          className="p-1.5 rounded hover:bg-zinc-100 transition-colors"
           title="Zoom In"
         >
           <ZoomIn className="w-3.5 h-3.5" />
         </button>
 
-        <span className="text-[11px] font-mono font-bold px-1.5 text-slate-500 dark:text-slate-400">
+        <span className="text-[11px] font-mono font-semibold px-1.5 text-zinc-500">
           {Math.round(zoom * 100)}%
         </span>
 
         <button
           onClick={handleZoomOut}
-          className="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+          className="p-1.5 rounded hover:bg-zinc-100 transition-colors"
           title="Zoom Out"
         >
           <ZoomOut className="w-3.5 h-3.5" />
         </button>
 
-        <div className="w-[1px] h-3.5 bg-slate-200 dark:bg-slate-700 my-auto mx-0.5" />
+        <div className="w-[1px] h-3.5 bg-zinc-200 my-auto mx-0.5" />
 
         <button
           onClick={handleResetView}
-          className="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+          className="p-1.5 rounded hover:bg-zinc-100 transition-colors"
           title="Reset View (100%)"
         >
           <Maximize2 className="w-3.5 h-3.5" />
@@ -190,7 +185,7 @@ export default function Canvas({
 
         <button
           onClick={() => onPingCanvas(window.innerWidth / 2 - pan.x, window.innerHeight / 2 - pan.y)}
-          className="p-2 rounded-lg text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 transition-colors"
+          className="p-1.5 rounded text-zinc-700 hover:bg-zinc-100 transition-colors"
           title="Attention Ping (or Shift+Click canvas)"
         >
           <Sparkles className="w-3.5 h-3.5" />
@@ -198,8 +193,8 @@ export default function Canvas({
       </div>
 
       {/* Tip Badge */}
-      <div className="fixed top-20 left-6 z-20 hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 backdrop-blur-md text-[11px] text-slate-500 dark:text-slate-400 shadow-sm pointer-events-none">
-        <span>💡 <b>Double-click</b> canvas to create note • <b>Shift+Click</b> to ping collaborators</span>
+      <div className="fixed top-18 left-6 z-20 hidden lg:flex items-center gap-2 px-2.5 py-1 rounded bg-white border border-zinc-200 text-[11px] text-zinc-500 shadow-xs pointer-events-none">
+        <span><b>Double-click</b> canvas to create note • <b>Shift+Click</b> to ping collaborators</span>
       </div>
     </main>
   );

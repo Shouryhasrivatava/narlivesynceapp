@@ -1,5 +1,5 @@
 # 🎥 Video Walkthrough Script (2–3 Minutes)
-## SyncSpace — Real-Time Collaborative Live-Sync Canvas (2nd Year Submission)
+## NAR Live Canvas — Real-Time Collaborative Workspace (2nd Year Submission)
 
 This script is structured to help you record a crisp, confident, and complete 2 to 3 minute demo showcasing all base and 2nd-year build-on requirements.
 
@@ -8,9 +8,9 @@ This script is structured to help you record a crisp, confident, and complete 2 
 ### 🕒 Video Breakdown Summary
 | Timestamp | Segment | Visual Action on Screen | Key Talking Points |
 | :--- | :--- | :--- | :--- |
-| **0:00 – 0:30** | Introduction & Live Cursors | Open 2 browser tabs side-by-side (Tab A left, Tab B right) | Introduce yourself, the project name (**SyncSpace**), and show real-time live cursor movement with names and custom avatars gliding across the canvas. |
+| **0:00 – 0:30** | Introduction & Live Cursors | Open 2 browser tabs side-by-side (Tab A left, Tab B right) | Introduce yourself, the project name (**NAR Live Canvas**), and show real-time live cursor movement with names and custom avatars gliding across the canvas. |
 | **0:30 – 1:00** | Interactive Sticky Notes & Optimistic UI | Create a new note on Tab A, drag it smoothly, and vote | Explain optimistic UI updates: interactions render immediately on the client at 60fps while broadcasting to the backend without lag. |
-| **1:00 – 1:45** | Simultaneous Edit & Conflict Resolution | Type concurrently in both Tab A & Tab B on the same note | Show the live typing indicator (`⚡ User is editing...`), explain the field-level versioning, and demonstrate the non-destructive 3-way text merge toast notification. |
+| **1:00 – 1:45** | Simultaneous Edit & Conflict Resolution | Type concurrently in both Tab A & Tab B on the same note | Show the live typing indicator (`User is editing...`), explain the field-level versioning, and demonstrate the non-destructive 3-way text merge toast notification. |
 | **1:45 – 2:15** | State Persistence & Refresh Survival | Edit a note, reload Tab A (F5), or close & reopen | Demonstrate that all sticky notes, positions, votes, and poll data survive page refreshes through atomic backend persistence. |
 | **2:15 – 2:45** | Code Architecture & Wrap-Up | Switch to VS Code editor (`server.js`, `conflictResolver.js`, `useLiveBoard.js`) | Walk through the Socket.IO event architecture, 3-way merge algorithm, and wrap up. |
 
@@ -22,11 +22,11 @@ This script is structured to help you record a crisp, confident, and complete 2 
 > **Setup:** Split your monitor into two browser windows side by side at `http://localhost:5173`.
 > 
 > **You say:**  
-> *"Hi everyone! My name is [Your Name], and this is my submission for the MLSA SRM Technical Recruitment Task: the Live-Sync Mini App, including the full 2nd-year build-ons.  
+> *"Hi everyone! My name is [Your Name], and this is my submission for the MLSA SRM Technical Recruitment Task: the Live-Sync Mini App with the 2nd-year concurrency extensions.  
 > 
-> I built **SyncSpace**, a high-performance real-time collaborative idea canvas where multiple users can brainstorm together.  
+> I built **NAR Live Canvas**, a real-time collaborative idea workspace where multiple users can brainstorm together.  
 > 
-> Right now, I have two separate browser tabs open side by side. As I move my cursor in Tab A on the left, you can immediately see the live cursor on the right in Tab B with my avatar and custom color, updating with sub-30 millisecond latency via WebSockets and Socket.IO. We also have collaborative radar pings when I click the canvas!"*
+> Right now, I have two separate browser tabs open side by side. As I move my cursor in Tab A on the left, you can immediately see the live cursor on the right in Tab B with sub-30 millisecond latency via WebSockets and Socket.IO. We also have collaborative radar pings when I Shift-click anywhere on the canvas!"*
 
 ---
 
@@ -37,7 +37,7 @@ This script is structured to help you record a crisp, confident, and complete 2 
 > *"Next, let’s look at sticky notes and optimistic UI updates.  
 > When I double-click to add a note or drag it across the board, the client updates the UI optimistically with zero delay, giving users a smooth 60fps feel. At the same time, position coordinates and category tags stream seamlessly to every other connected tab.  
 > 
-> When Tab B clicks the upvote button, we see micro-confetti feedback and the vote counter increments in real time across all open tabs."*
+> When Tab B clicks the upvote button, the vote counter increments in real time across all open tabs."*
 
 ---
 
@@ -59,7 +59,7 @@ This script is structured to help you record a crisp, confident, and complete 2 
 > 
 > **You say:**  
 > *"Another critical 2nd-year requirement is **State Refresh Survival**.  
-> In many WebSocket demos, reloading resets everything to empty. In SyncSpace, the Express backend persists the entire canvas state atomically to disk on every change.  
+> In standard WebSocket demos, reloading resets everything to empty. In NAR Live Canvas, the Express backend persists the entire canvas state atomically to disk on every change.  
 > 
 > When I refresh Tab A, it reconnects, fetches the authoritative state, and restores every note, tag, vote, and poll result right where we left off."*
 
@@ -74,10 +74,3 @@ This script is structured to help you record a crisp, confident, and complete 2 
 > - The frontend is built with **React 18, Vite, Tailwind CSS, and Framer Motion**, organized with a custom `useLiveBoard` hook that manages optimistic mutations and socket event subscriptions.  
 > 
 > Thank you for reviewing my submission!"*
-
----
-
-### 💡 Pro-Tips for Recording:
-1. **Tooling:** Use OBS Studio, Loom (free), or Windows Game Bar (`Win + G`) to record your screen.
-2. **Audio:** Ensure your microphone is clear and speak at a steady, enthusiastic pace.
-3. **Upload:** Upload as an **Unlisted YouTube video**, **Loom link**, or **Public Google Drive link** as specified in the recruitment guide.

@@ -3,92 +3,43 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --bg-canvas: #f8fafc;
-    --canvas-dot: rgba(0, 0, 0, 0.12);
-    --matte-surface: #ffffff;
-    --matte-border: #e2e8f0;
-    --text-main: #0f172a;
-    --text-muted: #64748b;
-  }
-
-  .dark {
-    --bg-canvas: #090d16;
-    --canvas-dot: rgba(255, 255, 255, 0.1);
-    --matte-surface: #0f172a;
-    --matte-border: #1e293b;
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-  }
-
   body {
-    @apply m-0 p-0 overflow-hidden font-sans transition-colors duration-200;
-    background-color: var(--bg-canvas);
-    color: var(--text-main);
+    @apply m-0 p-0 overflow-hidden font-sans;
+    background-color: #fafafa;
+    color: #18181b;
     user-select: none;
     -webkit-user-select: none;
   }
 
-  /* Matte Architectural Grid Backgrounds */
-  .canvas-matte-light {
-    background-color: #f8fafc;
-    background-image: radial-gradient(rgba(15, 23, 42, 0.14) 1.25px, transparent 1.25px);
-    background-size: 24px 24px;
-  }
-
-  .canvas-matte-dark {
-    background-color: #090d16;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1.25px, transparent 1.25px);
+  /* Clean Matte Dot Grid Canvas */
+  .canvas-matte-grid {
+    background-color: #fafafa;
+    background-image: radial-gradient(rgba(0, 0, 0, 0.12) 1.25px, transparent 1.25px);
     background-size: 24px 24px;
   }
 }
 
-/* Matte UI Panels */
-.matte-bar-light {
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+/* Neutral Matte Surfaces (No Gloss / No Blur) */
+.matte-panel {
+  background-color: #ffffff;
+  border: 1px solid #e4e4e7;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
 }
 
-.matte-bar-dark {
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 30px -4px rgba(0, 0, 0, 0.4);
+.matte-dropdown {
+  background-color: #ffffff;
+  border: 1px solid #e4e4e7;
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08);
 }
 
-.matte-dropdown-light {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+/* Matte Card Shadows */
+.matte-note-card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
-.matte-dropdown-dark {
-  background: #111827;
-  border: 1px solid #1f2937;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-}
-
-/* Matte Sticky Card Shadows */
-.matte-card-shadow-light {
-  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-}
-
-.matte-card-shadow-light-drag {
-  box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.15), 0 0 0 2px #4f46e5;
-  transform: scale(1.02);
-}
-
-.matte-card-shadow-dark {
-  box-shadow: 0 6px 16px -2px rgba(0, 0, 0, 0.4);
-}
-
-.matte-card-shadow-dark-drag {
-  box-shadow: 0 24px 40px -8px rgba(0, 0, 0, 0.7), 0 0 0 2px #6366f1;
-  transform: scale(1.02);
+.matte-note-dragging {
+  box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.12), 0 0 0 2px #18181b;
+  transform: scale(1.015);
 }
 
 /* Radar Ping Ripple */
@@ -98,7 +49,7 @@
     opacity: 0.9;
   }
   60% {
-    opacity: 0.4;
+    opacity: 0.35;
   }
   100% {
     transform: translate(-50%, -50%) scale(2.4);
@@ -110,10 +61,10 @@
   position: absolute;
   border-radius: 9999px;
   pointer-events: none;
-  animation: radar-ripple 1.6s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+  animation: radar-ripple 1.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
 }
 
-/* Custom Scrollbars */
+/* Minimalist Scrollbars */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
@@ -124,10 +75,10 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.3);
+  background: #d4d4d8;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.6);
+  background: #a1a1aa;
 }

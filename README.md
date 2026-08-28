@@ -1,4 +1,4 @@
-# SyncSpace — Real-Time Collaborative Live-Sync Canvas
+# NAR Live Canvas — Real-Time Collaborative Workspace
 
 > **MLSA SRM Technical Domain Recruitment Task (2026)**  
 > **Track:** Frontend Web Development & Concurrency Systems  
@@ -13,11 +13,11 @@
 
 ## 1. What I Built & Architecture
 
-**SyncSpace** is an interactive, multi-user idea canvas and sticky-note workspace. When you open two or more browser tabs side-by-side, actions in one tab reflect across all others in real time with sub-30ms latency.
+**NAR Live Canvas** is an interactive, multi-user idea canvas and sticky-note workspace. When you open two or more browser tabs side-by-side, actions in one tab reflect across all others in real time with sub-30ms latency.
 
 ```
 +-------------------------------------------------------------------------+
-|                      SYNCSPACE MULTI-TAB ARCHITECTURE                   |
+|                        NAR MULTI-TAB ARCHITECTURE                       |
 |                                                                         |
 |   +---------------------------+       +---------------------------+     |
 |   |   Browser Tab A (React)   |       |   Browser Tab B (React)   |     |
@@ -44,13 +44,13 @@
    - Shows user avatars, names, and customized color pointers.
    - `Shift + Click` sends an expanding attention ripple radar across all open tabs.
 2. **Interactive Sticky Notes:**
-   - Drag-and-drop cards with pastel matte color themes (*Yellow, Cyan, Pink, Mint, Violet, Coral*).
-   - Inline markdown-friendly text editor, category tags (*Feature, Idea, Bug, Architecture, Task, Note*), and live upvote counters with micro-confetti.
+   - Drag-and-drop cards with neutral matte paper color themes (*Warm Sand, Classic Paper, Pale Sage, Muted Clay, Soft Slate, Ivory Cream*).
+   - Inline markdown-friendly text editor, category tags (*Feature, Idea, Bug, Architecture, Task, Note*), and live upvote counters.
 3. **Live Collaborative Team Poll:**
    - Shared poll widget with synchronized percentage bars and instant vote updates.
-4. **Matte Studio UI (Bright & Dark Mode):**
+4. **Matte Studio UI:**
    - Clean, tactile paper surfaces with an architectural dot-grid canvas.
-   - 1-click theme switch between Bright Light Mode and Dark Matte Mode.
+   - Minimalist layout with NAR solid black logo.
    - Real-time Performance HUD showing live FPS, ping roundtrip (ms), and snap-to-grid toggle.
 
 ---
@@ -65,13 +65,13 @@ When a user drags a note, votes, changes color, or creates a new card:
 
 ### B. Simultaneous Edit Conflict Resolution
 When two tabs edit the same note at the exact same moment:
-1. **Soft-Locking Presence:** When Tab A focuses on a note, a live banner (`⚡ Tab A is editing...`) appears on Tab B.
+1. **Soft-Locking Presence:** When Tab A focuses on a note, a live banner (`Tab A is editing...`) appears on Tab B.
 2. **Field-Level Isolation:** Edits to distinct fields (e.g. Tab A moves coordinates while Tab B edits text) do not overwrite each other; both mutations apply independently.
 3. **Non-Destructive 3-Way Merge:** If both tabs modify the text content concurrently, the backend compares both changes against the common base version in `server/conflictResolver.js`, blends both inputs without data loss, and displays a `"Concurrent Edit Merged"` toast notification on both clients.
 
 ### C. State Refresh Survival (Persistence)
 - In standard memory-only sockets, hitting `F5` clears everything.
-- In SyncSpace, every change is written to `server/data/canvas-state.json` via **debounced atomic file writes** (`temp write -> atomic rename`).
+- In NAR Live Canvas, every change is written to `server/data/canvas-state.json` via **debounced atomic file writes** (`temp write -> atomic rename`).
 - Reloading any tab or reopening the browser immediately restores all sticky notes, positions, tags, votes, and poll responses.
 
 ---
@@ -113,7 +113,7 @@ node server/test-e2e-socket.js
 
 ---
 
-## 5. Honest Reflections & Future Scope (2–3 Paragraphs)
+## 5. Reflections & Future Scope (2–3 Paragraphs)
 
 Implementing real-time state synchronization with optimistic UI was an engaging exercise in managing latency and race conditions. Early on, I considered a simple Last-Write-Wins (LWW) model, but during multi-tab testing, I noticed that rapid concurrent typing could easily wipe out another collaborator's text if network packets arrived slightly out of order. Designing the 3-way merge algorithm in `conflictResolver.js` solved this by isolating field mutations and non-destructively combining paragraph additions.
 
@@ -135,19 +135,18 @@ dbugs/
 │   │   │   ├── ConflictToast.jsx     # Non-destructive merge notification
 │   │   │   ├── LiveCursors.jsx       # 60fps multiplayer cursor pointers
 │   │   │   ├── LivePollWidget.jsx    # Real-time collaborative team poll
-│   │   │   ├── Navbar.jsx            # Header with presence, telemetry & themes
+│   │   │   ├── Navbar.jsx            # Header with NAR logo, presence & telemetry
 │   │   │   ├── RadarPing.jsx         # Attention ripple animation
 │   │   │   ├── StickyNote.jsx        # Draggable card with locks & upvotes
 │   │   │   └── UserProfileModal.jsx  # Avatar & color customizer
 │   │   ├── context/
-│   │   │   ├── SocketContext.jsx     # Socket.IO connection & user session
-│   │   │   └── ThemeContext.jsx      # Bright Light / Dark Matte theme provider
+│   │   │   └── SocketContext.jsx     # Socket.IO connection & user session
 │   │   ├── hooks/
 │   │   │   └── useLiveBoard.js       # Optimistic state manager & telemetry
 │   │   ├── types/
-│   │   │   └── index.js              # Matte color palettes & categories
+│   │   │   └── index.js              # Neutral color palettes & categories
 │   │   ├── App.jsx                   # Application root
-│   │   └── index.css                 # Matte styling & grid patterns
+│   │   └── index.css                 # Neutral matte styling & grid patterns
 │   ├── index.html
 │   └── package.json
 ├── server/
