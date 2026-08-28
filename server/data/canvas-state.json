@@ -1,64 +1,115 @@
 {
   "board": {
     "id": "main-live-canvas",
-    "name": "SyncSpace Team Canvas",
+    "name": "Classic Notes Setup",
     "createdAt": 1756400000000,
-    "lastModified": 1756400000000
+    "lastModified": 1787957251888
   },
   "notes": [
     {
       "id": "note-1",
-      "title": "⚡ Live Sync & Presence",
-      "content": "Multiple tabs communicate via WebSockets / Socket.IO with sub-30ms latency! Watch cursors glide across the canvas.",
+      "title": "Live Sync & Presence",
+      "content": "Multiple tabs communicate via WebSockets / Socket.IO with sub-30ms latency!\n==Watch cursors glide across the canvas in real time!==\n- [x] WebSockets connected\n- [ ] Multi-tab test",
       "x": 80,
-      "y": 100,
-      "color": "yellow",
-      "category": "Feature",
+      "y": 120,
+      "width": 320,
+      "height": 240,
+      "color": "white",
+      "category": "Notes",
+      "priority": "high",
       "pinned": false,
       "votes": 8,
       "votedUsers": {},
       "version": 1,
-      "createdAt": 1756400000000,
-      "updatedAt": 1756400000000,
+      "createdAt": 1787955816771,
+      "updatedAt": 1787955816771,
       "lastEditedBy": "System",
-      "lastEditedByColor": "#f59e0b",
+      "lastEditedByColor": "#000000",
       "zIndex": 10
     },
     {
       "id": "note-2",
-      "title": "🛡️ 2nd-Year Concurrency & Merge",
-      "content": "Try  this note simultaneously in 2 tabs! Notice the live lock badge and 3-way non-destructive merging engine in action.",
-      "x": 420,
-      "y": 100,
-      "color": "cyan",
-      "category": "Architecture",
+      "title": "Simultaneous Edit & Merge",
+      "content": "Try editing this note simultaneously in 2 tabs!\n[hl:green]Notice the live lock badge and 3-way non-destructive merging engine in action.[/hl]\n- [x] Concurrency tests passed",
+      "x": 430,
+      "y": 120,
+      "width": 340,
+      "height": 240,
+      "color": "ivory",
+      "category": "Important",
+      "priority": "high",
       "pinned": true,
       "votes": 14,
       "votedUsers": {},
-      "version": 3,
-      "createdAt": 1756400000000,
-      "updatedAt": 1787952243811,
-      "lastEditedBy": "Explorer #629",
-      "lastEditedByColor": "#06b6d4",
-      "zIndex": 62
+      "version": 1,
+      "createdAt": 1787955816771,
+      "updatedAt": 1787955816771,
+      "lastEditedBy": "System",
+      "lastEditedByColor": "#3f3f46",
+      "zIndex": 11
     },
     {
       "id": "note-3",
-      "title": "🚀 Optimistic UI Updates",
-      "content": "Dragging, voting, and color toggles update instantly on client state before server acknowledgement for zero-latency feel.",
-      "x": 760,
-      "y": 100,
-      "color": "pink",
-      "category": "UX/UI",
+      "title": "Optimistic UI Updates",
+      "content": "Dragging, voting, and resizing update [hl:cyan]instantly on client state[/hl] before server acknowledgement for zero-latency feel.\n- [x] 60fps interaction",
+      "x": 1066.6666666666667,
+      "y": 124.44444444444444,
+      "width": 310,
+      "height": 240,
+      "color": "slate",
+      "category": "Tasks",
+      "priority": "medium",
       "pinned": false,
       "votes": 11,
       "votedUsers": {},
       "version": 1,
-      "createdAt": 1756400000000,
-      "updatedAt": 1756400000000,
+      "createdAt": 1787955816771,
+      "updatedAt": 1787957325367,
       "lastEditedBy": "System",
-      "lastEditedByColor": "#ec4899",
-      "zIndex": 12
+      "lastEditedByColor": "#2563eb",
+      "zIndex": 112
+    },
+    {
+      "id": "note-4",
+      "title": "Refresh Survival Guarantee",
+      "content": "All state changes are persistently written to server disk atomically.\n[hl:yellow]Close any tab or hit F5; your canvas state is safely restored.[/hl]",
+      "x": 250,
+      "y": 400,
+      "width": 320,
+      "height": 230,
+      "color": "zinc",
+      "category": "Important",
+      "priority": "high",
+      "pinned": false,
+      "votes": 9,
+      "votedUsers": {},
+      "version": 1,
+      "createdAt": 1787955816771,
+      "updatedAt": 1787955816771,
+      "lastEditedBy": "System",
+      "lastEditedByColor": "#059669",
+      "zIndex": 13
+    },
+    {
+      "id": "note-5",
+      "title": "Classic Notes & Tasks",
+      "content": "Double-click anywhere to quickly create a note, or click the toolbar button.\n[hl:pink]You can highlight text and add interactive checkboxes on the fly![/hl]",
+      "x": 600,
+      "y": 400,
+      "width": 339,
+      "height": 237,
+      "color": "amber",
+      "category": "Ideas",
+      "priority": "low",
+      "pinned": false,
+      "votes": 5,
+      "votedUsers": {},
+      "version": 34,
+      "createdAt": 1787955816771,
+      "updatedAt": 1787957261367,
+      "lastEditedBy": "Explorer #174",
+      "lastEditedByColor": "#475569",
+      "zIndex": 14
     }
   ],
   "poll": {
@@ -68,7 +119,7 @@
       {
         "id": "opt-1",
         "text": "WebSockets (Socket.IO)",
-        "votes": 14
+        "votes": 17
       },
       {
         "id": "opt-2",
@@ -83,670 +134,1792 @@
     ],
     "votedUsers": {
       "user-1787949242612-2d2w": "opt-1",
-      "user-1787949241283-dxdl": "opt-1"
+      "user-1787949241283-dxdl": "opt-1",
+      "user-1787956031081-l8ss": "opt-1",
+      "user-1787956019611-uuyg": "opt-1",
+      "user-1787956727334-7j83": "opt-1"
     },
-    "totalVotes": 21
+    "totalVotes": 24
   },
   "activities": [
     {
-      "id": "act-1787950624670-3a5y4",
-      "type": "leave",
-      "text": "Explorer #843 disconnected.",
-      "timestamp": 1787950624670,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787950791609-a89fi",
-      "type": "leave",
-      "text": "Explorer #629 disconnected.",
-      "timestamp": 1787950791609,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787950976775-i18ar",
-      "type": "join",
-      "text": "Explorer #629 joined the canvas.",
-      "timestamp": 1787950976775,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787951020833-vru9e",
+      "id": "act-1787956483217-vmq6u",
       "type": "update",
-      "text": "Explorer #629 updated note \"🎯 Team Brainstorming Idea\".",
-      "timestamp": 1787951020833,
+      "text": "Explorer #866 updated note \"Optimistic UI Updates\".",
+      "timestamp": 1787956483217,
       "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
+        "id": "user-1787956031081-l8ss",
+        "name": "Explorer #866",
+        "color": "#3f3f46"
       }
     },
     {
-      "id": "act-1787951027040-nj407",
+      "id": "act-1787956496399-e3d2x",
       "type": "update",
-      "text": "Explorer #629 updated note \"🎯 Team Brainstorming Idea\".",
-      "timestamp": 1787951027040,
+      "text": "Explorer #866 updated note \"Optimistic UI Updates\".",
+      "timestamp": 1787956496399,
       "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
+        "id": "user-1787956031081-l8ss",
+        "name": "Explorer #866",
+        "color": "#3f3f46"
       }
     },
     {
-      "id": "act-1787951039467-7l1v7",
-      "type": "join",
-      "text": "Explorer #843 joined the canvas.",
-      "timestamp": 1787951039467,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787951045979-2cpnb",
-      "type": "leave",
-      "text": "Explorer #843 disconnected.",
-      "timestamp": 1787951045979,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787951046069-3quhc",
-      "type": "join",
-      "text": "Explorer #843 joined the canvas.",
-      "timestamp": 1787951046069,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787951254911-ol238",
-      "type": "leave",
-      "text": "Explorer #843 disconnected.",
-      "timestamp": 1787951254911,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787951255562-zlvhl",
-      "type": "join",
-      "text": "Explorer #843 joined the canvas.",
-      "timestamp": 1787951255562,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787951277179-m30vv",
-      "type": "leave",
-      "text": "Explorer #629 disconnected.",
-      "timestamp": 1787951277179,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787951421471-julkc",
-      "type": "leave",
-      "text": "Explorer #843 disconnected.",
-      "timestamp": 1787951421471,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787951421800-imgrj",
-      "type": "join",
-      "text": "Explorer #843 joined the canvas.",
-      "timestamp": 1787951421800,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787951421862-bk0rd",
-      "type": "leave",
-      "text": "Explorer #843 disconnected.",
-      "timestamp": 1787951421862,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787951429578-t1uvs",
-      "type": "join",
-      "text": "Explorer #843 joined the canvas.",
-      "timestamp": 1787951429578,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787951429615-iewu7",
-      "type": "leave",
-      "text": "Explorer #843 disconnected.",
-      "timestamp": 1787951429615,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787951445810-ujeky",
-      "type": "join",
-      "text": "Explorer #843 joined the canvas.",
-      "timestamp": 1787951445810,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787951449451-zntwq",
-      "type": "leave",
-      "text": "Explorer #843 disconnected.",
-      "timestamp": 1787951449451,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787951450819-ejrr9",
-      "type": "join",
-      "text": "Explorer #843 joined the canvas.",
-      "timestamp": 1787951450819,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787951540823-yt8yz",
-      "type": "leave",
-      "text": "Explorer #843 disconnected.",
-      "timestamp": 1787951540823,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787951541383-lzz4n",
-      "type": "join",
-      "text": "Explorer #843 joined the canvas.",
-      "timestamp": 1787951541383,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787951543718-aerf0",
-      "type": "join",
-      "text": "Explorer #629 joined the canvas.",
-      "timestamp": 1787951543718,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787951546713-5vd6r",
-      "type": "leave",
-      "text": "Explorer #629 disconnected.",
-      "timestamp": 1787951546713,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787951546955-jb9g9",
-      "type": "join",
-      "text": "Explorer #629 joined the canvas.",
-      "timestamp": 1787951546955,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787951800309-5h7vs",
+      "id": "act-1787956508800-aq5es",
       "type": "update",
-      "text": "Explorer #629 updated note \"🛡️ 2nd-Year Concurrency & Merge\".",
-      "timestamp": 1787951800309,
+      "text": "Explorer #866 updated note \"Optimistic UI Updates\".",
+      "timestamp": 1787956508800,
       "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
+        "id": "user-1787956031081-l8ss",
+        "name": "Explorer #866",
+        "color": "#3f3f46"
       }
     },
     {
-      "id": "act-1787951905158-edswu",
-      "type": "leave",
-      "text": "Explorer #843 disconnected.",
-      "timestamp": 1787951905158,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787951975895-n9ist",
+      "id": "act-1787956589979-0pcma",
       "type": "create",
-      "text": "Explorer #629 created note \"New Idea\".",
-      "timestamp": 1787951975895,
+      "text": "Explorer #866 created note \"New Note\".",
+      "timestamp": 1787956589979,
       "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
+        "id": "user-1787956031081-l8ss",
+        "name": "Explorer #866",
+        "color": "#3f3f46"
       }
     },
     {
-      "id": "act-1787951986513-giyw8",
-      "type": "poll",
-      "text": "Explorer #629 voted in the collaborative poll.",
-      "timestamp": 1787951986513,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787952046183-138ci",
-      "type": "leave",
-      "text": "Explorer #629 disconnected.",
-      "timestamp": 1787952046183,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787952050273-am52t",
-      "type": "join",
-      "text": "Explorer #629 joined the canvas.",
-      "timestamp": 1787952050273,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787952205121-8b3vb",
-      "type": "leave",
-      "text": "Explorer #629 disconnected.",
-      "timestamp": 1787952205121,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787952205520-gmnih",
-      "type": "join",
-      "text": "Explorer #629 joined the canvas.",
-      "timestamp": 1787952205520,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787952212403-5433r",
-      "type": "join",
-      "text": "Explorer #843 joined the canvas.",
-      "timestamp": 1787952212403,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787952216000-5z6mu",
-      "type": "delete",
-      "text": "Explorer #629 deleted note \"New Note\".",
-      "timestamp": 1787952216000,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787952217395-8xem1",
-      "type": "delete",
-      "text": "Explorer #629 deleted note \"💾 Refresh Survival Guarantee\".",
-      "timestamp": 1787952217395,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787952218962-f4fu4",
-      "type": "delete",
-      "text": "Explorer #629 deleted note \"🎯 Team Brainstorming Idea\".",
-      "timestamp": 1787952218962,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787952224324-svset",
-      "type": "delete",
-      "text": "Explorer #629 deleted note \"New Idea\".",
-      "timestamp": 1787952224324,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787952243811-0hqj2",
+      "id": "act-1787956598818-iuvja",
       "type": "update",
-      "text": "Explorer #629 updated note \"🛡️ 2nd-Year Concurrency & Merge\".",
-      "timestamp": 1787952243811,
+      "text": "Explorer #866 updated note \"hi\".",
+      "timestamp": 1787956598818,
       "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
+        "id": "user-1787956031081-l8ss",
+        "name": "Explorer #866",
+        "color": "#3f3f46"
       }
     },
     {
-      "id": "act-1787952248933-xdk06",
+      "id": "act-1787956610091-r0se0",
+      "type": "update",
+      "text": "Explorer #866 updated note \"hi\".",
+      "timestamp": 1787956610091,
+      "user": {
+        "id": "user-1787956031081-l8ss",
+        "name": "Explorer #866",
+        "color": "#3f3f46"
+      }
+    },
+    {
+      "id": "act-1787956612491-nuu76",
+      "type": "join",
+      "text": "Explorer #599 joined the canvas.",
+      "timestamp": 1787956612491,
+      "user": {
+        "id": "user-1787956019611-uuyg",
+        "name": "Explorer #599",
+        "color": "#059669"
+      }
+    },
+    {
+      "id": "act-1787956635435-oe7ku",
+      "type": "join",
+      "text": "Explorer #709 joined the canvas.",
+      "timestamp": 1787956635435,
+      "user": {
+        "id": "user-1787956635110-wxvx",
+        "name": "Explorer #709",
+        "color": "#000000"
+      }
+    },
+    {
+      "id": "act-1787956693744-mnf2g",
+      "type": "leave",
+      "text": "nar disconnected.",
+      "timestamp": 1787956693744,
+      "user": {
+        "id": "user-1787956635110-wxvx",
+        "name": "nar",
+        "color": "#000000"
+      }
+    },
+    {
+      "id": "act-1787956694263-7sppz",
+      "type": "leave",
+      "text": "Explorer #599 disconnected.",
+      "timestamp": 1787956694263,
+      "user": {
+        "id": "user-1787956019611-uuyg",
+        "name": "Explorer #599",
+        "color": "#059669"
+      }
+    },
+    {
+      "id": "act-1787956694857-6xy2v",
+      "type": "leave",
+      "text": "Explorer #866 disconnected.",
+      "timestamp": 1787956694857,
+      "user": {
+        "id": "user-1787956031081-l8ss",
+        "name": "Explorer #866",
+        "color": "#3f3f46"
+      }
+    },
+    {
+      "id": "act-1787956704450-tzeyr",
+      "type": "join",
+      "text": "Explorer #781 joined the canvas.",
+      "timestamp": 1787956704450,
+      "user": {
+        "id": "user-1787956704335-f59n",
+        "name": "Explorer #781",
+        "color": "#059669"
+      }
+    },
+    {
+      "id": "act-1787956707818-94u27",
+      "type": "leave",
+      "text": "Explorer #781 disconnected.",
+      "timestamp": 1787956707818,
+      "user": {
+        "id": "user-1787956704335-f59n",
+        "name": "Explorer #781",
+        "color": "#059669"
+      }
+    },
+    {
+      "id": "act-1787956719997-naszj",
+      "type": "join",
+      "text": "Explorer #473 joined the canvas.",
+      "timestamp": 1787956719997,
+      "user": {
+        "id": "user-1787956719895-c3ff",
+        "name": "Explorer #473",
+        "color": "#7c3aed"
+      }
+    },
+    {
+      "id": "act-1787956727428-dth42",
+      "type": "join",
+      "text": "Explorer #174 joined the canvas.",
+      "timestamp": 1787956727428,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787956735938-zpisj",
+      "type": "system",
+      "text": "Canvas reset to \"Classic Notes Setup\" template.",
+      "timestamp": 1787956735938,
+      "user": {
+        "name": "Admin",
+        "color": "#ec4899"
+      }
+    },
+    {
+      "id": "act-1787956749782-kfwu4",
       "type": "delete",
-      "text": "Explorer #629 deleted note \"E2E Test Note\".",
-      "timestamp": 1787952248933,
+      "text": "Explorer #473 deleted note \"Classic Notes & Tasks\".",
+      "timestamp": 1787956749782,
       "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
+        "id": "user-1787956719895-c3ff",
+        "name": "Explorer #473",
+        "color": "#7c3aed"
       }
     },
     {
-      "id": "act-1787952555400-pf116",
+      "id": "act-1787956751225-c209g",
+      "type": "delete",
+      "text": "Explorer #473 deleted note \"Refresh Survival Guarantee\".",
+      "timestamp": 1787956751225,
+      "user": {
+        "id": "user-1787956719895-c3ff",
+        "name": "Explorer #473",
+        "color": "#7c3aed"
+      }
+    },
+    {
+      "id": "act-1787956753859-y6snb",
+      "type": "system",
+      "text": "Canvas reset to \"Sprint Tasks Board\" template.",
+      "timestamp": 1787956753859,
+      "user": {
+        "name": "Admin",
+        "color": "#ec4899"
+      }
+    },
+    {
+      "id": "act-1787956758007-cj8rz",
+      "type": "system",
+      "text": "Canvas reset to \"Classic Notes Setup\" template.",
+      "timestamp": 1787956758007,
+      "user": {
+        "name": "Admin",
+        "color": "#ec4899"
+      }
+    },
+    {
+      "id": "act-1787956761071-pdqjg",
+      "type": "delete",
+      "text": "Explorer #473 deleted note \"Optimistic UI Updates\".",
+      "timestamp": 1787956761071,
+      "user": {
+        "id": "user-1787956719895-c3ff",
+        "name": "Explorer #473",
+        "color": "#7c3aed"
+      }
+    },
+    {
+      "id": "act-1787956763704-2tpjn",
+      "type": "system",
+      "text": "Canvas reset to \"Sprint Tasks Board\" template.",
+      "timestamp": 1787956763704,
+      "user": {
+        "name": "Admin",
+        "color": "#ec4899"
+      }
+    },
+    {
+      "id": "act-1787956768578-9izqx",
+      "type": "delete",
+      "text": "Explorer #473 deleted note \"What Went Well\".",
+      "timestamp": 1787956768578,
+      "user": {
+        "id": "user-1787956719895-c3ff",
+        "name": "Explorer #473",
+        "color": "#7c3aed"
+      }
+    },
+    {
+      "id": "act-1787957251888-ugadd",
+      "type": "system",
+      "text": "Canvas reset to \"Classic Notes Setup\" template.",
+      "timestamp": 1787957251888,
+      "user": {
+        "name": "Admin",
+        "color": "#ec4899"
+      }
+    },
+    {
+      "id": "act-1787957260614-ompkd",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957260614,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957260650-wb8gu",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957260650,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957260679-eb0u2",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957260679,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957260688-622ja",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957260688,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957260738-94qj4",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957260738,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957260739-8dy2f",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957260739,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957260744-kcgb8",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957260744,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957260748-pij3v",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957260748,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957260748-9931k",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957260748,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957260785-5kfbj",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957260785,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957260816-kh5wi",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957260816,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957260819-237p3",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957260819,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957260855-ea1a6",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957260855,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957260880-4x52l",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957260880,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957260905-dc1cp",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957260905,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957260943-e9yoh",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957260943,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957260945-g5vml",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957260946,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957260976-i65ce",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957260976,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957261013-cuk75",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957261013,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957261046-h3m9e",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957261046,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957261051-tu3mf",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957261051,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957261082-jpxor",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957261082,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957261110-poof0",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957261111,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957261121-9k0u5",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957261121,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957261157-atzg7",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957261157,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957261163-qpnmt",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957261164,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957261173-ny5nb",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957261173,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957261184-gs28n",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957261184,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957261232-ynmeb",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957261232,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957261232-zpu38",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957261232,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957261252-6ovep",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957261252,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957261283-p48r8",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957261283,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957261367-hqici",
+      "type": "update",
+      "text": "Explorer #174 updated note \"Classic Notes & Tasks\".",
+      "timestamp": 1787957261367,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957307334-m06jm",
+      "type": "poll",
+      "text": "Explorer #174 voted in the collaborative poll.",
+      "timestamp": 1787957307334,
+      "user": {
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
+      }
+    },
+    {
+      "id": "act-1787957361745-xnbbf",
       "type": "leave",
-      "text": "Explorer #843 disconnected.",
-      "timestamp": 1787952555400,
+      "text": "Explorer #473 disconnected.",
+      "timestamp": 1787957361745,
       "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
+        "id": "user-1787956719895-c3ff",
+        "name": "Explorer #473",
+        "color": "#7c3aed"
       }
     },
     {
-      "id": "act-1787952583479-m9xep",
-      "type": "join",
-      "text": "Explorer #843 joined the canvas.",
-      "timestamp": 1787952583479,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787952781208-dfq8w",
+      "id": "act-1787957668543-t55dx",
       "type": "leave",
-      "text": "Explorer #843 disconnected.",
-      "timestamp": 1787952781208,
+      "text": "Explorer #174 disconnected.",
+      "timestamp": 1787957668543,
       "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
+        "id": "user-1787956727334-7j83",
+        "name": "Explorer #174",
+        "color": "#475569"
       }
+    }
+  ],
+  "strokes": [
+    {
+      "id": "stroke-1787956176425-otl2",
+      "points": [
+        {
+          "x": 412,
+          "y": 464
+        },
+        {
+          "x": 412,
+          "y": 464
+        },
+        {
+          "x": 410,
+          "y": 464
+        },
+        {
+          "x": 402,
+          "y": 464
+        },
+        {
+          "x": 398,
+          "y": 464
+        },
+        {
+          "x": 393,
+          "y": 464
+        },
+        {
+          "x": 391,
+          "y": 465
+        },
+        {
+          "x": 388,
+          "y": 466
+        },
+        {
+          "x": 386,
+          "y": 468
+        },
+        {
+          "x": 383,
+          "y": 469
+        },
+        {
+          "x": 376,
+          "y": 471
+        },
+        {
+          "x": 373,
+          "y": 472
+        },
+        {
+          "x": 359,
+          "y": 474
+        },
+        {
+          "x": 352,
+          "y": 475
+        },
+        {
+          "x": 345,
+          "y": 477
+        },
+        {
+          "x": 336,
+          "y": 478
+        },
+        {
+          "x": 328,
+          "y": 479
+        },
+        {
+          "x": 325,
+          "y": 480
+        },
+        {
+          "x": 324,
+          "y": 480
+        },
+        {
+          "x": 323,
+          "y": 480
+        },
+        {
+          "x": 320,
+          "y": 481
+        },
+        {
+          "x": 319,
+          "y": 484
+        },
+        {
+          "x": 316,
+          "y": 485
+        },
+        {
+          "x": 312,
+          "y": 488
+        },
+        {
+          "x": 309,
+          "y": 492
+        },
+        {
+          "x": 306,
+          "y": 497
+        },
+        {
+          "x": 303,
+          "y": 504
+        },
+        {
+          "x": 298,
+          "y": 514
+        },
+        {
+          "x": 294,
+          "y": 532
+        },
+        {
+          "x": 292,
+          "y": 542
+        },
+        {
+          "x": 292,
+          "y": 546
+        },
+        {
+          "x": 292,
+          "y": 551
+        },
+        {
+          "x": 292,
+          "y": 552
+        },
+        {
+          "x": 292,
+          "y": 552
+        },
+        {
+          "x": 292,
+          "y": 554
+        },
+        {
+          "x": 296,
+          "y": 558
+        },
+        {
+          "x": 301,
+          "y": 561
+        },
+        {
+          "x": 306,
+          "y": 563
+        },
+        {
+          "x": 319,
+          "y": 565
+        },
+        {
+          "x": 328,
+          "y": 566
+        },
+        {
+          "x": 333,
+          "y": 566
+        },
+        {
+          "x": 339,
+          "y": 564
+        },
+        {
+          "x": 340,
+          "y": 564
+        },
+        {
+          "x": 342,
+          "y": 563
+        },
+        {
+          "x": 343,
+          "y": 561
+        },
+        {
+          "x": 343,
+          "y": 558
+        },
+        {
+          "x": 343,
+          "y": 557
+        },
+        {
+          "x": 348,
+          "y": 553
+        },
+        {
+          "x": 393,
+          "y": 536
+        },
+        {
+          "x": 433,
+          "y": 536
+        },
+        {
+          "x": 460,
+          "y": 533
+        },
+        {
+          "x": 465,
+          "y": 533
+        },
+        {
+          "x": 476,
+          "y": 532
+        },
+        {
+          "x": 477,
+          "y": 531
+        },
+        {
+          "x": 478,
+          "y": 524
+        },
+        {
+          "x": 478,
+          "y": 518
+        },
+        {
+          "x": 478,
+          "y": 516
+        },
+        {
+          "x": 478,
+          "y": 514
+        },
+        {
+          "x": 480,
+          "y": 516
+        },
+        {
+          "x": 485,
+          "y": 520
+        },
+        {
+          "x": 489,
+          "y": 521
+        },
+        {
+          "x": 492,
+          "y": 524
+        },
+        {
+          "x": 493,
+          "y": 528
+        },
+        {
+          "x": 493,
+          "y": 531
+        },
+        {
+          "x": 492,
+          "y": 533
+        },
+        {
+          "x": 489,
+          "y": 538
+        },
+        {
+          "x": 487,
+          "y": 545
+        },
+        {
+          "x": 486,
+          "y": 554
+        },
+        {
+          "x": 486,
+          "y": 557
+        },
+        {
+          "x": 486,
+          "y": 561
+        },
+        {
+          "x": 486,
+          "y": 564
+        },
+        {
+          "x": 486,
+          "y": 566
+        },
+        {
+          "x": 486,
+          "y": 568
+        },
+        {
+          "x": 485,
+          "y": 568
+        },
+        {
+          "x": 484,
+          "y": 568
+        },
+        {
+          "x": 483,
+          "y": 568
+        },
+        {
+          "x": 482,
+          "y": 568
+        },
+        {
+          "x": 481,
+          "y": 568
+        },
+        {
+          "x": 480,
+          "y": 568
+        },
+        {
+          "x": 480,
+          "y": 568
+        }
+      ],
+      "color": "#000000",
+      "width": 3
     },
     {
-      "id": "act-1787952781213-j0o3g",
-      "type": "leave",
-      "text": "Explorer #629 disconnected.",
-      "timestamp": 1787952781213,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
+      "id": "stroke-1787956179569-9174",
+      "points": [
+        {
+          "x": 663,
+          "y": 444
+        },
+        {
+          "x": 663,
+          "y": 448
+        },
+        {
+          "x": 663,
+          "y": 456
+        },
+        {
+          "x": 662,
+          "y": 466
+        },
+        {
+          "x": 661,
+          "y": 471
+        },
+        {
+          "x": 660,
+          "y": 473
+        },
+        {
+          "x": 660,
+          "y": 476
+        },
+        {
+          "x": 660,
+          "y": 478
+        },
+        {
+          "x": 659,
+          "y": 480
+        },
+        {
+          "x": 659,
+          "y": 480
+        },
+        {
+          "x": 658,
+          "y": 480
+        },
+        {
+          "x": 656,
+          "y": 478
+        },
+        {
+          "x": 656,
+          "y": 476
+        },
+        {
+          "x": 656,
+          "y": 474
+        },
+        {
+          "x": 657,
+          "y": 472
+        },
+        {
+          "x": 659,
+          "y": 470
+        },
+        {
+          "x": 660,
+          "y": 468
+        },
+        {
+          "x": 662,
+          "y": 466
+        },
+        {
+          "x": 663,
+          "y": 464
+        },
+        {
+          "x": 664,
+          "y": 461
+        },
+        {
+          "x": 666,
+          "y": 459
+        },
+        {
+          "x": 667,
+          "y": 458
+        },
+        {
+          "x": 672,
+          "y": 455
+        },
+        {
+          "x": 675,
+          "y": 454
+        },
+        {
+          "x": 676,
+          "y": 453
+        },
+        {
+          "x": 677,
+          "y": 453
+        },
+        {
+          "x": 678,
+          "y": 453
+        },
+        {
+          "x": 682,
+          "y": 453
+        },
+        {
+          "x": 691,
+          "y": 453
+        },
+        {
+          "x": 692,
+          "y": 453
+        },
+        {
+          "x": 696,
+          "y": 452
+        },
+        {
+          "x": 698,
+          "y": 452
+        },
+        {
+          "x": 700,
+          "y": 448
+        },
+        {
+          "x": 700,
+          "y": 448
+        },
+        {
+          "x": 701,
+          "y": 445
+        },
+        {
+          "x": 701,
+          "y": 444
+        },
+        {
+          "x": 700,
+          "y": 444
+        },
+        {
+          "x": 700,
+          "y": 443
+        },
+        {
+          "x": 699,
+          "y": 443
+        },
+        {
+          "x": 698,
+          "y": 443
+        },
+        {
+          "x": 697,
+          "y": 443
+        },
+        {
+          "x": 696,
+          "y": 444
+        },
+        {
+          "x": 696,
+          "y": 445
+        },
+        {
+          "x": 695,
+          "y": 448
+        },
+        {
+          "x": 694,
+          "y": 454
+        },
+        {
+          "x": 692,
+          "y": 459
+        },
+        {
+          "x": 692,
+          "y": 465
+        },
+        {
+          "x": 692,
+          "y": 469
+        },
+        {
+          "x": 692,
+          "y": 472
+        },
+        {
+          "x": 692,
+          "y": 474
+        },
+        {
+          "x": 692,
+          "y": 476
+        },
+        {
+          "x": 692,
+          "y": 477
+        },
+        {
+          "x": 691,
+          "y": 479
+        },
+        {
+          "x": 691,
+          "y": 480
+        },
+        {
+          "x": 691,
+          "y": 483
+        },
+        {
+          "x": 691,
+          "y": 484
+        }
+      ],
+      "color": "#000000",
+      "width": 3
     },
     {
-      "id": "act-1787952808177-r2heu",
-      "type": "join",
-      "text": "Explorer #843 joined the canvas.",
-      "timestamp": 1787952808177,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
+      "id": "stroke-1787956182870-q3wp",
+      "points": [
+        {
+          "x": 716,
+          "y": 480
+        },
+        {
+          "x": 716,
+          "y": 480
+        },
+        {
+          "x": 716,
+          "y": 481
+        },
+        {
+          "x": 716,
+          "y": 482
+        },
+        {
+          "x": 716,
+          "y": 483
+        },
+        {
+          "x": 715,
+          "y": 484
+        },
+        {
+          "x": 715,
+          "y": 485
+        },
+        {
+          "x": 715,
+          "y": 486
+        },
+        {
+          "x": 715,
+          "y": 487
+        },
+        {
+          "x": 715,
+          "y": 488
+        },
+        {
+          "x": 715,
+          "y": 488
+        },
+        {
+          "x": 715,
+          "y": 489
+        },
+        {
+          "x": 715,
+          "y": 491
+        },
+        {
+          "x": 715,
+          "y": 492
+        },
+        {
+          "x": 715,
+          "y": 492
+        },
+        {
+          "x": 715,
+          "y": 493
+        },
+        {
+          "x": 715,
+          "y": 494
+        },
+        {
+          "x": 715,
+          "y": 495
+        },
+        {
+          "x": 715,
+          "y": 496
+        },
+        {
+          "x": 715,
+          "y": 497
+        },
+        {
+          "x": 715,
+          "y": 498
+        },
+        {
+          "x": 715,
+          "y": 499
+        },
+        {
+          "x": 715,
+          "y": 500
+        }
+      ],
+      "color": "#000000",
+      "width": 3
     },
     {
-      "id": "act-1787952808302-68ie9",
-      "type": "join",
-      "text": "Explorer #629 joined the canvas.",
-      "timestamp": 1787952808302,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
+      "id": "stroke-1787957182642-ik8r",
+      "points": [
+        {
+          "x": 210,
+          "y": 444
+        },
+        {
+          "x": 208,
+          "y": 444
+        },
+        {
+          "x": 203,
+          "y": 446
+        },
+        {
+          "x": 186,
+          "y": 458
+        },
+        {
+          "x": 177,
+          "y": 468
+        },
+        {
+          "x": 167,
+          "y": 482
+        },
+        {
+          "x": 150,
+          "y": 497
+        },
+        {
+          "x": 136,
+          "y": 505
+        },
+        {
+          "x": 123,
+          "y": 508
+        },
+        {
+          "x": 110,
+          "y": 509
+        },
+        {
+          "x": 97,
+          "y": 505
+        },
+        {
+          "x": 79,
+          "y": 495
+        },
+        {
+          "x": 52,
+          "y": 460
+        },
+        {
+          "x": 50,
+          "y": 455
+        },
+        {
+          "x": 44,
+          "y": 444
+        },
+        {
+          "x": 41,
+          "y": 436
+        },
+        {
+          "x": 40,
+          "y": 433
+        },
+        {
+          "x": 40,
+          "y": 429
+        },
+        {
+          "x": 42,
+          "y": 423
+        },
+        {
+          "x": 44,
+          "y": 419
+        },
+        {
+          "x": 46,
+          "y": 416
+        },
+        {
+          "x": 49,
+          "y": 410
+        },
+        {
+          "x": 53,
+          "y": 404
+        },
+        {
+          "x": 59,
+          "y": 398
+        },
+        {
+          "x": 76,
+          "y": 382
+        },
+        {
+          "x": 83,
+          "y": 376
+        },
+        {
+          "x": 84,
+          "y": 375
+        },
+        {
+          "x": 88,
+          "y": 372
+        },
+        {
+          "x": 90,
+          "y": 372
+        },
+        {
+          "x": 91,
+          "y": 372
+        },
+        {
+          "x": 92,
+          "y": 372
+        },
+        {
+          "x": 95,
+          "y": 366
+        },
+        {
+          "x": 103,
+          "y": 355
+        },
+        {
+          "x": 120,
+          "y": 342
+        },
+        {
+          "x": 123,
+          "y": 340
+        },
+        {
+          "x": 129,
+          "y": 337
+        },
+        {
+          "x": 130,
+          "y": 337
+        },
+        {
+          "x": 131,
+          "y": 337
+        },
+        {
+          "x": 131,
+          "y": 339
+        },
+        {
+          "x": 131,
+          "y": 340
+        },
+        {
+          "x": 131,
+          "y": 341
+        },
+        {
+          "x": 131,
+          "y": 344
+        },
+        {
+          "x": 131,
+          "y": 346
+        },
+        {
+          "x": 131,
+          "y": 348
+        },
+        {
+          "x": 131,
+          "y": 369
+        },
+        {
+          "x": 128,
+          "y": 376
+        },
+        {
+          "x": 128,
+          "y": 377
+        },
+        {
+          "x": 128,
+          "y": 380
+        },
+        {
+          "x": 128,
+          "y": 381
+        },
+        {
+          "x": 131,
+          "y": 377
+        },
+        {
+          "x": 133,
+          "y": 374
+        },
+        {
+          "x": 133,
+          "y": 373
+        },
+        {
+          "x": 134,
+          "y": 372
+        },
+        {
+          "x": 134,
+          "y": 372
+        },
+        {
+          "x": 134,
+          "y": 373
+        },
+        {
+          "x": 134,
+          "y": 374
+        },
+        {
+          "x": 134,
+          "y": 373
+        },
+        {
+          "x": 135,
+          "y": 373
+        }
+      ],
+      "color": "#000000",
+      "width": 3
     },
     {
-      "id": "act-1787952870932-1nlrp",
-      "type": "leave",
-      "text": "Explorer #843 disconnected.",
-      "timestamp": 1787952870932,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
+      "id": "stroke-1787957186059-1zss",
+      "points": [
+        {
+          "x": 132,
+          "y": 292
+        },
+        {
+          "x": 132,
+          "y": 296
+        },
+        {
+          "x": 136,
+          "y": 320
+        },
+        {
+          "x": 144,
+          "y": 362
+        },
+        {
+          "x": 147,
+          "y": 383
+        },
+        {
+          "x": 147,
+          "y": 388
+        },
+        {
+          "x": 147,
+          "y": 390
+        },
+        {
+          "x": 147,
+          "y": 391
+        },
+        {
+          "x": 147,
+          "y": 392
+        },
+        {
+          "x": 146,
+          "y": 387
+        },
+        {
+          "x": 146,
+          "y": 383
+        },
+        {
+          "x": 146,
+          "y": 377
+        },
+        {
+          "x": 146,
+          "y": 375
+        },
+        {
+          "x": 146,
+          "y": 371
+        },
+        {
+          "x": 147,
+          "y": 366
+        },
+        {
+          "x": 150,
+          "y": 360
+        },
+        {
+          "x": 155,
+          "y": 355
+        },
+        {
+          "x": 159,
+          "y": 352
+        },
+        {
+          "x": 169,
+          "y": 344
+        },
+        {
+          "x": 172,
+          "y": 344
+        },
+        {
+          "x": 174,
+          "y": 343
+        },
+        {
+          "x": 176,
+          "y": 342
+        },
+        {
+          "x": 177,
+          "y": 342
+        },
+        {
+          "x": 178,
+          "y": 341
+        },
+        {
+          "x": 183,
+          "y": 333
+        },
+        {
+          "x": 185,
+          "y": 327
+        },
+        {
+          "x": 187,
+          "y": 320
+        },
+        {
+          "x": 187,
+          "y": 315
+        },
+        {
+          "x": 187,
+          "y": 312
+        },
+        {
+          "x": 187,
+          "y": 311
+        },
+        {
+          "x": 187,
+          "y": 312
+        },
+        {
+          "x": 187,
+          "y": 317
+        },
+        {
+          "x": 187,
+          "y": 320
+        },
+        {
+          "x": 188,
+          "y": 329
+        },
+        {
+          "x": 188,
+          "y": 342
+        },
+        {
+          "x": 188,
+          "y": 351
+        },
+        {
+          "x": 188,
+          "y": 354
+        },
+        {
+          "x": 188,
+          "y": 356
+        },
+        {
+          "x": 188,
+          "y": 360
+        },
+        {
+          "x": 188,
+          "y": 360
+        }
+      ],
+      "color": "#000000",
+      "width": 3
     },
     {
-      "id": "act-1787952870933-w67jc",
-      "type": "leave",
-      "text": "Explorer #629 disconnected.",
-      "timestamp": 1787952870933,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
+      "id": "stroke-1787957188318-4mzi",
+      "points": [
+        {
+          "x": 200,
+          "y": 353
+        },
+        {
+          "x": 200,
+          "y": 355
+        },
+        {
+          "x": 200,
+          "y": 363
+        },
+        {
+          "x": 200,
+          "y": 371
+        },
+        {
+          "x": 200,
+          "y": 375
+        },
+        {
+          "x": 200,
+          "y": 377
+        },
+        {
+          "x": 200,
+          "y": 379
+        },
+        {
+          "x": 200,
+          "y": 381
+        }
+      ],
+      "color": "#000000",
+      "width": 3
+    }
+  ],
+  "connectors": [
+    {
+      "id": "conn-1787956205277-jb66",
+      "fromNoteId": "note-3",
+      "toNoteId": "note-2",
+      "color": "#000000"
     },
     {
-      "id": "act-1787953305773-p6ucf",
-      "type": "join",
-      "text": "Explorer #629 joined the canvas.",
-      "timestamp": 1787953305773,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
+      "id": "conn-1787957201280-grv0",
+      "fromNoteId": "retro-2",
+      "toNoteId": "retro-3",
+      "color": "#000000"
     },
     {
-      "id": "act-1787953441139-ph4qd",
-      "type": "leave",
-      "text": "Explorer #629 disconnected.",
-      "timestamp": 1787953441139,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787953441400-2b48i",
-      "type": "join",
-      "text": "Explorer #629 joined the canvas.",
-      "timestamp": 1787953441400,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787953455082-9quhf",
-      "type": "join",
-      "text": "Explorer #843 joined the canvas.",
-      "timestamp": 1787953455082,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787953734725-4fzni",
-      "type": "leave",
-      "text": "Explorer #629 disconnected.",
-      "timestamp": 1787953734725,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787953735182-ujwln",
-      "type": "join",
-      "text": "Explorer #629 joined the canvas.",
-      "timestamp": 1787953735182,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787953735198-fjo50",
-      "type": "leave",
-      "text": "Explorer #843 disconnected.",
-      "timestamp": 1787953735198,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787953736479-k3p5a",
-      "type": "join",
-      "text": "Explorer #843 joined the canvas.",
-      "timestamp": 1787953736479,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
-    },
-    {
-      "id": "act-1787953853308-82kvx",
-      "type": "leave",
-      "text": "Explorer #629 disconnected.",
-      "timestamp": 1787953853308,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787953853625-zn88l",
-      "type": "join",
-      "text": "Explorer #629 joined the canvas.",
-      "timestamp": 1787953853625,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787953869780-lwncv",
-      "type": "leave",
-      "text": "Explorer #629 disconnected.",
-      "timestamp": 1787953869780,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787953870159-xhfap",
-      "type": "join",
-      "text": "Explorer #629 joined the canvas.",
-      "timestamp": 1787953870159,
-      "user": {
-        "id": "user-1787949241283-dxdl",
-        "name": "Explorer #629",
-        "color": "#06b6d4"
-      }
-    },
-    {
-      "id": "act-1787953876379-clkpm",
-      "type": "leave",
-      "text": "Explorer #843 disconnected.",
-      "timestamp": 1787953876379,
-      "user": {
-        "id": "user-1787949242612-2d2w",
-        "name": "Explorer #843",
-        "color": "#3b82f6"
-      }
+      "id": "conn-1787957325345-nnao",
+      "fromNoteId": "retro-2",
+      "toNoteId": "note-3",
+      "color": "#000000"
     }
   ]
 }

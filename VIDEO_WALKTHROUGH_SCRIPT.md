@@ -1,76 +1,56 @@
-# 🎥 Video Walkthrough Script (2–3 Minutes)
-## NAR Live Canvas — Real-Time Collaborative Workspace (2nd Year Submission)
+# 🎙️ Video Walkthrough Script (2–3 Minutes)
 
-This script is structured to help you record a crisp, confident, and complete 2 to 3 minute demo showcasing all base and 2nd-year build-on requirements.
-
----
-
-### 🕒 Video Breakdown Summary
-| Timestamp | Segment | Visual Action on Screen | Key Talking Points |
-| :--- | :--- | :--- | :--- |
-| **0:00 – 0:30** | Introduction & Live Cursors | Open 2 browser tabs side-by-side (Tab A left, Tab B right) | Introduce yourself, the project name (**NAR Live Canvas**), and show real-time live cursor movement with names and custom avatars gliding across the canvas. |
-| **0:30 – 1:00** | Interactive Sticky Notes & Optimistic UI | Create a new note on Tab A, drag it smoothly, and vote | Explain optimistic UI updates: interactions render immediately on the client at 60fps while broadcasting to the backend without lag. |
-| **1:00 – 1:45** | Simultaneous Edit & Conflict Resolution | Type concurrently in both Tab A & Tab B on the same note | Show the live typing indicator (`User is editing...`), explain the field-level versioning, and demonstrate the non-destructive 3-way text merge toast notification. |
-| **1:45 – 2:15** | State Persistence & Refresh Survival | Edit a note, reload Tab A (F5), or close & reopen | Demonstrate that all sticky notes, positions, votes, and poll data survive page refreshes through atomic backend persistence. |
-| **2:15 – 2:45** | Code Architecture & Wrap-Up | Switch to VS Code editor (`server.js`, `conflictResolver.js`, `useLiveBoard.js`) | Walk through the Socket.IO event architecture, 3-way merge algorithm, and wrap up. |
+> **Submission Note (One-Liner):**  
+> *"To prevent data loss during simultaneous edits, NAR Live Sync Mini App runs a server-side 3-way merge algorithm that automatically combines edits from multiple users working on the same note at once."*
 
 ---
 
-### 🎙️ Step-by-Step Spoken Script
+## 🎬 Walkthrough Script (Read Aloud While Recording)
 
-#### **[0:00 – 0:30] Scene 1: Introduction & Live Presence**
-> **Setup:** Split your monitor into two browser windows side by side at `http://localhost:5173`.
-> 
-> **You say:**  
-> *"Hi everyone! My name is [Your Name], and this is my submission for the MLSA SRM Technical Recruitment Task: the Live-Sync Mini App with the 2nd-year concurrency extensions.  
-> 
-> I built **NAR Live Canvas**, a real-time collaborative idea workspace where multiple users can brainstorm together.  
-> 
-> Right now, I have two separate browser tabs open side by side. As I move my cursor in Tab A on the left, you can immediately see the live cursor on the right in Tab B with sub-30 millisecond latency via WebSockets and Socket.IO. We also have collaborative radar pings when I Shift-click anywhere on the canvas!"*
+**(Have two browser windows open side-by-side on `http://localhost:5173`)**
 
 ---
 
-#### **[0:30 – 1:00] Scene 2: Sticky Notes & Optimistic UI**
-> **Setup:** Double-click on the canvas or click "New Note" in Tab A. Drag the note around smoothly. Upvote the note in Tab B.
-> 
-> **You say:**  
-> *"Next, let’s look at sticky notes and optimistic UI updates.  
-> When I double-click to add a note or drag it across the board, the client updates the UI optimistically with zero delay, giving users a smooth 60fps feel. At the same time, position coordinates and category tags stream seamlessly to every other connected tab.  
-> 
-> When Tab B clicks the upvote button, the vote counter increments in real time across all open tabs."*
+"Hello everyone! Welcome to **NAR Live Sync Mini App**, a collaborative digital workspace that I designed and built for real-time teamwork, brainstorming, and note organization.
+
+Under the hood, I built the interface with **React** and powered the real-time collaboration using a **Node.js and Express** backend with **Socket.IO**, giving us smooth, bidirectional synchronization with virtually zero latency.
 
 ---
 
-#### **[1:00 – 1:45] Scene 3: Simultaneous Edits & Concurrency Resolution (2nd-Year Core)**
-> **Setup:** In Tab A, start editing the content of a sticky note. Show the live lock badge on Tab B. Then type different text into both tabs simultaneously and blur.
-> 
-> **You say:**  
-> *"Now let's examine the 2nd-year requirement: **handling simultaneous edits without silent overwrites**.  
-> 
-> First, we have **active presence soft-locking**: as soon as I focus on a note in Tab A, Tab B displays a live visual banner showing that I am actively editing.  
-> 
-> Second, we implemented **field-level isolation and a 3-way text merge algorithm**. If User A edits the position or color while User B edits the text, both apply without interference.  
-> If two users edit the note content at the exact same moment, the server compares the base version against both inputs, performs a non-destructive 3-way merge, and displays a resolution badge so neither person's data is lost!"*
+*[Action: Move your mouse around in the left window. Show the named cursor gliding in the right window. Shift+Click on the canvas in the left tab to trigger a radar ping shockwave.]*
+
+As you can see, I have two separate browser tabs open side by side to demonstrate multi-user collaboration. When I move my mouse in the left window, you can see my cursor and collaborator tag gliding smoothly in the right window in real time. 
+
+If I want to quickly grab my team’s attention to a specific part of the board, I can **Shift-Click** anywhere on the canvas to broadcast a live radar ping. 
 
 ---
 
-#### **[1:45 – 2:15] Scene 4: Refresh Survival & Live Poll**
-> **Setup:** Make a quick change or vote in the live poll widget, then press `F5` / Refresh on Tab A. Reopen and show that all data remains intact.
-> 
-> **You say:**  
-> *"Another critical 2nd-year requirement is **State Refresh Survival**.  
-> In standard WebSocket demos, reloading resets everything to empty. In NAR Live Canvas, the Express backend persists the entire canvas state atomically to disk on every change.  
-> 
-> When I refresh Tab A, it reconnects, fetches the authoritative state, and restores every note, tag, vote, and poll result right where we left off."*
+*[Action: Focus on Note #2 in Tab 1 (show the "editing..." lock badge on Tab 2). Type a sentence in Tab 1 and a different sentence in Tab 2 at the same time, blur both, and show the merged result + the toast notification.]*
+
+One of the most important features in this app is how it handles **simultaneous edits**. 
+
+When a user starts typing, a soft-lock indicator instantly appears to let other teammates know that someone is currently editing. But if two people still happen to type into the exact same note at the same moment, the app doesn't overwrite anyone's work. Our server runs a **3-way merge algorithm** that intelligently blends both edits together non-destructively, saves the merged text, and displays a quick notification confirming that no data was lost.
 
 ---
 
-#### **[2:15 – 2:45] Scene 5: Code Walkthrough & Conclusion**
-> **Setup:** Switch screen to VS Code and show `server/conflictResolver.js` and `client/src/hooks/useLiveBoard.js`.
-> 
-> **You say:**  
-> *"Under the hood:  
-> - The backend uses **Node.js, Express, and Socket.IO** with debounced atomic file persistence and the custom `conflictResolver.js` module.  
-> - The frontend is built with **React 18, Vite, Tailwind CSS, and Framer Motion**, organized with a custom `useLiveBoard` hook that manages optimistic mutations and socket event subscriptions.  
-> 
-> Thank you for reviewing my submission!"*
+*[Action: Click "Draw" on the bottom toolbar, sketch a doodle on the canvas in blue. Click "Connect", click Note 1 then Note 2 to create an arrow. Drag Note 1 and show the arrow following it. Drag the corner resize grip (///) on a note to resize it.]*
+
+I also integrated a freehand **Draw Mode** where you can sketch diagrams and write notes directly on the background canvas using smooth vector strokes in different ink colors.
+
+Right next to it is the **Connect Mode**, which allows you to attach notes together with dynamic live arrows. When you drag or reposition either note, the arrow automatically recalculates its curve and stretches along with it. Notes are also completely resizable—you can drag the corner grip or choose from quick preset sizes in the note header.
+
+---
+
+*[Action: Click an option in the bottom-right Team Poll in Tab 1, watch the vote bar animate in Tab 2. Click "+ New" in the poll widget, type a quick question, and launch it. Then click the Background dropdown in the navbar and switch between styles, and toggle Dark Mode.]*
+
+In the bottom right, we have a **Live Team Poll**. As teammates cast their votes, the progress bars and percentages update live on every open screen. You can also click **+ New** to create and launch custom team polls on the fly.
+
+Up in the navbar, users can customize their view with four different background styles—Solid Blank, Fine Grid, Dot Matrix, or Notebook Lined paper—along with a snap-to-grid toggle and a clean, solid-color Dark Mode.
+
+---
+
+*[Action: Refresh (F5) both browser tabs. Show that all notes, positions, drawings, arrows, and votes are fully restored.]*
+
+Finally, the entire board state is saved to the server on every action. If you refresh the page or close your browser, all your notes, drawings, arrows, and poll data are safely restored.
+
+That is **NAR Live Sync Mini App**. Thank you for watching!"
