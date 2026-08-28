@@ -6,10 +6,11 @@ import {
   Download,
   Filter,
   Grid,
-  ChevronDown
+  ChevronDown,
+  Flag
 } from 'lucide-react';
 import { useSocket } from '../context/SocketContext';
-import { CATEGORIES } from '../types';
+import { CATEGORIES, PRIORITIES } from '../types';
 
 export default function Navbar({
   notesCount,
@@ -20,6 +21,8 @@ export default function Navbar({
   onToggleSnap,
   filterCategory,
   onSelectCategory,
+  filterPriority,
+  onSelectPriority,
   onCreateNote,
   onResetTemplate,
   onExportJSON,
@@ -29,22 +32,26 @@ export default function Navbar({
   const { isConnected, onlineUsers, currentUser } = useSocket();
   const [showTemplateMenu, setShowTemplateMenu] = useState(false);
   const [showFilterMenu, setShowFilterMenu] = useState(false);
+  const [showPriorityMenu, setShowPriorityMenu] = useState(false);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-40 h-14 px-4 sm:px-6 flex items-center justify-between matte-panel border-b border-zinc-200 bg-white text-zinc-900">
       {/* Brand & Logo */}
       <div className="flex items-center gap-3 sm:gap-4">
         <div className="flex items-center gap-2.5">
-          {/* Requested NAR Logo with solid black background */}
-          <div className="w-8 h-8 rounded bg-black text-white font-black font-mono flex items-center justify-center text-xs tracking-wider shadow-sm select-none">
+          {/* NAR Black Box Logo */}
+          <div className="w-8 h-8 rounded bg-black text-white font-black font-mono flex items-center justify-center text-xs tracking-wider shadow-xs select-none">
             NAR
           </div>
           <div>
-            <h1 className="font-bold text-sm tracking-tight text-zinc-900 leading-none">
-              NAR Live Canvas
-            </h1>
+            <div className="flex items-center gap-1.5">
+              <h1 className="font-bold text-sm tracking-tight text-zinc-900 leading-none">
+                NAR Live Canvas
+              </h1>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" title="Connected" />
+            </div>
             <p className="text-[10px] text-zinc-500 font-medium hidden md:block mt-0.5">
-              Real-Time Collaborative Workspace
+              Next-Gen Collaborative Docs & Idea Canvas
             </p>
           </div>
         </div>
@@ -53,14 +60,14 @@ export default function Navbar({
         <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded bg-zinc-50 border border-zinc-200 text-[11px] font-mono">
           <span className="flex items-center gap-1.5 text-zinc-700 font-semibold">
             <span className={`w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-emerald-500' : 'bg-rose-500'}`} />
-            {isConnected ? 'LIVE' : 'OFFLINE'}
+            {isConnected ? 'SYNCED' : 'OFFLINE'}
           </span>
           <span className="text-zinc-300">|</span>
-          <span className="text-zinc-600 font-medium" title="Network round-trip latency">
+          <span className="text-zinc-600 font-medium" title="Network Latency">
             {pingLatency}ms
           </span>
           <span className="text-zinc-300">|</span>
-          <span className="text-zinc-600 font-medium" title="Client frame rate">
+          <span className="text-zinc-600 font-medium" title="Rendering Frame Rate">
             {fps} FPS
           </span>
         </div>
@@ -72,8 +79,8 @@ export default function Navbar({
           {onlineUsers.slice(0, 5).map((user) => (
             <div
               key={user.id || user.socketId}
-              className="w-7 h-7 rounded-full border-2 border-white flex items-center justify-center text-xs shadow-sm transition-transform hover:scale-110 cursor-pointer"
-              style={{ backgroundColor: user.color || '#18181b' }}
+              className="w-7 h-7 rounded-full border-2 border-white flex items-center justify-center text-xs shadow-xs transition-transform hover:scale-110 cursor-pointer"
+              style={{ backgroundColor: user.color || '#1c2bff' }}
               title={`${user.name} ${user.id === currentUser.id ? '(You)' : ''}`}
             >
               <span className="text-white text-[11px]">{user.avatar || '👤'}</span>
@@ -92,11 +99,61 @@ export default function Navbar({
 
       {/* Right Controls */}
       <div className="flex items-center gap-1.5 sm:gap-2">
+        {/* Priority Filter */}
+        <div className="relative hidden sm:block">
+          <button
+            onClick={() => {
+              setShowPriorityMenu(!showPriorityMenu);
+              setShowFilterMenu(false);
+              setShowTemplateMenu(false);
+            }}
+            className={`flex items-center gap-1 px-2.5 py-1.5 rounded border text-xs font-semibold transition-colors ${
+              filterPriority !== 'All'
+                ? 'bg-zinc-100 text-zinc-900 border-zinc-400'
+                : 'bg-white border-zinc-200 text-zinc-700 hover:bg-zinc-50'
+            }`}
+            title="Filter by Priority"
+          >
+            <Flag className="w-3 h-3 text-zinc-500" />
+            <span>{filterPriority === 'All' ? 'Priority' : filterPriority.toUpperCase()}</span>
+            <ChevronDown className="w-3 h-3 text-zinc-400" />
+          </button>
+
+          {showPriorityMenu && (
+            <div
+              className="absolute right-0 top-10 w-36 rounded-lg p-1 matte-dropdown z-50 flex flex-col gap-0.5"
+              onClick={() => setShowPriorityMenu(false)}
+            >
+              <button
+                onClick={() => onSelectPriority('All')}
+                className={`text-left text-xs px-2 py-1.5 rounded font-medium transition-colors ${
+                  filterPriority === 'All' ? 'bg-black text-white' : 'text-zinc-700 hover:bg-zinc-100'
+                }`}
+              >
+                All Priorities
+              </button>
+              {PRIORITIES.map((p) => (
+                <button
+                  key={p.id}
+                  onClick={() => onSelectPriority(p.id)}
+                  className={`text-left text-xs px-2 py-1.5 rounded font-medium transition-colors hover:bg-zinc-100 flex items-center gap-1.5 ${
+                    filterPriority === p.id ? 'bg-black text-white' : 'text-zinc-700'
+                  }`}
+                >
+                  <span className={`w-1.5 h-1.5 rounded-full ${p.dot}`} />
+                  <span>{p.label}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
         {/* Category Filter */}
         <div className="relative">
           <button
             onClick={() => {
               setShowFilterMenu(!showFilterMenu);
+              setShowPriorityMenu(false);
               setShowTemplateMenu(false);
             }}
             className={`flex items-center gap-1 px-2.5 py-1.5 rounded border text-xs font-semibold transition-colors ${
@@ -106,7 +163,7 @@ export default function Navbar({
             }`}
             title="Filter by Category"
           >
-            <Filter className="w-3.5 h-3.5 text-zinc-500" />
+            <Filter className="w-3 h-3 text-zinc-500" />
             <span className="hidden sm:inline">{filterCategory}</span>
             <ChevronDown className="w-3 h-3 text-zinc-400" />
           </button>
@@ -119,9 +176,7 @@ export default function Navbar({
               <button
                 onClick={() => onSelectCategory('All')}
                 className={`text-left text-xs px-2.5 py-1.5 rounded font-medium transition-colors ${
-                  filterCategory === 'All'
-                    ? 'bg-black text-white'
-                    : 'text-zinc-700 hover:bg-zinc-100'
+                  filterCategory === 'All' ? 'bg-black text-white' : 'text-zinc-700 hover:bg-zinc-100'
                 }`}
               >
                 All Categories ({notesCount})
@@ -131,9 +186,7 @@ export default function Navbar({
                   key={cat.id}
                   onClick={() => onSelectCategory(cat.id)}
                   className={`text-left text-xs px-2.5 py-1.5 rounded font-medium transition-colors ${
-                    filterCategory === cat.id
-                      ? 'bg-black text-white'
-                      : 'text-zinc-700 hover:bg-zinc-100'
+                    filterCategory === cat.id ? 'bg-black text-white' : 'text-zinc-700 hover:bg-zinc-100'
                   }`}
                 >
                   {cat.label}
@@ -156,7 +209,7 @@ export default function Navbar({
           <Grid className="w-3.5 h-3.5" />
         </button>
 
-        {/* Create Note CTA */}
+        {/* New Document Note CTA */}
         <button
           onClick={() => onCreateNote()}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-black hover:bg-zinc-800 active:scale-95 text-xs font-semibold text-white shadow-xs transition-all"
@@ -171,6 +224,7 @@ export default function Navbar({
             onClick={() => {
               setShowTemplateMenu(!showTemplateMenu);
               setShowFilterMenu(false);
+              setShowPriorityMenu(false);
             }}
             className="flex items-center gap-1 px-2.5 py-1.5 rounded bg-white hover:bg-zinc-50 border border-zinc-200 text-xs font-semibold text-zinc-700 transition-colors"
             title="Load Template / Reset Canvas"
@@ -192,7 +246,7 @@ export default function Navbar({
                 <span>📋</span>
                 <div>
                   <div>Brainstorm Board</div>
-                  <div className="text-[10px] text-zinc-500 font-normal">Standard 5-note layout</div>
+                  <div className="text-[10px] text-zinc-500 font-normal">Docs & Idea Canvas layout</div>
                 </div>
               </button>
               <button
@@ -222,7 +276,7 @@ export default function Navbar({
         <button
           onClick={onOpenActivity}
           className="relative p-2 rounded bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-600 transition-colors"
-          title="Activity Log"
+          title="Activity Stream"
         >
           <History className="w-3.5 h-3.5" />
           {activityCount > 0 && (
@@ -240,7 +294,7 @@ export default function Navbar({
         >
           <div
             className="w-5 h-5 rounded-full flex items-center justify-center text-xs"
-            style={{ backgroundColor: currentUser.color || '#18181b' }}
+            style={{ backgroundColor: currentUser.color || '#1c2bff' }}
           >
             <span className="text-white text-[10px]">{currentUser.avatar || '👤'}</span>
           </div>

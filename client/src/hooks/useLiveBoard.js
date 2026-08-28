@@ -4,7 +4,7 @@ import { useSocket } from '../context/SocketContext';
 export function useLiveBoard() {
   const { socket, isConnected, currentUser } = useSocket();
 
-  const [board, setBoard] = useState({ id: 'main-live-canvas', name: 'SyncSpace Team Canvas' });
+  const [board, setBoard] = useState({ id: 'main-live-canvas', name: 'NAR Live Workspace' });
   const [notes, setNotes] = useState([]);
   const [poll, setPoll] = useState(null);
   const [activities, setActivities] = useState([]);
@@ -20,6 +20,7 @@ export function useLiveBoard() {
   const [eventCount, setEventCount] = useState(0);
   const [snapToGrid, setSnapToGrid] = useState(false);
   const [filterCategory, setFilterCategory] = useState('All');
+  const [filterPriority, setFilterPriority] = useState('All');
 
   // Highest z-index tracking
   const maxZIndexRef = useRef(20);
@@ -259,12 +260,15 @@ export function useLiveBoard() {
 
       const newNote = {
         id: tempId,
-        title: initialData.title || 'New Note',
+        title: initialData.title || 'Untitled Document',
         content: initialData.content || '',
         x: rawX,
         y: rawY,
-        color: initialData.color || 'yellow',
-        category: initialData.category || 'Idea',
+        width: initialData.width || 320,
+        height: initialData.height || 230,
+        color: initialData.color || 'azure',
+        category: initialData.category || 'Docs',
+        priority: initialData.priority || 'medium',
         pinned: !!initialData.pinned,
         votes: 0,
         votedUsers: {},
@@ -323,6 +327,20 @@ export function useLiveBoard() {
       }
     },
     [socket, isConnected, notes, currentUser]
+  );
+
+  // Optimistic Resize
+  const resizeNote = useCallback(
+    (id, width, height) => {
+      setNotes((prev) =>
+        prev.map((n) => (n.id === id ? { ...n, width, height } : n))
+      );
+
+      if (socket && isConnected) {
+        socket.emit('note:update', { id, width, height });
+      }
+    },
+    [socket, isConnected]
   );
 
   // Optimistic Move with optional grid snapping
@@ -446,7 +464,7 @@ export function useLiveBoard() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ board, notes, poll }, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `syncspace-board-${Date.now()}.json`);
+    downloadAnchor.setAttribute("download", `nar-canvas-${Date.now()}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -456,9 +474,11 @@ export function useLiveBoard() {
     setConflictToasts((prev) => prev.filter((t) => t.id !== toastId));
   }, []);
 
-  const filteredNotes = filterCategory === 'All'
-    ? notes
-    : notes.filter((n) => n.category === filterCategory);
+  const filteredNotes = notes.filter((n) => {
+    const matchesCat = filterCategory === 'All' || n.category === filterCategory;
+    const matchesPriority = filterPriority === 'All' || n.priority === filterPriority;
+    return matchesCat && matchesPriority;
+  });
 
   return {
     board,
@@ -478,8 +498,11 @@ export function useLiveBoard() {
     setSnapToGrid,
     filterCategory,
     setFilterCategory,
+    filterPriority,
+    setFilterPriority,
     createNote,
     updateNote,
+    resizeNote,
     moveNote,
     voteNote,
     deleteNote,

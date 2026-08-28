@@ -27,6 +27,8 @@ function LiveSyncBoardApp() {
     setSnapToGrid,
     filterCategory,
     setFilterCategory,
+    filterPriority,
+    setFilterPriority,
     createNote,
     updateNote,
     moveNote,
@@ -73,6 +75,8 @@ function LiveSyncBoardApp() {
         onToggleSnap={() => setSnapToGrid(!snapToGrid)}
         filterCategory={filterCategory}
         onSelectCategory={setFilterCategory}
+        filterPriority={filterPriority}
+        onSelectPriority={setFilterPriority}
         onCreateNote={createNote}
         onResetTemplate={resetBoard}
         onExportJSON={exportBoardJSON}

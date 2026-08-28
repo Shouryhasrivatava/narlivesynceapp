@@ -2,7 +2,7 @@
  * Conflict Resolution Engine (2nd-Year Concurrency & Real-Time Sync)
  * 
  * Handles:
- * 1. Field-level merging (Position, Color, Tags, Votes vs Text Content)
+ * 1. Field-level merging (Position, Dimensions, Priority, Color, Tags, Votes vs Text Content)
  * 2. 3-Way non-destructive text merging for simultaneous edits to the same note
  * 3. Version tracking (Lamport timestamps / integer versions)
  */
@@ -28,27 +28,22 @@ function mergeTextContent(baseText = '', serverText = '', clientText = '', clien
     return { mergedText: serverText, hasConflict: false };
   }
 
-  // If one is empty and other isn't, preserve non-empty
   if (!serverText && clientText) return { mergedText: clientText, hasConflict: true };
   if (!clientText && serverText) return { mergedText: serverText, hasConflict: true };
 
-  // Split lines to attempt line-by-line 3-way merge
   const baseLines = baseText.split('\n');
   const serverLines = serverText.split('\n');
   const clientLines = clientText.split('\n');
 
-  // If simple append on both ends
   const serverAdded = serverLines.slice(baseLines.length);
   const clientAdded = clientLines.slice(baseLines.length);
 
   if (serverLines.slice(0, baseLines.length).join('\n') === baseText &&
       clientLines.slice(0, baseLines.length).join('\n') === baseText) {
-    // Both just appended text
     const merged = [...baseLines, ...serverAdded, ...clientAdded].filter(Boolean).join('\n');
     return { mergedText: merged, hasConflict: true };
   }
 
-  // Non-destructive fallback merge: preserve both changes with clear visual demarcation
   const mergedText = `${serverText.trim()}\n\n---\n📝 [Merged update from ${clientAuthor}]:\n${clientText.trim()}`;
   return { mergedText, hasConflict: true };
 }
@@ -65,6 +60,9 @@ function resolveNoteUpdate(existingNote, incomingPatch, user) {
     return {
       resolvedNote: {
         ...incomingPatch,
+        width: incomingPatch.width || 300,
+        height: incomingPatch.height || 220,
+        priority: incomingPatch.priority || 'medium',
         version: 1,
         updatedAt: Date.now(),
         lastEditedBy: user?.name || 'Anonymous'
@@ -88,6 +86,19 @@ function resolveNoteUpdate(existingNote, incomingPatch, user) {
     resolved.zIndex = incomingPatch.zIndex !== undefined ? incomingPatch.zIndex : (resolved.zIndex || 1);
   }
 
+  // Resizable dimensions
+  if (incomingPatch.width !== undefined) {
+    resolved.width = Math.max(240, Math.min(800, incomingPatch.width));
+  }
+  if (incomingPatch.height !== undefined) {
+    resolved.height = Math.max(180, Math.min(1000, incomingPatch.height));
+  }
+
+  // Priority marking
+  if (incomingPatch.priority !== undefined) {
+    resolved.priority = incomingPatch.priority;
+  }
+
   if (incomingPatch.color !== undefined) {
     resolved.color = incomingPatch.color;
   }
@@ -101,7 +112,6 @@ function resolveNoteUpdate(existingNote, incomingPatch, user) {
   }
 
   if (incomingPatch.votes !== undefined || incomingPatch.voteDelta !== undefined) {
-    // Additive vote merging to prevent overwriting other users' votes
     if (incomingPatch.voteDelta !== undefined) {
       resolved.votes = Math.max(0, (resolved.votes || 0) + incomingPatch.voteDelta);
       if (user?.id) {
@@ -115,7 +125,6 @@ function resolveNoteUpdate(existingNote, incomingPatch, user) {
   // 2. Text content and title reconciliation
   if (incomingPatch.content !== undefined || incomingPatch.title !== undefined) {
     if (isVersionStale) {
-      // Content conflict check
       if (incomingPatch.content !== undefined && incomingPatch.content !== existingNote.content) {
         const { mergedText, hasConflict } = mergeTextContent(
           incomingPatch.baseContent || '',
@@ -131,7 +140,6 @@ function resolveNoteUpdate(existingNote, incomingPatch, user) {
         }
       }
 
-      // Title reconciliation: Last-Write-Wins with preservation if drastically different
       if (incomingPatch.title !== undefined && incomingPatch.title !== existingNote.title) {
         if (!existingNote.title) {
           resolved.title = incomingPatch.title;
@@ -145,11 +153,10 @@ function resolveNoteUpdate(existingNote, incomingPatch, user) {
     }
   }
 
-  // Increment version and record metadata
   resolved.version = (existingNote.version || 1) + 1;
   resolved.updatedAt = Date.now();
   resolved.lastEditedBy = user?.name || 'Anonymous';
-  resolved.lastEditedByColor = user?.color || '#3b82f6';
+  resolved.lastEditedByColor = user?.color || '#1c2bff';
 
   if (conflictOccurred) {
     resolved.lastConflict = {
