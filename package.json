@@ -1,0 +1,31 @@
+{
+  "name": "syncspace-live-collab",
+  "version": "1.0.0",
+  "description": "SyncSpace: Real-Time Collaborative Canvas with Live Cursors, Optimistic UI, 3-Way Merge Simultaneous Edit Conflict Resolution, and Persistent Storage",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "node server/server.js",
+    "dev:client": "npm --prefix client run dev",
+    "start": "concurrently \"npm run dev:server\" \"npm --prefix client run preview\"",
+    "install:all": "npm install && npm --prefix server install && npm --prefix client install",
+    "build:client": "npm --prefix client run build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "react",
+    "socket.io",
+    "websockets",
+    "real-time",
+    "live-sync",
+    "collaborative-canvas",
+    "sticky-notes",
+    "optimistic-ui",
+    "crdt",
+    "conflict-resolution",
+    "presence"
+  ],
+  "author": "MLSA SRM Technical Recruitments 2026",
+  "license": "ISC"
+}
