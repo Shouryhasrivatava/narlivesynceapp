@@ -153,7 +153,6 @@ dbugs/
 │   ├── server.js                       # Express & Socket.IO server
 │   ├── test-conflict.js                # Automated concurrency tests
 │   └── package.json
-├── VIDEO_WALKTHROUGH_SCRIPT.md         # 2-3 minute video recording pitch
 ├── package.json
 └── README.md
 ```
