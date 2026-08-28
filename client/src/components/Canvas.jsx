@@ -2,6 +2,7 @@ import React, { useRef, useState, useCallback } from 'react';
 import StickyNote from './StickyNote';
 import LiveCursors from './LiveCursors';
 import RadarPing from './RadarPing';
+import FuturisticBackground from './FuturisticBackground';
 import { ZoomIn, ZoomOut, Maximize2, Sparkles } from 'lucide-react';
 
 export default function Canvas({
@@ -121,10 +122,13 @@ export default function Canvas({
       onMouseUp={handleMouseUp}
       onDoubleClick={handleDoubleClick}
       onClick={handleCanvasClick}
-      className={`relative w-screen h-screen pt-14 overflow-hidden cursor-crosshair canvas-matte-grid select-none ${
+      className={`relative w-screen h-screen pt-14 overflow-hidden cursor-crosshair canvas-futuristic-grid select-none ${
         isPanning ? 'cursor-grab active:cursor-grabbing' : ''
       }`}
     >
+      {/* Futuristic Space Background & Ambient Orbs */}
+      <FuturisticBackground />
+
       {/* Visual Canvas Layer */}
       <div
         className="canvas-background absolute inset-0 origin-top-left transition-transform duration-75"
@@ -155,7 +159,7 @@ export default function Canvas({
       </div>
 
       {/* Floating Canvas Controls */}
-      <div className="fixed bottom-6 left-6 z-30 flex items-center gap-1 rounded matte-panel p-1 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 shadow-md">
+      <div className="fixed bottom-6 left-6 z-30 flex items-center gap-1 rounded matte-panel p-1 bg-white/90 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 shadow-xl backdrop-blur-md">
         <button
           onClick={handleZoomIn}
           className="p-1.5 rounded hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
@@ -191,13 +195,13 @@ export default function Canvas({
           className="p-1.5 rounded text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
           title="Attention Ping (or Shift+Click canvas)"
         >
-          <Sparkles className="w-3.5 h-3.5" />
+          <Sparkles className="w-3.5 h-3.5 text-[#1c2bff] dark:text-[#00d2ff]" />
         </button>
       </div>
 
       {/* Tip Badge */}
-      <div className="fixed top-18 left-6 z-20 hidden lg:flex items-center gap-2 px-2.5 py-1 rounded bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-[11px] text-zinc-500 dark:text-zinc-400 shadow-xs pointer-events-none">
-        <span><b>Double-click</b> canvas to create note • <b>Shift+Click</b> to ping collaborators</span>
+      <div className="fixed top-18 left-6 z-20 hidden lg:flex items-center gap-2 px-2.5 py-1 rounded bg-white/85 dark:bg-zinc-900/85 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 text-[11px] text-zinc-600 dark:text-zinc-400 shadow-sm pointer-events-none">
+        <span><b>Double-click</b> canvas to create note • <b>Shift+Click</b> for radar ping</span>
       </div>
     </main>
   );
