@@ -62,21 +62,21 @@ export default function UserProfileModal({ isOpen, onClose }) {
 
             <div>
               <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1">
-                Avatar Emoji
+                Avatar Tag
               </label>
-              <div className="grid grid-cols-5 gap-1.5">
-                {USER_AVATARS.map((emoji) => (
+              <div className="grid grid-cols-6 gap-1.5">
+                {USER_AVATARS.map((tag) => (
                   <button
-                    key={emoji}
+                    key={tag}
                     type="button"
-                    onClick={() => setAvatar(emoji)}
-                    className={`h-9 rounded text-base flex items-center justify-center transition-all ${
-                      avatar === emoji
+                    onClick={() => setAvatar(tag)}
+                    className={`h-8 rounded text-xs font-mono font-bold flex items-center justify-center transition-all ${
+                      avatar === tag
                         ? 'bg-black dark:bg-white text-white dark:text-black shadow-xs'
                         : 'bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200'
                     }`}
                   >
-                    {emoji}
+                    {tag}
                   </button>
                 ))}
               </div>

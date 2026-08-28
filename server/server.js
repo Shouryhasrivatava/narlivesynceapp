@@ -357,7 +357,7 @@ io.on('connection', (socket) => {
       id: userData?.id || socket.id,
       socketId: socket.id,
       name: userData?.name || `Collaborator ${socket.id.substring(0, 4)}`,
-      avatar: userData?.avatar || '🦊',
+      avatar: userData?.avatar || 'U',
       color: userData?.color || '#3b82f6',
       cursor: null,
       joinedAt: Date.now()

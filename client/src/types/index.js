@@ -1,4 +1,4 @@
-// Classic Black & White Notes App Color System
+// Professional Notes App Color System
 export const NOTE_COLORS = {
   white: {
     name: 'Classic White',
@@ -53,14 +53,21 @@ export const HIGHLIGHT_COLORS = [
 ];
 
 export const CATEGORIES = [
-  { id: 'Notes', label: '📝 Notes', color: 'bg-zinc-100 text-zinc-800 border-zinc-300' },
-  { id: 'Tasks', label: '✅ Tasks', color: 'bg-zinc-100 text-zinc-800 border-zinc-300' },
-  { id: 'Ideas', label: '💡 Ideas', color: 'bg-zinc-100 text-zinc-800 border-zinc-300' },
-  { id: 'Projects', label: '📁 Projects', color: 'bg-zinc-100 text-zinc-800 border-zinc-300' },
-  { id: 'Important', label: '⭐ Important', color: 'bg-zinc-100 text-zinc-800 border-zinc-300' }
+  { id: 'Notes', label: 'Notes', color: 'bg-zinc-100 text-zinc-800 border-zinc-300' },
+  { id: 'Tasks', label: 'Tasks', color: 'bg-zinc-100 text-zinc-800 border-zinc-300' },
+  { id: 'Ideas', label: 'Ideas', color: 'bg-zinc-100 text-zinc-800 border-zinc-300' },
+  { id: 'Projects', label: 'Projects', color: 'bg-zinc-100 text-zinc-800 border-zinc-300' },
+  { id: 'Important', label: 'Important', color: 'bg-zinc-100 text-zinc-800 border-zinc-300' }
 ];
 
-export const USER_AVATARS = ['👤', '⚡', '💡', '🎯', '✨', '☕', '🚀', '🛠️', '📌', '🧭'];
+export const BACKGROUND_PATTERNS = [
+  { id: 'plain', label: 'Solid Blank' },
+  { id: 'grid', label: 'Fine Grid' },
+  { id: 'dots', label: 'Dot Matrix' },
+  { id: 'lined', label: 'Ruled Lined' }
+];
+
+export const USER_AVATARS = ['U1', 'U2', 'DV', 'PM', 'QA', 'FE', 'BE', 'UX', 'AI', 'ME', 'TL', 'SEC'];
 
 export const USER_COLORS = [
   '#000000', // Solid Black

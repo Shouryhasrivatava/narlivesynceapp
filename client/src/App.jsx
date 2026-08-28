@@ -65,6 +65,9 @@ function LiveSyncBoardApp() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
     return localStorage.getItem('live_sync_dark_mode') === 'true';
   });
+  const [backgroundPattern, setBackgroundPattern] = useState(() => {
+    return localStorage.getItem('live_sync_bg_pattern') || 'plain';
+  });
 
   // Apply dark mode class to root HTML & Body
   useEffect(() => {
@@ -78,6 +81,11 @@ function LiveSyncBoardApp() {
       localStorage.setItem('live_sync_dark_mode', 'false');
     }
   }, [isDarkMode]);
+
+  // Persist background pattern
+  useEffect(() => {
+    localStorage.setItem('live_sync_bg_pattern', backgroundPattern);
+  }, [backgroundPattern]);
 
   const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
 
@@ -97,7 +105,7 @@ function LiveSyncBoardApp() {
   }
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden bg-[#fafafa] dark:bg-[#0c0d10] text-zinc-900 dark:text-zinc-100 font-sans transition-colors">
+    <div className="relative w-screen h-screen overflow-hidden bg-[#fafafa] dark:bg-[#09090b] text-zinc-900 dark:text-zinc-100 font-sans transition-colors">
       {/* Top Header */}
       <Navbar
         notesCount={rawNotesCount}
@@ -106,6 +114,8 @@ function LiveSyncBoardApp() {
         pingLatency={pingLatency}
         snapToGrid={snapToGrid}
         onToggleSnap={() => setSnapToGrid(!snapToGrid)}
+        backgroundPattern={backgroundPattern}
+        onSelectBackgroundPattern={setBackgroundPattern}
         filterCategory={filterCategory}
         onSelectCategory={setFilterCategory}
         filterPriority={filterPriority}
@@ -119,7 +129,7 @@ function LiveSyncBoardApp() {
         onOpenProfile={() => setIsProfileOpen(true)}
       />
 
-      {/* Main Interactive Canvas with StrawPage Drawing & Arrows */}
+      {/* Main Interactive Canvas */}
       <Canvas
         notes={notes}
         activeLocks={activeLocks}
@@ -127,6 +137,8 @@ function LiveSyncBoardApp() {
         pings={pings}
         strokes={strokes}
         connectors={connectors}
+        snapToGrid={snapToGrid}
+        backgroundPattern={backgroundPattern}
         canvasMode={canvasMode}
         setCanvasMode={setCanvasMode}
         drawColor={drawColor}

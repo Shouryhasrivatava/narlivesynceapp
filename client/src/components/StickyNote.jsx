@@ -27,6 +27,7 @@ import { useSocket } from '../context/SocketContext';
 export default function StickyNote({
   note,
   activeLock,
+  snapToGrid,
   onUpdate,
   onMove,
   onVote,
@@ -224,7 +225,7 @@ export default function StickyNote({
     onUpdate({ id: note.id, content: updated });
   };
 
-  // Dragging logic
+  // Dragging logic with live snap-to-grid
   const handleMouseDownHeader = (e) => {
     if (note.pinned || isLockedByOther) return;
     if (e.target.closest('button') || e.target.closest('input')) return;
@@ -245,8 +246,13 @@ export default function StickyNote({
     const handleMouseMove = (moveEvent) => {
       const deltaX = moveEvent.clientX - dragStartPos.current.mouseX;
       const deltaY = moveEvent.clientY - dragStartPos.current.mouseY;
-      const newX = Math.max(10, dragStartPos.current.noteX + deltaX);
-      const newY = Math.max(10, dragStartPos.current.noteY + deltaY);
+      let newX = Math.max(10, dragStartPos.current.noteX + deltaX);
+      let newY = Math.max(10, dragStartPos.current.noteY + deltaY);
+
+      if (snapToGrid) {
+        newX = Math.round(newX / 24) * 24;
+        newY = Math.round(newY / 24) * 24;
+      }
 
       onMove(note.id, newX, newY, false);
     };
@@ -261,7 +267,7 @@ export default function StickyNote({
     window.addEventListener('mouseup', handleMouseUp);
   };
 
-  // Resizing logic (Bottom-Right corner handle)
+  // Resizing logic with live snap-to-grid
   const handleMouseDownResize = (e) => {
     if (note.pinned || isLockedByOther) return;
     e.preventDefault();
@@ -278,8 +284,13 @@ export default function StickyNote({
     const handleMouseMove = (moveEvent) => {
       const deltaX = moveEvent.clientX - resizeStartPos.current.mouseX;
       const deltaY = moveEvent.clientY - resizeStartPos.current.mouseY;
-      const newWidth = Math.max(260, Math.min(700, resizeStartPos.current.width + deltaX));
-      const newHeight = Math.max(180, Math.min(700, resizeStartPos.current.height + deltaY));
+      let newWidth = Math.max(260, Math.min(700, resizeStartPos.current.width + deltaX));
+      let newHeight = Math.max(180, Math.min(700, resizeStartPos.current.height + deltaY));
+
+      if (snapToGrid) {
+        newWidth = Math.round(newWidth / 24) * 24;
+        newHeight = Math.round(newHeight / 24) * 24;
+      }
 
       onUpdate({ id: note.id, width: newWidth, height: newHeight });
     };
@@ -318,7 +329,6 @@ export default function StickyNote({
     const parts = text.split(/(\[hl:[a-z]+\](?:(?!\[\/hl\]).)+\[\/hl\]|==(?:(?!==).)+==|\*\*(?:(?!\*\*).)+\*\*)/gs);
 
     return parts.map((part, i) => {
-      // 1. Standard markdown highlight ==text==
       if (part.startsWith('==') && part.endsWith('==') && part.length > 4) {
         return (
           <mark
@@ -331,7 +341,6 @@ export default function StickyNote({
         );
       }
 
-      // 2. Tagged color highlight [hl:color]text[/hl]
       if (part.startsWith('[hl:') && part.includes(']')) {
         const match = part.match(/^\[hl:([a-z]+)\](.*)\[\/hl\]$/s);
         if (match) {
@@ -350,7 +359,6 @@ export default function StickyNote({
         }
       }
 
-      // 3. Bold text **text**
       if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
         return (
           <strong key={i} className="font-bold text-black dark:text-white">
@@ -363,7 +371,6 @@ export default function StickyNote({
     });
   };
 
-  // Formatted View Body
   const renderFormattedContent = () => {
     if (!content.trim()) {
       return (
@@ -663,7 +670,6 @@ export default function StickyNote({
 
         {/* Clean Monochrome Formatting Toolbar */}
         <div className="flex items-center gap-1 py-1 border-y border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 select-none">
-          {/* Clean Highlighter Symbol Button (Requested: no yellow background, clean symbol with "Highlighter" tooltip) */}
           <div className="relative">
             <button
               type="button"

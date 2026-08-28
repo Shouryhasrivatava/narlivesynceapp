@@ -24,6 +24,8 @@ export default function Canvas({
   pings,
   strokes = [],
   connectors = [],
+  snapToGrid = false,
+  backgroundPattern = 'plain',
   canvasMode = 'select',
   setCanvasMode,
   drawColor = '#000000',
@@ -64,10 +66,9 @@ export default function Canvas({
     (e) => {
       if (!canvasRef.current) return { x: 0, y: 0 };
       const rect = canvasRef.current.getBoundingClientRect();
-      return {
-        x: Math.round((e.clientX - rect.left - pan.x) / zoom),
-        y: Math.round((e.clientY - rect.top - pan.y) / zoom)
-      };
+      let x = Math.round((e.clientX - rect.left - pan.x) / zoom);
+      let y = Math.round((e.clientY - rect.top - pan.y) / zoom);
+      return { x, y };
     },
     [pan, zoom]
   );
@@ -157,13 +158,20 @@ export default function Canvas({
     if (canvasMode !== 'select') return;
     if (e.target !== canvasRef.current && !e.target.classList.contains('canvas-background')) return;
 
-    const coords = getCanvasCoords(e);
+    let coords = getCanvasCoords(e);
+    let x = Math.max(20, coords.x - 160);
+    let y = Math.max(20, coords.y - 50);
+
+    if (snapToGrid) {
+      x = Math.round(x / 24) * 24;
+      y = Math.round(y / 24) * 24;
+    }
 
     onCreateNote({
       title: 'New Note',
       content: '',
-      x: Math.max(20, coords.x - 160),
-      y: Math.max(20, coords.y - 50),
+      x,
+      y,
       color: ['white', 'ivory', 'slate', 'zinc', 'amber'][Math.floor(Math.random() * 5)]
     });
   };
@@ -199,8 +207,8 @@ export default function Canvas({
     onCreateNote({
       title: `${note.title} (Copy)`,
       content: note.content,
-      x: note.x + 30,
-      y: note.y + 30,
+      x: note.x + (snapToGrid ? 24 : 30),
+      y: note.y + (snapToGrid ? 24 : 30),
       width: note.width,
       height: note.height,
       color: note.color,
@@ -209,6 +217,15 @@ export default function Canvas({
       pinned: false
     });
   };
+
+  const bgClass =
+    backgroundPattern === 'grid'
+      ? 'canvas-bg-grid'
+      : backgroundPattern === 'dots'
+      ? 'canvas-bg-dots'
+      : backgroundPattern === 'lined'
+      ? 'canvas-bg-lined'
+      : 'canvas-bg-plain';
 
   return (
     <main
@@ -219,7 +236,7 @@ export default function Canvas({
       onMouseUp={handleMouseUp}
       onDoubleClick={handleDoubleClick}
       onClick={handleCanvasClick}
-      className={`relative w-screen h-screen pt-14 overflow-hidden select-none canvas-studio-bg ${
+      className={`relative w-screen h-screen pt-14 overflow-hidden select-none ${bgClass} ${
         canvasMode === 'draw'
           ? 'cursor-crosshair'
           : canvasMode === 'connect'
@@ -229,9 +246,6 @@ export default function Canvas({
           : 'cursor-default'
       }`}
     >
-      {/* Subtle Studio Ambient Lighting Overlay */}
-      <div className="absolute inset-0 studio-ambient-light pointer-events-none z-0" />
-
       {/* Visual Canvas Layer */}
       <div
         className="canvas-background absolute inset-0 origin-top-left transition-transform duration-75"
@@ -268,6 +282,7 @@ export default function Canvas({
             <StickyNote
               note={note}
               activeLock={activeLocks[note.id]}
+              snapToGrid={snapToGrid}
               onUpdate={onUpdateNote}
               onMove={onMoveNote}
               onVote={onVoteNote}
@@ -284,7 +299,7 @@ export default function Canvas({
       </div>
 
       {/* Floating StrawPage Toolbar */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 flex items-center gap-1 rounded-full matte-panel p-1.5 bg-white/95 dark:bg-zinc-900/95 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 shadow-xl backdrop-blur-md">
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 flex items-center gap-1 rounded-full matte-panel p-1.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 shadow-xl">
         {/* Select / Move */}
         <button
           onClick={() => {
@@ -361,13 +376,13 @@ export default function Canvas({
 
         {canvasMode === 'connect' && (
           <span className="text-[10px] font-mono text-zinc-500 dark:text-zinc-400 px-2">
-            {connectSourceNoteId ? '👉 Click target note' : '👉 Click 1st note'}
+            {connectSourceNoteId ? 'Click target note to link' : 'Click first note'}
           </span>
         )}
       </div>
 
       {/* Floating Canvas Zoom Controls */}
-      <div className="fixed bottom-6 left-6 z-30 flex items-center gap-1 rounded-full matte-panel p-1 bg-white/95 dark:bg-zinc-900/95 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 shadow-md backdrop-blur-md">
+      <div className="fixed bottom-6 left-6 z-30 flex items-center gap-1 rounded-full matte-panel p-1 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 shadow-md">
         <button
           onClick={handleZoomIn}
           className="p-1.5 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
@@ -408,15 +423,16 @@ export default function Canvas({
       </div>
 
       {/* Minimal Coordinates HUD */}
-      <div className="fixed bottom-6 right-6 z-20 hidden xl:flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/90 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800 text-[10px] font-mono text-zinc-400 dark:text-zinc-500 shadow-xs pointer-events-none">
+      <div className="fixed bottom-6 right-6 z-20 hidden xl:flex items-center gap-2 px-2.5 py-1 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-[10px] font-mono text-zinc-400 dark:text-zinc-500 shadow-xs pointer-events-none">
         <span>X: {mouseCoords.x}</span>
         <span>|</span>
         <span>Y: {mouseCoords.y}</span>
-      </div>
-
-      {/* Tip Badge */}
-      <div className="fixed top-18 left-6 z-20 hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/85 dark:bg-zinc-900/85 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 text-[11px] text-zinc-600 dark:text-zinc-400 shadow-xs pointer-events-none">
-        <span><b>Studio Canvas</b> • Draw freely or click <b>Connect</b> to link notes</span>
+        {snapToGrid && (
+          <>
+            <span>|</span>
+            <span className="text-black dark:text-white font-bold">SNAP 24px</span>
+          </>
+        )}
       </div>
     </main>
   );

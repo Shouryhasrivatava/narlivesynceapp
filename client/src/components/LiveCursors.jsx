@@ -53,10 +53,12 @@ export default function LiveCursors({ cursors }) {
 
               {/* Collaborator Badge */}
               <div
-                className="absolute left-3 top-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold text-white shadow-lg whitespace-nowrap border border-white/30 backdrop-blur-md select-none"
+                className="absolute left-3 top-3 flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold text-white shadow-lg whitespace-nowrap border border-white/30 backdrop-blur-md select-none"
                 style={{ backgroundColor: color }}
               >
-                <span className="text-xs">{cursor.avatar || '👤'}</span>
+                <span className="w-3.5 h-3.5 rounded-full bg-white/25 flex items-center justify-center text-[9px] font-mono font-bold">
+                  {cursor.avatar || cursor.name?.charAt(0) || 'U'}
+                </span>
                 <span>{cursor.name}</span>
               </div>
             </motion.div>
