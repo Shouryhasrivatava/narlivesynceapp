@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { SocketProvider } from './context/SocketContext';
-import { useLiveBoard } from './hooks/useLiveBoard';
+import useLiveBoard from './hooks/useLiveBoard';
 import Navbar from './components/Navbar';
 import Canvas from './components/Canvas';
 import LivePollWidget from './components/LivePollWidget';
@@ -21,6 +21,14 @@ function LiveSyncBoardApp() {
     cursors,
     pings,
     conflictToasts,
+    strokes,
+    connectors,
+    canvasMode,
+    setCanvasMode,
+    drawColor,
+    setDrawColor,
+    drawWidth,
+    setDrawWidth,
     isLoading,
     fps,
     pingLatency,
@@ -35,6 +43,10 @@ function LiveSyncBoardApp() {
     moveNote,
     voteNote,
     deleteNote,
+    addStroke,
+    clearStrokes,
+    addConnector,
+    deleteConnector,
     startTyping,
     stopTyping,
     votePoll,
@@ -85,7 +97,7 @@ function LiveSyncBoardApp() {
   }
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden bg-[#fafafa] dark:bg-[#09090b] text-zinc-900 dark:text-zinc-100 font-sans transition-colors">
+    <div className="relative w-screen h-screen overflow-hidden bg-[#fafafa] dark:bg-[#0c0d10] text-zinc-900 dark:text-zinc-100 font-sans transition-colors">
       {/* Top Header */}
       <Navbar
         notesCount={rawNotesCount}
@@ -107,12 +119,24 @@ function LiveSyncBoardApp() {
         onOpenProfile={() => setIsProfileOpen(true)}
       />
 
-      {/* Main Interactive Canvas */}
+      {/* Main Interactive Canvas with StrawPage Drawing & Arrows */}
       <Canvas
         notes={notes}
         activeLocks={activeLocks}
         cursors={cursors}
         pings={pings}
+        strokes={strokes}
+        connectors={connectors}
+        canvasMode={canvasMode}
+        setCanvasMode={setCanvasMode}
+        drawColor={drawColor}
+        setDrawColor={setDrawColor}
+        drawWidth={drawWidth}
+        setDrawWidth={setDrawWidth}
+        onAddStroke={addStroke}
+        onClearStrokes={clearStrokes}
+        onAddConnector={addConnector}
+        onDeleteConnector={deleteConnector}
         onUpdateNote={updateNote}
         onMoveNote={moveNote}
         onVoteNote={voteNote}

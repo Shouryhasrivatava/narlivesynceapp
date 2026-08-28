@@ -5,131 +5,100 @@
 @layer base {
   body {
     @apply m-0 p-0 overflow-hidden font-sans;
-    background-color: #f8fafc;
-    color: #0f172a;
+    background-color: #fafafa;
+    color: #18181b;
     user-select: none;
     -webkit-user-select: none;
   }
 
   body.dark {
-    background-color: #07080d;
-    color: #f8fafc;
+    background-color: #09090b;
+    color: #f4f4f5;
   }
 
-  /* Futuristic Cyber Matrix Canvas Grid (MSA SRM Inspired) */
-  .canvas-futuristic-grid {
-    background-color: #f8fafc;
-    background-image: 
-      radial-gradient(rgba(28, 43, 255, 0.14) 1.25px, transparent 1.25px),
-      linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
-    background-size: 28px 28px, 140px 140px, 140px 140px;
+  /* Plain and Simple Clean StrawPage Canvas Background (No Dots) */
+  .canvas-plain-bg {
+    background-color: #fafafa;
   }
 
-  .dark .canvas-futuristic-grid {
-    background-color: #07080d;
-    background-image: 
-      radial-gradient(rgba(0, 210, 255, 0.22) 1.25px, transparent 1.25px),
-      linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-    background-size: 28px 28px, 140px 140px, 140px 140px;
+  .dark .canvas-plain-bg {
+    background-color: #0c0d10;
   }
 }
 
-/* Futuristic Ambient Keyframe Animations */
-@keyframes float-slow {
-  0%, 100% {
-    transform: translate(0px, 0px) scale(1);
-  }
-  50% {
-    transform: translate(30px, -25px) scale(1.08);
-  }
+/* StrawPage Drawing Styles */
+.drawing-canvas {
+  touch-action: none;
 }
 
-@keyframes pulse-glow {
-  0%, 100% {
-    opacity: 0.2;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.35;
-    transform: scale(1.12);
+/* StrawPage Connectors / Arrows */
+.connector-line {
+  stroke-dasharray: 4 4;
+  animation: connector-dash 20s linear infinite;
+}
+
+@keyframes connector-dash {
+  to {
+    stroke-dashoffset: -100;
   }
 }
 
-.animate-float-slow {
-  animation: float-slow 18s ease-in-out infinite;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 10s ease-in-out infinite;
-}
-
-/* Futuristic Cyber Dust Starfield */
-.cyber-particles {
-  background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.6) 0.5px, transparent 1px);
-  background-size: 90px 90px;
-}
-
-/* High-Tech Glass & Matte Surfaces */
+/* Clean Panels */
 .matte-panel {
-  background-color: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.05);
+  background-color: #ffffff;
+  border: 1px solid #e4e4e7;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
 }
 
 .dark .matte-panel {
-  background-color: rgba(13, 15, 22, 0.85);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  background-color: #14161b;
+  border: 1px solid #27272a;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
 }
 
 .matte-dropdown {
   background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e4e4e7;
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.08);
 }
 
 .dark .matte-dropdown {
-  background-color: #0f121a;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.7);
+  background-color: #14161b;
+  border: 1px solid #27272a;
+  box-shadow: 0 8px 24px -2px rgba(0, 0, 0, 0.7);
 }
 
-/* Futuristic Note Cards */
+/* Clean Cards */
 .matte-note-card {
-  box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .dark .matte-note-card {
-  background-color: rgba(18, 21, 31, 0.88);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  background-color: #16181f;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
 .matte-note-dragging {
-  box-shadow: 0 20px 35px -8px rgba(0, 0, 0, 0.25), 0 0 0 2px #000000;
-  transform: scale(1.02);
+  box-shadow: 0 16px 32px -4px rgba(0, 0, 0, 0.18), 0 0 0 2px #000000;
+  transform: scale(1.015);
 }
 
 .dark .matte-note-dragging {
-  box-shadow: 0 25px 50px -10px rgba(0, 210, 255, 0.3), 0 0 0 2px #00d2ff;
-  transform: scale(1.02);
+  box-shadow: 0 16px 32px -4px rgba(0, 0, 0, 0.6), 0 0 0 2px #ffffff;
+  transform: scale(1.015);
 }
 
-/* Radar Ping Ripple (Shockwave) */
+/* Radar Ping Ripple */
 @keyframes radar-ripple {
   0% {
     transform: translate(-50%, -50%) scale(0.1);
-    opacity: 0.95;
+    opacity: 0.9;
   }
-  50% {
-    opacity: 0.45;
+  60% {
+    opacity: 0.35;
   }
   100% {
-    transform: translate(-50%, -50%) scale(2.8);
+    transform: translate(-50%, -50%) scale(2.4);
     opacity: 0;
   }
 }
@@ -138,7 +107,7 @@
   position: absolute;
   border-radius: 9999px;
   pointer-events: none;
-  animation: radar-ripple 1.6s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+  animation: radar-ripple 1.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
 }
 
 /* Scrollbars */
@@ -152,7 +121,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #d4d4d8;
   border-radius: 9999px;
 }
 
@@ -161,7 +130,7 @@
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #a1a1aa;
 }
 
 .dark ::-webkit-scrollbar-thumb:hover {

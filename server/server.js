@@ -71,7 +71,9 @@ function loadStateFromDisk() {
         board: parsed.board || canvasState.board,
         notes: Array.isArray(parsed.notes) ? parsed.notes : [],
         poll: parsed.poll || canvasState.poll,
-        activities: Array.isArray(parsed.activities) ? parsed.activities.slice(-50) : []
+        activities: Array.isArray(parsed.activities) ? parsed.activities.slice(-50) : [],
+        strokes: Array.isArray(parsed.strokes) ? parsed.strokes : [],
+        connectors: Array.isArray(parsed.connectors) ? parsed.connectors : []
       };
       console.log(`[Storage] Loaded ${canvasState.notes.length} sticky notes from disk.`);
     } else {
@@ -370,6 +372,8 @@ io.on('connection', (socket) => {
       notes: canvasState.notes,
       poll: canvasState.poll,
       activities: canvasState.activities,
+      strokes: canvasState.strokes || [],
+      connectors: canvasState.connectors || [],
       onlineUsers: Array.from(onlineUsers.values()),
       activeLocks: locksObj,
       currentUser: user
@@ -653,7 +657,42 @@ io.on('connection', (socket) => {
     if (typeof callback === 'function') callback({ success: true, poll: newPoll });
   });
 
-  // 11. User Profile Update
+  // 12. Freehand Canvas Drawing (StrawPage Style)
+  socket.on('stroke:create', ({ stroke }) => {
+    if (!stroke || !Array.isArray(stroke.points) || stroke.points.length === 0) return;
+    canvasState.strokes = canvasState.strokes || [];
+    canvasState.strokes.push(stroke);
+    if (canvasState.strokes.length > 300) {
+      canvasState.strokes = canvasState.strokes.slice(-300);
+    }
+    socket.broadcast.emit('stroke:created', stroke);
+    saveStateToDisk();
+  });
+
+  socket.on('stroke:clear', () => {
+    canvasState.strokes = [];
+    io.emit('stroke:cleared');
+    saveStateToDisk();
+    const user = onlineUsers.get(socket.id);
+    logActivity('system', `${user?.name || 'User'} cleared the canvas drawings.`, user);
+  });
+
+  // 13. Dynamic Arrows & Note Connectors
+  socket.on('connector:create', ({ connector }) => {
+    if (!connector || !connector.fromNoteId || !connector.toNoteId) return;
+    canvasState.connectors = canvasState.connectors || [];
+    canvasState.connectors.push(connector);
+    socket.broadcast.emit('connector:created', connector);
+    saveStateToDisk();
+  });
+
+  socket.on('connector:delete', ({ id }) => {
+    canvasState.connectors = (canvasState.connectors || []).filter((c) => c.id !== id);
+    io.emit('connector:deleted', { id });
+    saveStateToDisk();
+  });
+
+  // 14. User Profile Update
   socket.on('user:profile_update', (newProfile) => {
     const user = onlineUsers.get(socket.id);
     if (!user) return;

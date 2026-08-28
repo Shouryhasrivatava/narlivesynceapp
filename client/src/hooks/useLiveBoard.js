@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useSocket } from '../context/SocketContext';
 
-export function useLiveBoard() {
+export default function useLiveBoard() {
   const { socket, isConnected, currentUser } = useSocket();
 
-  const [board, setBoard] = useState({ id: 'main-live-canvas', name: 'NAR Live Workspace' });
+  const [board, setBoard] = useState({ id: 'main-live-canvas', name: 'Live Sync Mini App' });
   const [notes, setNotes] = useState([]);
   const [poll, setPoll] = useState(null);
   const [activities, setActivities] = useState([]);
@@ -12,7 +12,14 @@ export function useLiveBoard() {
   const [cursors, setCursors] = useState({});
   const [pings, setPings] = useState([]);
   const [conflictToasts, setConflictToasts] = useState([]);
+  const [strokes, setStrokes] = useState([]);
+  const [connectors, setConnectors] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Canvas interaction mode: 'select' | 'draw' | 'connect'
+  const [canvasMode, setCanvasMode] = useState('select');
+  const [drawColor, setDrawColor] = useState('#000000');
+  const [drawWidth, setDrawWidth] = useState(3);
 
   // Performance & Network Telemetry
   const [fps, setFps] = useState(60);
@@ -72,6 +79,8 @@ export function useLiveBoard() {
       if (Array.isArray(data.notes)) setNotes(data.notes);
       if (data.poll) setPoll(data.poll);
       if (Array.isArray(data.activities)) setActivities(data.activities);
+      if (Array.isArray(data.strokes)) setStrokes(data.strokes);
+      if (Array.isArray(data.connectors)) setConnectors(data.connectors);
       if (data.activeLocks) setActiveLocks(data.activeLocks);
 
       const maxZ = (data.notes || []).reduce((max, n) => Math.max(max, n.zIndex || 0), 20);
@@ -120,6 +129,7 @@ export function useLiveBoard() {
 
     socket.on('note:deleted', ({ id }) => {
       setNotes((prev) => prev.filter((n) => n.id !== id));
+      setConnectors((prev) => prev.filter((c) => c.fromNoteId !== id && c.toNoteId !== id));
       setActiveLocks((prev) => {
         const copy = { ...prev };
         delete copy[id];
@@ -128,7 +138,29 @@ export function useLiveBoard() {
       incrementEvent();
     });
 
-    // 3. Active Locks
+    // 3. StrawPage Freehand Drawings
+    socket.on('stroke:created', (stroke) => {
+      setStrokes((prev) => [...prev, stroke]);
+      incrementEvent();
+    });
+
+    socket.on('stroke:cleared', () => {
+      setStrokes([]);
+      incrementEvent();
+    });
+
+    // 4. Note Connectors / Dynamic Arrows
+    socket.on('connector:created', (connector) => {
+      setConnectors((prev) => [...prev, connector]);
+      incrementEvent();
+    });
+
+    socket.on('connector:deleted', ({ id }) => {
+      setConnectors((prev) => prev.filter((c) => c.id !== id));
+      incrementEvent();
+    });
+
+    // 5. Active Locks
     socket.on('lock:update', ({ noteId, lockInfo }) => {
       setActiveLocks((prev) => {
         const copy = { ...prev };
@@ -142,7 +174,7 @@ export function useLiveBoard() {
       incrementEvent();
     });
 
-    // 4. Live Cursors
+    // 6. Live Cursors
     socket.on('cursor:update', (data) => {
       setCursors((prev) => ({
         ...prev,
@@ -158,7 +190,7 @@ export function useLiveBoard() {
       });
     });
 
-    // 5. Collaborative Radar Ping
+    // 7. Collaborative Radar Ping
     socket.on('canvas:ping_received', (pingData) => {
       const pingId = `ping-${Date.now()}-${Math.random()}`;
       setPings((prev) => [...prev, { ...pingData, id: pingId }]);
@@ -169,7 +201,7 @@ export function useLiveBoard() {
       }, 2500);
     });
 
-    // 6. Conflict Resolution Notification
+    // 8. Conflict Resolution Notification
     socket.on('conflict:resolved', (conflictData) => {
       const toastId = `conflict-${Date.now()}`;
       setConflictToasts((prev) => [...prev, { ...conflictData, id: toastId }]);
@@ -180,7 +212,7 @@ export function useLiveBoard() {
       }, 7000);
     });
 
-    // 7. Poll & Activities
+    // 9. Poll & Activities
     socket.on('poll:updated', (updatedPoll) => {
       setPoll(updatedPoll);
       incrementEvent();
@@ -195,6 +227,8 @@ export function useLiveBoard() {
       if (resetData.board) setBoard(resetData.board);
       if (resetData.notes) setNotes(resetData.notes);
       if (resetData.poll) setPoll(resetData.poll);
+      setStrokes([]);
+      setConnectors([]);
       setActiveLocks({});
       incrementEvent();
     });
@@ -206,6 +240,10 @@ export function useLiveBoard() {
       socket.off('note:moved');
       socket.off('note:voted');
       socket.off('note:deleted');
+      socket.off('stroke:created');
+      socket.off('stroke:cleared');
+      socket.off('connector:created');
+      socket.off('connector:deleted');
       socket.off('lock:update');
       socket.off('cursor:update');
       socket.off('cursor:remove');
@@ -260,14 +298,14 @@ export function useLiveBoard() {
 
       const newNote = {
         id: tempId,
-        title: initialData.title || 'Untitled Document',
+        title: initialData.title || 'New Note',
         content: initialData.content || '',
         x: rawX,
         y: rawY,
         width: initialData.width || 320,
         height: initialData.height || 230,
-        color: initialData.color || 'azure',
-        category: initialData.category || 'Docs',
+        color: initialData.color || 'white',
+        category: initialData.category || 'Notes',
         priority: initialData.priority || 'medium',
         pinned: !!initialData.pinned,
         votes: 0,
@@ -329,21 +367,7 @@ export function useLiveBoard() {
     [socket, isConnected, notes, currentUser]
   );
 
-  // Optimistic Resize
-  const resizeNote = useCallback(
-    (id, width, height) => {
-      setNotes((prev) =>
-        prev.map((n) => (n.id === id ? { ...n, width, height } : n))
-      );
-
-      if (socket && isConnected) {
-        socket.emit('note:update', { id, width, height });
-      }
-    },
-    [socket, isConnected]
-  );
-
-  // Optimistic Move with optional grid snapping
+  // Optimistic Move
   const moveNote = useCallback(
     (id, x, y, bringToFront = false) => {
       let finalX = x;
@@ -416,6 +440,53 @@ export function useLiveBoard() {
     [socket, isConnected]
   );
 
+  // Freehand Drawing Actions
+  const addStroke = useCallback(
+    (stroke) => {
+      setStrokes((prev) => [...prev, stroke]);
+      if (socket && isConnected) {
+        socket.emit('stroke:create', { stroke });
+      }
+    },
+    [socket, isConnected]
+  );
+
+  const clearStrokes = useCallback(() => {
+    setStrokes([]);
+    if (socket && isConnected) {
+      socket.emit('stroke:clear');
+    }
+  }, [socket, isConnected]);
+
+  // Connector Actions (Dynamic Arrows between notes)
+  const addConnector = useCallback(
+    (fromNoteId, toNoteId, color = '#18181b') => {
+      if (fromNoteId === toNoteId) return;
+      const newConnector = {
+        id: `conn-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+        fromNoteId,
+        toNoteId,
+        color
+      };
+
+      setConnectors((prev) => [...prev, newConnector]);
+      if (socket && isConnected) {
+        socket.emit('connector:create', { connector: newConnector });
+      }
+    },
+    [socket, isConnected]
+  );
+
+  const deleteConnector = useCallback(
+    (id) => {
+      setConnectors((prev) => prev.filter((c) => c.id !== id));
+      if (socket && isConnected) {
+        socket.emit('connector:delete', { id });
+      }
+    },
+    [socket, isConnected]
+  );
+
   // Typing locks
   const startTyping = useCallback(
     (noteId) => {
@@ -471,14 +542,14 @@ export function useLiveBoard() {
 
   // Export board as JSON
   const exportBoardJSON = useCallback(() => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ board, notes, poll }, null, 2));
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ board, notes, poll, strokes, connectors }, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `nar-canvas-${Date.now()}.json`);
+    downloadAnchor.setAttribute("download", `live-sync-canvas-${Date.now()}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
-  }, [board, notes, poll]);
+  }, [board, notes, poll, strokes, connectors]);
 
   const dismissConflictToast = useCallback((toastId) => {
     setConflictToasts((prev) => prev.filter((t) => t.id !== toastId));
@@ -500,6 +571,14 @@ export function useLiveBoard() {
     cursors,
     pings,
     conflictToasts,
+    strokes,
+    connectors,
+    canvasMode,
+    setCanvasMode,
+    drawColor,
+    setDrawColor,
+    drawWidth,
+    setDrawWidth,
     isLoading,
     fps,
     pingLatency,
@@ -512,10 +591,13 @@ export function useLiveBoard() {
     setFilterPriority,
     createNote,
     updateNote,
-    resizeNote,
     moveNote,
     voteNote,
     deleteNote,
+    addStroke,
+    clearStrokes,
+    addConnector,
+    deleteConnector,
     startTyping,
     stopTyping,
     votePoll,
@@ -528,3 +610,4 @@ export function useLiveBoard() {
     dismissConflictToast
   };
 }
+export { useLiveBoard };
