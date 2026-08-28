@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply m-0 p-0 overflow-hidden bg-slate-950 text-slate-100 font-sans;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* Canvas Grid Pattern */
+  .canvas-grid-dark {
+    background-color: #0b0f19;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1.5px, transparent 1.5px);
+    background-size: 28px 28px;
+  }
+
+  .canvas-grid-light {
+    background-color: #f8fafc;
+    background-image: radial-gradient(rgba(0, 0, 0, 0.12) 1.5px, transparent 1.5px);
+    background-size: 28px 28px;
+  }
+}
+
+/* Custom Scrollbar for drawers and lists */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
+}
+
+/* Glass UI */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-dropdown {
+  background: rgba(30, 41, 59, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Radar Ping Ripple Animation */
+@keyframes radar-ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0.1);
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2.8);
+    opacity: 0;
+  }
+}
+
+.radar-ping-ring {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  animation: radar-ripple 1.8s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+/* Cursor movement smooth transition */
+.live-cursor-smooth {
+  transition: transform 0.04s linear;
+  will-change: transform;
+}
+
+/* Sticky note paper styling */
+.sticky-shadow {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+}
+
+.sticky-shadow-dragging {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 2px rgba(99, 102, 241, 0.6);
+  transform: scale(1.03) rotate(1deg);
+}
